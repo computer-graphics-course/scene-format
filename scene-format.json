@@ -1,0 +1,44 @@
+{
+	"type": "object",
+	"properties": {
+		"objects": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "integer" },
+				"reference": { "type": "string" }
+			},
+			"required": [ "id", "reference" ]
+		},
+		"maretials": {
+			"type": "object",
+			"properties": {
+				"object_id": { "type": "integer" },
+				"type": { "type": "string" }
+			},
+			"required": [ "object_id", "type" ]
+		},
+		"lights": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "integer" },
+				"type": { "type": "string" },
+				"position": {
+					"type": "array",
+					"items": { "type": "number" }
+				}
+			},
+			"required": [ "id", "type", "position" ]
+		},
+		"cameras": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "integer" },
+				"position": {
+					"type": "array",
+					"items": { "type": "number" }
+				}
+			},
+			"required": [ "id", "position" ]
+		}
+	}
+}

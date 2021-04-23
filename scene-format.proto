@@ -21,7 +21,7 @@ message Scene {
     repeated double position;
   }
   repeated Object objects;
-  repeated Material meterials;
+  repeated Material materials;
   repeated Light lights;
   repeated Camera cameras;
 }

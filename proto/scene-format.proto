@@ -14,13 +14,25 @@ message Scene {
 		float z;
 	}
 	message Transform {
+		int32 id = 1;
 		Vector3 translation;
 		Vector3 rotation;
 		Vector3 scale;
 		int32 parent_id;
 	}
+	message Cube {
+		int32 id = 1;
+		Vector3 upper_bounds;
+		Vector3 lower_bounds;
+		Transform transform;
+	}
+	message Sphere {
+		int32 id = 1;
+		Vector3 positon;
+		float radius;
+	}
 	message MeshedObject {
-		int32 id;
+		int32 id = 1;
 		string reference;
 		MaterialType matherial_type = 0;
 		Transform transform;
@@ -42,6 +54,8 @@ message Scene {
 		Transform transform;
 	}
 	repeated Object objects;
+	optional repeated Cube cubes;
+	optional repeated Sphere spheres;
 	repeated Material materials;
 	repeated Light lights;
 	repeated Camera cameras;

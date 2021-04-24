@@ -9,54 +9,54 @@ message Scene {
 		// other matherials
 	}
 	message Vector3 {
-		float x;
-		float y;
-		float z;
+		float x = 2;
+		float y = 3;
+		float z = 4;
 	}
 	message Transform {
-		int32 id = 1;
-		Vector3 translation;
-		Vector3 rotation;
-		Vector3 scale;
-		int32 parent_id;
+		int32 id = 5;
+		Vector3 translation = 6;
+		Vector3 rotation = 7;
+		Vector3 scale = 8;
+		int32 parent_id = 9;
 	}
 	message Cube {
-		int32 id = 1;
-		Vector3 upper_bounds;
-		Vector3 lower_bounds;
-		Transform transform;
+		int32 id = 34;
+		Vector3 upper_bounds = 10;
+		Vector3 lower_bounds = 11;
+		Transform transform = 11;
 	}
 	message Sphere {
-		int32 id = 1;
-		Vector3 positon;
-		float radius;
+		int32 id = 35;
+		Vector3 positon = 12;
+		float radius = 13;
 	}
 	message MeshedObject {
-		int32 id = 1;
-		string reference;
-		MaterialType matherial_type = 0;
-		Transform transform;
+		int32 id = 14;
+		string reference = 15;
+		MaterialType matherial_type = 16;
+		Transform transform = 17;
 	}
 	enum LightType {
-		POINT = 0;
-		SPHERE = 1;
-		DIRECTIONAL = 2;
+		POINT = 18;
+		SPHERE = 19;
+		DIRECTIONAL = 20;
 	}
 	message Light {
-		int32 id;
-		LightType light_type;
-		Transform transform;
-		Vector3 color;
-		double intensity;
+		int32 id = 21;
+		LightType light_type = 22;
+		Transform transform = 23;
+		Vector3 color = 24;
+		double intensity = 25;
 	}
 	message Camera {
-		int32 id;
-		Transform transform;
+		int32 id = 26;
+		Transform transform = 27;
 	}
-	repeated Object objects;
-	optional repeated Cube cubes;
-	optional repeated Sphere spheres;
-	repeated Material materials;
-	repeated Light lights;
-	repeated Camera cameras;
+	repeated Object objects = 28;
+	optional repeated Cube cubes = 29;
+	optional repeated Sphere spheres = 30;
+	repeated Material materials = 31;
+	repeated Light lights = 32;
+	repeated Camera cameras = 33;
 }

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package turbocow;
+
+message Scene {
+	enum MaterialType {
+		SOLID = 0;
+		GLASS = 1;
+		// other matherials
+	}
+	message Vector3 {
+		float x;
+		float y;
+		float z;
+	}
+	message Transform {
+		Vector3 translation;
+		Vector3 rotation;
+		Vector3 scale;
+		int32 parent_id;
+	}
+	message MeshedObject {
+		int32 id;
+		string reference;
+		MaterialType matherial_type = 0;
+		Transform transform;
+	}
+	enum LightType {
+		POINT = 0;
+		SPHERE = 1;
+		DIRECTIONAL = 2;
+	}
+	message Light {
+		int32 id;
+		LightType light_type;
+		Transform transform;
+		Vector3 color;
+		double intensity;
+	}
+	message Camera {
+		int32 id;
+		Transform transform;
+	}
+	repeated Object objects;
+	repeated Material materials;
+	repeated Light lights;
+	repeated Camera cameras;
+}

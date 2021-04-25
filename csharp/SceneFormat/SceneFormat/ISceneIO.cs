@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Com.Github.ComputerGraphicsCourse;
 
 namespace SceneFormat
 {

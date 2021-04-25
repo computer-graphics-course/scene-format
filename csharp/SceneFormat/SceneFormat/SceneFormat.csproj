@@ -2,6 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <PackageVersion></PackageVersion>
+        <Title>SceneFormat</Title>
+        <Authors>SceneFormat committee</Authors>
+        <PackageProjectUrl>https://github.com/computer-graphics-course/scene-format</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup>

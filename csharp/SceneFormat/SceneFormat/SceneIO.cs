@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Com.Github.ComputerGraphicsCourse;
+using System.Text.Json;
 using Google.Protobuf;
 
 namespace SceneFormat
@@ -9,7 +9,17 @@ namespace SceneFormat
     public class SceneIO : ISceneIO
     {
         private readonly JsonFormatter _jsonFormatter = JsonFormatter.Default;
+        private readonly bool _prettifyJson;
         
+        public SceneIO(bool prettifyJson)
+        {
+            _prettifyJson = prettifyJson;
+        }
+
+        public SceneIO() : this(true)
+        {
+        }
+
         public Scene Read(Stream input)
         {
             var content = ReadToEnd(input);
@@ -18,7 +28,7 @@ namespace SceneFormat
             {
                 return Scene.Parser.ParseJson(Encoding.UTF8.GetString(content));
             }
-            catch (InvalidProtocolBufferException e)
+            catch (InvalidJsonException e)
             {
                 return Scene.Parser.ParseFrom(content);
             }
@@ -26,7 +36,7 @@ namespace SceneFormat
 
         public Scene Read(string inputPath)
         {
-            throw new NotImplementedException();
+            return Read(File.Open(inputPath, FileMode.Open));
         }
 
         public void Save(Scene scene, Stream output)
@@ -36,17 +46,30 @@ namespace SceneFormat
 
         public void Save(Scene scene, string outputPath)
         {
-            Save(scene, OpenOutputFile(outputPath));
+            var outputStream = OpenOutputFile(outputPath);
+            Save(scene, outputStream);
+            outputStream.Flush();
+            outputStream.Close();
         }
 
         public void SaveAsJson(Scene scene, Stream output)
         {
-            output.Write(Encoding.UTF8.GetBytes(_jsonFormatter.Format(scene)));
+            var jsonData = _jsonFormatter.Format(scene);
+         
+            if (this._prettifyJson)
+            {
+                jsonData = PrettifyJson(jsonData);
+            }
+            
+            output.Write(Encoding.UTF8.GetBytes(jsonData));
         }
 
         public void SaveAsJson(Scene scene, string outputPath)
         {
-            SaveAsJson(scene, OpenOutputFile(outputPath));
+            var outputStream = OpenOutputFile(outputPath);
+            SaveAsJson(scene, outputStream);
+            outputStream.Flush();
+            outputStream.Close();
         }
 
         private Stream OpenOutputFile(String path)
@@ -59,6 +82,17 @@ namespace SceneFormat
             using var memoryStream = new MemoryStream();
             stream.CopyTo(memoryStream);
             return memoryStream.ToArray();
+        }
+        
+        private string PrettifyJson(string json)
+        {
+            var options = new JsonSerializerOptions {
+                WriteIndented = true
+            };
+
+            var jsonElement = JsonSerializer.Deserialize<JsonElement>(json);
+
+            return JsonSerializer.Serialize(jsonElement, options);
         }
     }
 }

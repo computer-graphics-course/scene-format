@@ -1,20 +1,19 @@
 syntax = "proto3";
 
-package com.github.computer_graphics_course;
+package scene_format;
 
 message Scene {
-
-    message Vector3 {
-        double x = 1;
-        double y = 2;
-        double z = 3;
-    }
-
-    message Camera {
-        int32 id = 1;
-        Vector3 position = 2;
-    }
-
     int32 version = 1;
     repeated Camera cameras = 2;
+}
+
+message Vector3 {
+    double x = 1;
+    double y = 2;
+    double z = 3;
+}
+
+message Camera {
+    int32 id = 1;
+    Vector3 position = 2;
 }

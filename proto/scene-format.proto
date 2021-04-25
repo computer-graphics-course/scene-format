@@ -1,62 +1,77 @@
 syntax = "proto3";
 
-package turbocow;
+package com.github.computer_graphics_course;
 
 message Scene {
 	enum MaterialType {
-		SOLID = 0;
-		GLASS = 1;
-		// other matherials
+		SOLID = 1;
+		GLASS = 2;
+		// other materials
 	}
 	message Vector3 {
-		float x = 2;
-		float y = 3;
-		float z = 4;
+		double x = 1;
+		double y = 2;
+		double z = 3;
+	}
+	message Color {
+		double r = 1;
+		double g = 2;
+		double b = 3;
 	}
 	message Transform {
-		int32 id = 5;
-		Vector3 translation = 6;
-		Vector3 rotation = 7;
-		Vector3 scale = 8;
-		int32 parent_id = 9;
+		int32 id = 1;
+		Vector3 position = 2;
+		Vector3 rotation = 3;
+		Vector3 scale = 4;
+		int32 parent_id = 5;
 	}
 	message Cube {
-		int32 id = 34;
-		Vector3 upper_bounds = 10;
-		Vector3 lower_bounds = 11;
-		Transform transform = 11;
+		int32 id = 1;
+		Vector3 upper_bounds = 2;
+		Vector3 lower_bounds = 3;
 	}
 	message Sphere {
-		int32 id = 35;
-		Vector3 positon = 12;
-		float radius = 13;
+		int32 id = 1;
+		double radius = 2;
+	}
+	message Plain {
+		int32 id = 1;
+		Vector3 positon = 2;
+		Vector3 normal = 3;
 	}
 	message MeshedObject {
-		int32 id = 14;
-		string reference = 15;
-		MaterialType matherial_type = 16;
-		Transform transform = 17;
+		int32 id = 1;
+		string reference = 2;
+	}
+	message SceneObject {
+		int32 id = 1;
+		Transform transform = 2;
+		MaterialType material_type = 3;
+		oneof mesh {
+      Sphere sphere = 3;
+      Cube cube = 4;
+      Plain plain = 5;
+      MeshedObject meshedObject = 6;
+    }
 	}
 	enum LightType {
-		POINT = 18;
-		SPHERE = 19;
-		DIRECTIONAL = 20;
+		POINT = 1;
+		SPHERE = 2;
+		DIRECTIONAL = 3;
 	}
 	message Light {
-		int32 id = 21;
-		LightType light_type = 22;
-		Transform transform = 23;
-		Vector3 color = 24;
-		double intensity = 25;
+		int32 id = 1;
+		LightType light_type = 2;
+		Transform transform = 3;
+		Color color = 4;
+		double intensity = 5;
 	}
 	message Camera {
-		int32 id = 26;
-		Transform transform = 27;
+		int32 id = 1;
+		Transform transform = 2;
 	}
-	repeated Object objects = 28;
-	optional repeated Cube cubes = 29;
-	optional repeated Sphere spheres = 30;
-	repeated Material materials = 31;
-	repeated Light lights = 32;
-	repeated Camera cameras = 33;
+	int32 version = 1;
+	repeated SceneObject meshed_objects = 2;
+	repeated Light lights = 3;
+	repeated Camera cameras = 4;
 }

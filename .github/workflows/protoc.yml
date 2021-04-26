@@ -7,17 +7,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
         with:
           version: '3.x'
+      - name: Install ts-proto
+        run: npm install ts-proto
       - name: Generate code with protoc
-        run: protoc -I=proto --csharp_out=csharp/SceneFormat/SceneFormat ./proto/scene.proto
+        run: |
+          protoc \
+            --plugin=./node_modules/.bin/protoc-gen-ts_proto \
+            --csharp_out=csharp/SceneFormat/SceneFormat \
+            --ts_proto_out=ts \
+            --ts_proto_opt=esModuleInterop=true \
+            ./proto/scene.proto
       - name: Release generated csharp code as artifact
         uses: actions/upload-artifact@v2
         with:
           name: generated-code-csharp
           path: csharp/SceneFormat/SceneFormat/Scene.cs
+      - name: Release generated ts code as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-code-ts
+          path: ts/proto
   build_csharp_library:
     needs: protoc
     runs-on: ubuntu-latest
@@ -44,3 +60,29 @@ jobs:
         run: cd csharp/SceneFormat && gpr push SceneFormat.0.1.$GITHUB_RUN_NUMBER.nupkg --repository computer-graphics-course/scene-format
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build_npm_package:
+    needs: protoc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Download ts generated code
+        uses: actions/download-artifact@v2
+        with:
+          name: generated-code-ts
+          path: ts/proto
+      - name: Install
+        run: cd ts && npm install
+      - name: Build
+        run: cd ts && npm run-script build
+      - name: Set version number
+        run: |
+          cd ts
+          jq "{\"version\": \"0.1.$GITHUB_RUN_NUMBER\"} + ." package.json > dist/package.json
+      - name: Publish
+        run: cd ts/dist && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

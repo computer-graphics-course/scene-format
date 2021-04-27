@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 package scene_format;
+option java_package = "com.github.computergraphicscourse.sceneformat";
+option java_outer_classname = "SceneFormat";
 
 message Scene {
   int32 version = 1;

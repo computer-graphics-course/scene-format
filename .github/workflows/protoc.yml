@@ -23,6 +23,7 @@ jobs:
             --csharp_out=csharp/SceneFormat/SceneFormat \
             --ts_proto_out=ts \
             --ts_proto_opt=esModuleInterop=true \
+            --java_out=java/sceneformat/src/main/java \
             ./proto/scene.proto
       - name: Release generated csharp code as artifact
         uses: actions/upload-artifact@v2
@@ -34,6 +35,11 @@ jobs:
         with:
           name: generated-code-ts
           path: ts/proto
+      - name: Release generated java code as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-code-java
+          path: java/sceneformat/src/main/java/com/github/computergraphicscourse/sceneformat/SceneFormat.java
   build_csharp_library:
     needs: protoc
     runs-on: ubuntu-latest
@@ -86,3 +92,23 @@ jobs:
         run: cd ts/dist && npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build_java_library:
+    needs: protoc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Download java generated code
+        uses: actions/download-artifact@v2
+        with:
+          name: generated-code-java
+          path: java/sceneformat/src/main/java/com/github/computergraphicscourse/sceneformat/SceneFormat.java
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '14'
+      - name: Publish Library
+        run: PUBLICATION_VERSION=0.1.$GITHUB_RUN_NUMBER ./gradlew build publish
+        working-directory: java/sceneformat
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

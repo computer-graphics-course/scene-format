@@ -4,9 +4,11 @@ package scene_format;
 
 message Scene {
   int32 version = 1;
-  repeated SceneObject scene_objects = 2;
-  repeated Light lights = 3;
-  repeated Camera cameras = 4;
+  RenderOptions render_options = 2;
+  repeated SceneObject scene_objects = 3;
+  repeated Light lights = 4;
+  repeated Camera cameras = 5;
+  repeated Material materials = 6;
 }
 
 message Vector3 {
@@ -26,6 +28,12 @@ message Transform {
   Vector3 rotation = 3;
   Vector3 scale = 4;
   int32 parent_id = 5;
+}
+
+message RenderOptions {
+    int32 camera_id = 1;
+    int32 width = 2;
+    int32 height = 3;
 }
 
 message Cube {}

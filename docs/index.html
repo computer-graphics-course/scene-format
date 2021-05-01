@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Scene Format</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic"/>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        width: 60em;
+        margin: 1em auto;
+        color: #222;
+        font-family: "Ubuntu", sans-serif;
+        padding-bottom: 4em;
+      }
+
+      h1 {
+        font-weight: normal;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 0.5ex;
+      }
+
+      h2 {
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 0.5ex;
+        margin: 1.5em 0;
+      }
+
+      h3 {
+        font-weight: normal;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 0.5ex;
+      }
+
+      a {
+        text-decoration: none;
+        color: #567e25;
+      }
+
+      table {
+        width: 100%;
+        font-size: 80%;
+        border-collapse: collapse;
+        line-height: 1.5;
+      }
+
+      thead {
+        font-weight: 700;
+        background-color: #dcdcdc;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #fbfbfb;
+      }
+
+      td {
+        border: 1px solid #ccc;
+        padding: 0.5ex 2ex;
+      }
+
+      td p {
+        text-indent: 1em;
+        margin: 0;
+      }
+
+      td p:nth-child(1) {
+        text-indent: 0; /* No indent on first p in td */
+      }
+
+      /* Table of fields */
+      .field-table .field_name { /* Field */
+        width: 5em;
+      }
+      .field-table .field_type { /* Type */
+        width: 12em;
+      }
+      .field-table .required_to_implement { /* Required to implement */
+        width: 12em;
+      }
+      .field-table .field_description { /* Description */
+        width: auto;
+      }
+
+      /* Table of extensions */
+      .extension-table td:nth-child(1) { /* Extension */
+        width: 10em;
+      }
+      .extension-table td:nth-child(2) { /* Type */
+        width: 10em;
+      }
+      .extension-table td:nth-child(3) { /* Base */
+        width: 10em;
+      }
+      .extension-table td:nth-child(4) { /* Number */
+        width: 5em;
+      }
+      .extension-table td:nth-child(5) { /* Description */
+        width: auto;
+      }
+
+      /* Table of enum values. */
+      .enum-table td:nth-child(1) { /* Name */
+        width: 10em;
+      }
+      .enum-table td:nth-child(2) { /* Number */
+        width: 10em;
+      }
+      .enum-table td:nth-child(3) { /* Description */
+        width: auto;
+      }
+
+      /* Table of scalar value types. */
+      .scalar-value-types-table tr {
+        height: 3em;
+      }
+
+      /* Table of contents. */
+      #toc-container ul {
+        list-style-type: none;
+        padding-left: 1em;
+        line-height: 180%;
+        margin: 0;
+      }
+      #toc > li > a {
+        font-weight: bold;
+      }
+
+      /* File heading div */
+      .file-heading {
+        width: 100%;
+        display: table;
+        border-bottom: 1px solid #aaa;
+        margin: 4em 0 1.5em 0;
+      }
+      .file-heading h2 {
+        border: none;
+        display: table-cell;
+      }
+      .file-heading a {
+        text-align: right;
+        display: table-cell;
+      }
+
+      /* The 'M', 'E' and 'X' badges in the ToC */
+      .badge {
+        width: 1.6em;
+        height: 1.6em;
+        display: inline-block;
+
+        line-height: 1.6em;
+        text-align: center;
+        font-weight: bold;
+        font-size: 60%;
+
+        color: #89ba48;
+        background-color: #dff0c8;
+
+        margin: 0.5ex 1em 0.5ex -1em;
+        border: 1px solid #fbfbfb;
+        border-radius: 1ex;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <h1 id="title">Scene Format</h1>
+
+    <h2>Table of Contents</h2>
+
+    <div id="toc-container">
+      <ul id="toc">
+        
+          
+          <li>
+            <a href="#scene.proto">scene.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#scene_format.Camera"><span class="badge">M</span>Camera</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Color"><span class="badge">M</span>Color</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Cube"><span class="badge">M</span>Cube</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Light"><span class="badge">M</span>Light</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightDirectional"><span class="badge">M</span>LightDirectional</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightPoint"><span class="badge">M</span>LightPoint</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightSphere"><span class="badge">M</span>LightSphere</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Material"><span class="badge">M</span>Material</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.MeshedObject"><span class="badge">M</span>MeshedObject</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.MirrorMaterial"><span class="badge">M</span>MirrorMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.OrthographicCamera"><span class="badge">M</span>OrthographicCamera</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.PerspectiveCamera"><span class="badge">M</span>PerspectiveCamera</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Plane"><span class="badge">M</span>Plane</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.RenderOptions"><span class="badge">M</span>RenderOptions</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Scene"><span class="badge">M</span>Scene</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.SceneObject"><span class="badge">M</span>SceneObject</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.SolidMaterial"><span class="badge">M</span>SolidMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Sphere"><span class="badge">M</span>Sphere</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Transform"><span class="badge">M</span>Transform</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Vector3"><span class="badge">M</span>Vector3</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+        <li><a href="#scalar-value-types">Scalar Value Types</a></li>
+      </ul>
+    </div>
+
+    
+      
+      <div class="file-heading">
+        <h2 id="scene.proto">scene.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="scene_format.Camera">Camera</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Object id in scene.<br/>Should be equal or greater than 1.<br/>Should be unique across all Camera, Light and SceneObject
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">transform</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Transform">Transform</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="2">camera (one&nbsp;of)</td>
+                        <td colspan="1">perspective</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.PerspectiveCamera">PerspectiveCamera</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">orthographic</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.OrthographicCamera">OrthographicCamera</a></td>
+                  <td class="required_to_implement"><strong>no</strong></td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            <br/>
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.Color">Color</h3>
+        <p>Representation of RGB colors.<br/>Components in range [0, 1]</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">g</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">b</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.Cube">Cube</h3>
+        <p>Representation of cube</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.Light">Light</h3>
+        <p>Representation of light</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Object id in scene.<br/>Should be equal or greater than 1.<br/>Should be unique across all Camera, Light and SceneObject
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">transform</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Transform">Transform</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">intensity</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="3">light (one&nbsp;of)</td>
+                        <td colspan="1">point</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.LightPoint">LightPoint</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">directional</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.LightDirectional">LightDirectional</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">sphere</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.LightSphere">LightSphere</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.LightDirectional">LightDirectional</h3>
+        <p>Representation of directional light</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.LightPoint">LightPoint</h3>
+        <p>Representation of point light</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.LightSphere">LightSphere<strong> - not required to implement</strong></h3>
+        <p><br/>Representation of sphere light</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.Material">Material</h3>
+        <p>Representation of material</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="2">material (one&nbsp;of)</td>
+                        <td colspan="1">solid</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.SolidMaterial">SolidMaterial</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">glass</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.MirrorMaterial">MirrorMaterial</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.MeshedObject">MeshedObject</h3>
+        <p>Mesh specified in obj file</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">reference</td>
+                    
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Reference to obj file.<br/>Absolute or relative path
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.MirrorMaterial">MirrorMaterial</h3>
+        <p>Material for perfect mirror</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.OrthographicCamera">OrthographicCamera<strong> - not required to implement</strong></h3>
+        <p><br/>Representation of orthographic camera</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.PerspectiveCamera">PerspectiveCamera</h3>
+        <p>Representation of perspective camera</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">fov</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.Plane">Plane</h3>
+        <p>Representation of plane</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.RenderOptions">RenderOptions</h3>
+        <p>Default options for rendering scene.<br/>Can be overridden in renderer</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">camera_id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Camera from which scene should be rendered
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">width</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">height</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.Scene">Scene</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">version</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">render_options</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.RenderOptions">RenderOptions</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">scene_objects</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.SceneObject">SceneObject</a>, repeated</strong></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">lights</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Light">Light</a>, repeated</strong></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">cameras</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Camera">Camera</a>, repeated</strong></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">materials</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Material">Material</a>, repeated</strong></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.SceneObject">SceneObject</h3>
+        <p>Representation of object to render</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Object id in scene.<br/>Should be equal or greater than 1.<br/>Should be unique across all Camera, Light and SceneObject
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">transform</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Transform">Transform</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="2">material (one&nbsp;of)</td>
+                        <td colspan="1">material_id</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                        
+                            Reference to material in array of materials
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">material</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Material">Material</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="4">mesh (one&nbsp;of)</td>
+                        <td colspan="1">sphere</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.Sphere">Sphere</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">cube</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Cube">Cube</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">plane</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Plane">Plane</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">meshed_object</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.MeshedObject">MeshedObject</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.SolidMaterial">SolidMaterial</h3>
+        <p>Lambert material</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.Sphere">Sphere</h3>
+        <p>Representation of sphere</p>
+
+        
+
+        
+      
+        <h3 id="scene_format.Transform">Transform</h3>
+        <p>Position, rotation and scale of an object</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">position</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">rotation</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Rotation in euler angles.<br/>Can be negative or positive.<br/>Angles are measured counterclockwise
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">scale</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">parent_id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="required_to_implement"><strong>no</strong></td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            <br/>Id of parent relative to which transformation should be applied.<br/>If parent_id is 0 transformation is specified in world space.<br/>To correctly apply transformation you should build a tree structure representing relationships between objects.<br/>Then from top to bottom create transformation matrix.<br/>If object has parent: multiply parent's matrix by object's matrix to get final matrix
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="scene_format.Vector3">Vector3</h3>
+        <p>Representation of 3D vectors and points</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">x</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">y</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">z</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+
+    <h2 id="scalar-value-types">Scalar Value Types</h2>
+    <table class="scalar-value-types-table">
+      <thead>
+        <tr><td>Scalar Type</td><td>C#</td><td>JavaScript</td><td>Java</td><td>C++</td></tr>
+      </thead>
+      <tbody>
+        
+          <tr id="double">
+            <td>double</td>
+            <td>double</td>
+            <td>any</td>
+            <td>double</td>
+            <td>double</td>
+          </tr>
+        
+          <tr id="float">
+            <td>float</td>
+            <td>float</td>
+            <td>any</td>
+            <td>float</td>
+            <td>float</td>
+          </tr>
+        
+          <tr id="int32">
+            <td>int32</td>
+            <td>int</td>
+            <td>any</td>
+            <td>int</td>
+            <td>int32</td>
+          </tr>
+        
+          <tr id="int64">
+            <td>int64</td>
+            <td>long</td>
+            <td>any</td>
+            <td>long</td>
+            <td>int64</td>
+          </tr>
+        
+          <tr id="uint32">
+            <td>uint32</td>
+            <td>uint</td>
+            <td>any</td>
+            <td>int</td>
+            <td>uint32</td>
+          </tr>
+        
+          <tr id="uint64">
+            <td>uint64</td>
+            <td>ulong</td>
+            <td>any</td>
+            <td>long</td>
+            <td>uint64</td>
+          </tr>
+        
+          <tr id="sint32">
+            <td>sint32</td>
+            <td>int</td>
+            <td>any</td>
+            <td>int</td>
+            <td>int32</td>
+          </tr>
+        
+          <tr id="sint64">
+            <td>sint64</td>
+            <td>long</td>
+            <td>any</td>
+            <td>long</td>
+            <td>int64</td>
+          </tr>
+        
+          <tr id="fixed32">
+            <td>fixed32</td>
+            <td>uint</td>
+            <td>any</td>
+            <td>int</td>
+            <td>uint32</td>
+          </tr>
+        
+          <tr id="fixed64">
+            <td>fixed64</td>
+            <td>ulong</td>
+            <td>any</td>
+            <td>long</td>
+            <td>uint64</td>
+          </tr>
+        
+          <tr id="sfixed32">
+            <td>sfixed32</td>
+            <td>int</td>
+            <td>any</td>
+            <td>int</td>
+            <td>int32</td>
+          </tr>
+        
+          <tr id="sfixed64">
+            <td>sfixed64</td>
+            <td>long</td>
+            <td>any</td>
+            <td>long</td>
+            <td>int64</td>
+          </tr>
+        
+          <tr id="bool">
+            <td>bool</td>
+            <td>bool</td>
+            <td>any</td>
+            <td>boolean</td>
+            <td>bool</td>
+          </tr>
+        
+          <tr id="string">
+            <td>string</td>
+            <td>string</td>
+            <td>any</td>
+            <td>String</td>
+            <td>string</td>
+          </tr>
+        
+          <tr id="bytes">
+            <td>bytes</td>
+            <td>ByteString</td>
+            <td>any</td>
+            <td>ByteString</td>
+            <td>string</td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </body>
+</html>
+

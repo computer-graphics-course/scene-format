@@ -2,9 +2,12 @@
 
 <html>
   <head>
-    <title>Scene Format</title>
+    <title>Scene Format - v1</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic"/>
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <style>
       html {
         scroll-behavior: smooth;
@@ -136,13 +139,28 @@
         border-bottom: 1px solid #aaa;
         margin: 4em 0 1.5em 0;
       }
-      .file-heading h2 {
+      .struct-heading {
+        width: 100%;
+        display: table;
+        margin-top: 0.75rem;
+        border-bottom: 1px solid #aaa;
+      }
+      .file-heading h2, .struct-heading h3 {
         border: none;
         display: table-cell;
       }
       .file-heading a {
         text-align: right;
         display: table-cell;
+      }
+      .struct-heading a {
+        text-align: right;
+        display: table-cell;
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      .struct-heading:hover a {
+        opacity: 1;
       }
 
       /* The 'M', 'E' and 'X' badges in the ToC */
@@ -174,6 +192,7 @@
 
     <div id="toc-container">
       <ul id="toc">
+        <li><a href="#into">Intro</a></li>
         
           
           <li>
@@ -267,7 +286,41 @@
           </li>
         
         <li><a href="#scalar-value-types">Scalar Value Types</a></li>
+        <li><a href="#json-example">JSON Example</a></li>
       </ul>
+    </div>
+
+    <div class="file-heading">
+      <h2 id="intro">Intro</h2>
+      <a href="#title">Top</a>
+    </div>
+    <div>
+      This scene format is intended to be used to define scenes for rendering as a part of <a href="https://github.com/computer-graphics-course/assignments">computer graphics course</a>.<br />
+      We use <a href="https://developers.google.com/protocol-buffers">protobuf</a> to define a files schema (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/proto/scene.proto">see it on GitHub</a>).  
+      Protobuf schema is a single source of truth and it is used to generate io libraries and this document.
+
+      <h3>Usage & example</h3>
+      Please <a href="#json-example">see the example</a> of demo scene defined in this format. To read or write such files we provide libraries for a number of languages.<br />
+      <b>It is strongly advised to use libraries we provide instead of implementing your own parser. That is because our libraries implement additional pre/processing steps when reading/writing the file.</b>
+
+      <h3>C# Library</h3>
+      <b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a href="https://github.com/settings/tokens">here</a>.<br />
+      <b>Step 2.</b> Add a nuget source:
+      <pre>
+      <code>
+url = "https://github.com/computer-graphics-course/index.json"
+user = "&lt;your github username&gt;"
+password = "&lt;token from step 1&gt;"
+      </code>
+      </pre>
+      <b>Step 3.</b> Install <i>SceneFormat</i> dependency. Check <a href="https://github.com/computer-graphics-course/scene-format/packages/752161">this page</a> for the latest version available.<br />
+      <b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/csharp/SceneFormat/Example/Program.cs">this snippet</a> to read or write scene format files.<br />
+
+      <h3>Problems? Contributions?</h3>
+      If you have any suggestions or would like to submit a patch, feel free to create a pull request against <a href="https://github.com/computer-graphics-course/scene-format">scene format repo</a> or
+      create an issue.<br />
+      Also, feel free to contact anyone from the scene format team if you have any questions or issues:
+      <a href="https://t.me/nikitavbv">@nikitavbv</a>, <a href="https://t.me/Brookokoko">@Brookokoko</a>, <a href="https://t.me/metamodern">@metamodern</a>, <a href="https://t.me/TheBestTvarynka">@TheBestTvarynka</a>, <a href="https://t.me/grizik">@grizik</a>.
     </div>
 
     
@@ -278,7 +331,10 @@
       <p></p>
 
       
-        <h3 id="scene_format.Camera">Camera</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Camera">Camera</h3>
+          <a href="#title">Top</a>
+        </div>
         <p></p>
 
         
@@ -364,7 +420,10 @@
 
         
       
-        <h3 id="scene_format.Color">Color</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Color">Color</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of RGB colors.<br/>Components in range [0, 1]</p>
 
         
@@ -432,14 +491,20 @@
 
         
       
-        <h3 id="scene_format.Cube">Cube</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Cube">Cube</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of cube</p>
 
         
 
         
       
-        <h3 id="scene_format.Light">Light</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Light">Light</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of light</p>
 
         
@@ -559,11 +624,11 @@
                     
                   
                   <td class="field_type"><a href="#scene_format.LightSphere">LightSphere</a></td>
-                  <td class="required_to_implement">yes</td>
+                  <td class="required_to_implement"><strong>no</strong></td>
                   <td class="field_description">
                       <p>
                                                     
-                            
+                            <br/>
                         
                       </p>
                 </td>
@@ -576,28 +641,40 @@
 
         
       
-        <h3 id="scene_format.LightDirectional">LightDirectional</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.LightDirectional">LightDirectional</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of directional light</p>
 
         
 
         
       
-        <h3 id="scene_format.LightPoint">LightPoint</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.LightPoint">LightPoint</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of point light</p>
 
         
 
         
       
-        <h3 id="scene_format.LightSphere">LightSphere<strong> - not required to implement</strong></h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.LightSphere">LightSphere<strong> - not required to implement</strong></h3>
+          <a href="#title">Top</a>
+        </div>
         <p><br/>Representation of sphere light</p>
 
         
 
         
       
-        <h3 id="scene_format.Material">Material</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Material">Material</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of material</p>
 
         
@@ -666,7 +743,10 @@
 
         
       
-        <h3 id="scene_format.MeshedObject">MeshedObject</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.MeshedObject">MeshedObject</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Mesh specified in obj file</p>
 
         
@@ -700,21 +780,30 @@
 
         
       
-        <h3 id="scene_format.MirrorMaterial">MirrorMaterial</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.MirrorMaterial">MirrorMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Material for perfect mirror</p>
 
         
 
         
       
-        <h3 id="scene_format.OrthographicCamera">OrthographicCamera<strong> - not required to implement</strong></h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.OrthographicCamera">OrthographicCamera<strong> - not required to implement</strong></h3>
+          <a href="#title">Top</a>
+        </div>
         <p><br/>Representation of orthographic camera</p>
 
         
 
         
       
-        <h3 id="scene_format.PerspectiveCamera">PerspectiveCamera</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.PerspectiveCamera">PerspectiveCamera</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of perspective camera</p>
 
         
@@ -748,14 +837,20 @@
 
         
       
-        <h3 id="scene_format.Plane">Plane</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Plane">Plane</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of plane</p>
 
         
 
         
       
-        <h3 id="scene_format.RenderOptions">RenderOptions</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.RenderOptions">RenderOptions</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Default options for rendering scene.<br/>Can be overridden in renderer</p>
 
         
@@ -823,7 +918,10 @@
 
         
       
-        <h3 id="scene_format.Scene">Scene</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Scene">Scene</h3>
+          <a href="#title">Top</a>
+        </div>
         <p></p>
 
         
@@ -942,7 +1040,10 @@
 
         
       
-        <h3 id="scene_format.SceneObject">SceneObject</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.SceneObject">SceneObject</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of object to render</p>
 
         
@@ -1097,21 +1198,30 @@
 
         
       
-        <h3 id="scene_format.SolidMaterial">SolidMaterial</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.SolidMaterial">SolidMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Lambert material</p>
 
         
 
         
       
-        <h3 id="scene_format.Sphere">Sphere</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Sphere">Sphere</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of sphere</p>
 
         
 
         
       
-        <h3 id="scene_format.Transform">Transform</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Transform">Transform</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Position, rotation and scale of an object</p>
 
         
@@ -1196,7 +1306,10 @@
 
         
       
-        <h3 id="scene_format.Vector3">Vector3</h3>
+        <div class="struct-heading">
+          <h3 id="scene_format.Vector3">Vector3</h3>
+          <a href="#title">Top</a>
+        </div>
         <p>Representation of 3D vectors and points</p>
 
         
@@ -1401,6 +1514,102 @@
         
       </tbody>
     </table>
+
+    <div class="file-heading">
+      <h2 id="json-example">JSON example</h2>
+      <a href="#title">Top</a>
+    </div>
+    <pre>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 1920,
+    "height": 1080
+  },
+  "sceneObjects": [
+    {
+      "id": 4,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.4,
+          "y": 1,
+          "z": 4
+        }
+      },
+      "material": {
+        "solid": {}
+      },
+      "meshedObject": {
+        "reference": "cow2.obj"
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 3,
+          "y": 0,
+          "z": 3
+        }
+      },
+      "color": {
+        "r": 0.5,
+        "g": 0,
+        "b": 1
+      },
+      "intensity": 100,
+      "point": {}
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 3,
+          "z": 0
+        }
+      },
+      "color": {
+        "r": 0,
+        "g": 1,
+        "b": 0
+      },
+      "intensity": 30,
+      "point": {}
+    }
+  ],
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 1.25,
+          "y": 0.1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 10,
+          "y": 90,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ]
+}
+        </code>
+    </pre>
   </body>
+  <script>hljs.highlightAll();</script>
 </html>
 

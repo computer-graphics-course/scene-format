@@ -11,6 +11,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@computer-graphics-course/scene-format": "=0.1.48"
+    "@computer-graphics-course/scene-format": "=0.1.87"
   }
 }

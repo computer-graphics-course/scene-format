@@ -1,0 +1,5 @@
+src/main/java/com/github/computergraphicscourse/sceneformat/SceneFormat.java
+
+.idea
+.gradle
+build

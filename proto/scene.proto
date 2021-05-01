@@ -11,86 +11,176 @@ message Scene {
   repeated Material materials = 6;
 }
 
+// Representation of 3D vectors and points
 message Vector3 {
   double x = 1;
   double y = 2;
   double z = 3;
 }
 
+/*
+Representation of RGB colors.
+Components in range [0, 1]
+*/
 message Color {
   double r = 1;
   double g = 2;
   double b = 3;
 }
 
+// Position, rotation and scale of an object
 message Transform {
   Vector3 position = 2;
+  /*
+  Rotation in euler angles.
+  Can be negative or positive.
+  Angles are measured counterclockwise
+  */
   Vector3 rotation = 3;
   Vector3 scale = 4;
+  /*
+  @optional
+  Id of parent relative to which transformation should be applied.
+  If parent_id is 0 transformation is specified in world space.
+  To correctly apply transformation you should build a tree structure representing relationships between objects.
+  Then from top to bottom create transformation matrix.
+  If object has parent: multiply parent's matrix by object's matrix to get final matrix
+  */
   int32 parent_id = 5;
 }
 
+/*
+Default options for rendering scene.
+Can be overridden in renderer
+*/
 message RenderOptions {
-    int32 camera_id = 1;
-    int32 width = 2;
-    int32 height = 3;
+  // Camera from which scene should be rendered
+  int32 camera_id = 1;
+  int32 width = 2;
+  int32 height = 3;
 }
 
+// Representation of cube 
 message Cube {}
+
+// Representation of sphere 
 message Sphere {}
+
+// Representation of plane 
 message Plane {}
-message MeshedObject { string reference = 2; }
+
+// Mesh specified in obj file 
+message MeshedObject {
+  /*
+  Reference to obj file.
+  Absolute or relative path 
+  */
+  string reference = 2;
+}
+
+// Representation of object to render
 message SceneObject {
+  /*
+  Object id in scene.
+  Should be equal or greater than 1.
+  Should be unique across all Camera, Light and SceneObject
+  */
   int32 id = 1;
   Transform transform = 2;
 
   oneof mat {
+    // @oneof 2 material
+    // Reference to material in array of materials
     string material_id = 3;
+    // @oneof_item
     Material material = 4;
   }
 
   oneof mesh {
+    // @oneof 4 mesh
     Sphere sphere = 5;
+    // @oneof_item
     Cube cube = 6;
+    // @oneof_item
     Plane plane = 7;
+    // @oneof_item
     MeshedObject meshed_object = 8;
   }
 }
 
-message LightPoint {}
-message LightSphere {}
+// Representation of directional light
 message LightDirectional {}
+
+// Representation of point light
+message LightPoint {}
+
+/*
+@optional
+Representation of sphere light
+*/
+message LightSphere {}
+
+// Representation of light
 message Light {
+  /*
+  Object id in scene.
+  Should be equal or greater than 1.
+  Should be unique across all Camera, Light and SceneObject
+  */
   int32 id = 1;
   Transform transform = 3;
   Color color = 4;
   double intensity = 5;
   oneof light {
+    // @oneof 3 light
     LightPoint point = 6;
+    // @oneof_item
     LightDirectional directional = 7;
+    // @oneof_item
+    // @optional
     LightSphere sphere = 8;
   }
 }
 
+// Representation of perspective camera
 message PerspectiveCamera { double fov = 1; }
+
+/*
+@optional
+Representation of orthographic camera
+*/
 message OrthographicCamera {}
+
 message Camera {
+  /*
+  Object id in scene.
+  Should be equal or greater than 1.
+  Should be unique across all Camera, Light and SceneObject
+  */
   int32 id = 1;
   Transform transform = 2;
   oneof camera {
+    // @oneof 2 camera
     PerspectiveCamera perspective = 3;
+    // @oneof_item
+    // @optional
     OrthographicCamera orthographic = 4;
   }
 }
 
+// Representation of material
 message Material {
   string id = 1;
   oneof material {
+    // @oneof 2 material
     SolidMaterial solid = 2;
-    GlassMaterial glass = 3;
+    // @oneof_item
+    MirrorMaterial glass = 3;
   }
 }
 
+// Lambert material
 message SolidMaterial {}
 
-message GlassMaterial {}
+// Material for perfect mirror
+message MirrorMaterial {}

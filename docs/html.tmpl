@@ -242,14 +242,14 @@
 
       <h3>Usage & example</h3>
       Please <a href="#json-example">see the example</a> of the demo scene defined in this format (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/file_samples/binary.cowscene">example for binary is available in our github repo</a>). To read or write such files we provide libraries for a number of languages. These libraries support both json and binary as inputs.<br />
-      <b>It is strongly advised to use libraries we provide instead of implementing your own parser. That is because our libraries implement additional pre/processing steps when reading/writing the file.</b>
+      <b>It is strongly advised to use libraries we provide instead of implementing your own parser. That is because our libraries implement additional pre/postprocessing steps when reading/writing the file.</b>
 
       <h3>C# Library</h3>
       <b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a href="https://github.com/settings/tokens">here</a>.<br />
       <b>Step 2.</b> Add a nuget source:
       <pre>
       <code>
-dotnet nuget add source "https://github.com/computer-graphics-course/index.json" --name "SceneFormat GitHub" --username "&lt;your github username&gt;" "&lt;token from step 1&gt;"
+dotnet nuget add source "https://github.com/computer-graphics-course/index.json" --name "SceneFormat GitHub" --username "&lt;your github username&gt;" --password "&lt;token from step 1&gt;"
       </code>
       </pre>
       <b>Step 3.</b> Install <i>SceneFormat</i> dependency. Check <a href="https://github.com/computer-graphics-course/scene-format/packages/752161">this page</a> for the latest version available.<br />

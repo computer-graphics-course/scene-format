@@ -1,0 +1,46 @@
+name: protobuf build
+
+on: [push]
+
+jobs:
+  protoc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+      - name: Generate code with protoc
+        run: protoc -I=proto --csharp_out=csharp/SceneFormat/SceneFormat ./proto/scene.proto
+      - name: Release generated csharp code as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-code-csharp
+          path: csharp/SceneFormat/SceneFormat/Scene.cs
+  build_csharp_library:
+    needs: protoc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Download csharp generated code
+        uses: actions/download-artifact@v2
+        with:
+          name: generated-code-csharp
+          path: csharp/SceneFormat/SceneFormat/Scene.cs
+      - name: Add GitHub package registry source
+        run: dotnet nuget add source https://nuget.pkg.github.com/computer-graphics-course/index.json -n "github" -u "computer-graphics-course" -p "${{ secrets.GITHUB_TOKEN }}" --store-password-in-clear-text
+      - name: Restore
+        run: cd csharp/SceneFormat && dotnet restore
+      - name: Build
+        run: cd csharp/SceneFormat && dotnet build --configuration Release /p:Version=0.1.$GITHUB_RUN_NUMBER
+      - name: Pack
+        run: cd csharp/SceneFormat && dotnet pack --configuration Release /p:Version=0.1.$GITHUB_RUN_NUMBER --no-build --output .
+      - name: Install gpr
+        run: dotnet tool install gpr -g
+      - name: Delete existing package
+        run : cd csharp/SceneFormat && gpr delete SceneFormat.0.1.$GITHUB_RUN_NUMBER.nupkg || true
+      - name: Push
+        run: cd csharp/SceneFormat && gpr push SceneFormat.0.1.$GITHUB_RUN_NUMBER.nupkg --repository computer-graphics-course/scene-format
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

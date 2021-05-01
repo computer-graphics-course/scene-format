@@ -186,7 +186,7 @@
 
   <body>
 
-    <h1 id="title">Scene Format</h1>
+    <h1 id="title">Scene Format - v1</h1>
 
     <h2>Table of Contents</h2>
 
@@ -233,7 +233,12 @@
     <div>
       This scene format is intended to be used to define scenes for rendering as a part of <a href="https://github.com/computer-graphics-course/assignments">computer graphics course</a>.<br />
       We use <a href="https://developers.google.com/protocol-buffers">protobuf</a> to define a files schema (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/proto/scene.proto">see it on GitHub</a>).  
-      Protobuf schema is a single source of truth and it is used to generate io libraries and this document.
+      Protobuf schema is a single source of truth and it is used to generate io libraries and this document.<br />
+      Data is stored as json in files with <i>.cowscene</i> extension.
+
+      <h3 id="into-file-structure">Structure<h3>
+      Top-level structure of this file is <a href="#scene_format.Scene">Scene</a>. All scene objects are listed there.<br />
+      <b>Note that fields marked with <i>"Required to implement? No"</i> mean fields and features which are not required to be implemented as a part of the course. These fields are added for fun and experimentational purposes only.</b>
 
       <h3>Usage & example</h3>
       Please <a href="#json-example">see the example</a> of demo scene defined in this format. To read or write such files we provide libraries for a number of languages.<br />

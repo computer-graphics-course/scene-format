@@ -114,6 +114,9 @@ message LightDirectional {}
 // Representation of point light
 message LightPoint {}
 
+// This is a sphere of light which surrounds the whole scene.
+message LightSurrounding {}
+
 /*
 @optional
 Representation of sphere light
@@ -132,13 +135,10 @@ message Light {
   Color color = 4;
   double intensity = 5;
   oneof light {
-    // @oneof 3 light
-    LightPoint point = 6;
-    // @oneof_item
-    LightDirectional directional = 7;
-    // @oneof_item
-    // @optional
-    LightSphere sphere = 8;
+    LightPoint point = 6; // @oneof 4 light
+    LightDirectional directional = 7; // @oneof_item
+    LightSphere sphere = 8; // @oneof_item @optional
+    LightSurrounding surrounding = 9; // @oneof_item
   }
 }
 

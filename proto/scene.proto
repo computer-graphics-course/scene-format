@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.github.computer_graphics_course;
+package scene_format;
 
 message Scene {
   int32 version = 1;

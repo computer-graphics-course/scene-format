@@ -186,7 +186,7 @@
 
   <body>
 
-    <h1 id="title">Scene Format</h1>
+    <h1 id="title">Scene Format - v1</h1>
 
     <h2>Table of Contents</h2>
 
@@ -299,17 +299,17 @@
       <a href="#title">Top</a>
     </div>
     <div>
-      This scene format is intended to be used to define scenes for rendering as a part of <a href="https://github.com/computer-graphics-course/assignments">computer graphics course</a>.<br />
-      We use <a href="https://developers.google.com/protocol-buffers">protobuf</a> to define a files schema (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/proto/scene.proto">see it on GitHub</a>).  
+      This scene format is intended to be used to define scenes for rendering as a part of a <a href="https://github.com/computer-graphics-course/assignments">computer graphics course</a>.<br />
+      We use <a href="https://developers.google.com/protocol-buffers">protobuf</a> to define files schema (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/proto/scene.proto">see it on GitHub</a>).  
       Protobuf schema is a single source of truth and it is used to generate io libraries and this document.<br />
-      Data is stored as json in files with <i>.cowscene</i> extension.
+      Data is stored as json in files with <i>.cowscene</i> extension (binary mode is also supported).
 
       <h3 id="into-file-structure">Structure<h3>
-      Top-level structure of this file is <a href="#scene_format.Scene">Scene</a>. All scene objects are listed there.<br />
-      <b>Note that fields marked with <i>"Required to implement? No"</i> mean fields and features which are not required to be implemented as a part of the course. These fields are added for fun and experimentational purposes only.</b>
+      The top-level structure of this file is <a href="#scene_format.Scene">Scene</a>. All scene objects are listed there.<br />
+      <b>Note that fields marked with <i>"Required to implement? No"</i> mean fields and features which are not required to be implemented as a part of the course. These fields are added for fun and experimentation purposes only.</b>
 
       <h3>Usage & example</h3>
-      Please <a href="#json-example">see the example</a> of demo scene defined in this format. To read or write such files we provide libraries for a number of languages.<br />
+      Please <a href="#json-example">see the example</a> of the demo scene defined in this format (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/file_samples/binary.cowscene">example for binary is available in our github repo</a>). To read or write such files we provide libraries for a number of languages. These libraries support both json and binary as inputs.<br />
       <b>It is strongly advised to use libraries we provide instead of implementing your own parser. That is because our libraries implement additional pre/processing steps when reading/writing the file.</b>
 
       <h3>C# Library</h3>
@@ -317,16 +317,57 @@
       <b>Step 2.</b> Add a nuget source:
       <pre>
       <code>
-url = "https://github.com/computer-graphics-course/index.json"
-user = "&lt;your github username&gt;"
-password = "&lt;token from step 1&gt;"
+dotnet nuget add source "https://github.com/computer-graphics-course/index.json" --name "SceneFormat GitHub" --username "&lt;your github username&gt;" "&lt;token from step 1&gt;"
       </code>
       </pre>
       <b>Step 3.</b> Install <i>SceneFormat</i> dependency. Check <a href="https://github.com/computer-graphics-course/scene-format/packages/752161">this page</a> for the latest version available.<br />
       <b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/csharp/SceneFormat/Example/Program.cs">this snippet</a> to read or write scene format files.<br />
 
+      <h3>JavaScript/TypeScript Library</h3>
+      <b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a href="https://github.com/settings/tokens">here</a>.<br />
+      <b>Step 2.</b> Login to npm registry (use your github username as username and token from step 1 as password):
+      <pre>
+      <code>
+npm login --scope=@computer-graphics-course --registry=https://npm.pkg.github.com
+      </code>
+      </pre>
+      <b>Step 3.</b> Install scene-format dependency:
+      <pre>
+      <code>
+npm install --save @computer-graphics-course/scene-format
+      </code>
+      </pre>
+      Remember that you can always check for latest version on <a href="https://github.com/computer-graphics-course/scene-format/packages/754546">the package page</a>.<br />
+      <b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/ts/example/main.ts">this snippet</a> to read or write scene format files.<br />
+
+      <h3>Java Library</h3>
+      <b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a href="https://github.com/settings/tokens">here</a>.<br />
+      <b>Step 2.</b> Add following lines to your <i>~/.gradle/gradle.properties</i>:
+      <pre>
+      <code>
+gprComputerGraphicsUser=&lt;your github username&gt;
+gprComputerGraphicsPassword=&lt;token from step 1&gt;
+      </code>
+      </pre>
+      <b>Step 3.</b> Add repository to your <i>build.gradle</i> (see complete example <a href="https://github.com/computer-graphics-course/scene-format/blob/master/java/example/build.gradle">here</a>):
+      <pre>
+      <code>
+maven {
+  url "https://maven.pkg.github.com/computer-graphics-course/scene-format"
+  credentials {
+    username "$gprComputerGraphicsUser"
+    password "$gprComputerGraphicsPassword"
+  }
+}
+      </code>
+      </pre>
+      <b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/java/example/src/main/java/Main.java">this snippet</a> to read or write scene format files.<br />
+
+      <h3>C++/Rust Libraries</h3>
+      Coming soon. C++ Library will probably be distributed as a source code archive. Meanwhile you can build library yourself using protoc, as <a href="https://developers.google.com/protocol-buffers/docs/cpptutorial">described here</a>.<br />
+
       <h3>Problems? Contributions?</h3>
-      If you have any suggestions or would like to submit a patch, feel free to create a pull request against <a href="https://github.com/computer-graphics-course/scene-format">scene format repo</a> or
+      If you have any suggestions or would like to submit a patch, feel free to create a pull request against the <a href="https://github.com/computer-graphics-course/scene-format">scene format repo</a> or
       create an issue.<br />
       Also, feel free to contact anyone from the scene format team if you have any questions or issues:
       <a href="https://t.me/nikitavbv">@nikitavbv</a>, <a href="https://t.me/Brookokoko">@Brookokoko</a>, <a href="https://t.me/metamodern">@metamodern</a>, <a href="https://t.me/TheBestTvarynka">@TheBestTvarynka</a>, <a href="https://t.me/grizik">@grizik</a>.
@@ -1421,7 +1462,10 @@ password = "&lt;token from step 1&gt;"
       
     
 
-    <h2 id="scalar-value-types">Scalar Value Types</h2>
+    <div class="file-heading">
+      <h2 id="scalar-value-types">Intro</h2>
+      <a href="#title">Top</a>
+    </div>
     <table class="scalar-value-types-table">
       <thead>
         <tr><td>Scalar Type</td><td>C#</td><td>JavaScript</td><td>Java</td><td>C++</td></tr>

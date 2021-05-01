@@ -1,0 +1,87 @@
+{
+    "version": 1,
+    "renderOptions": {
+      "cameraId": 1,
+      "width": 1920,
+      "height": 1080
+    },
+    "sceneObjects": [
+      {
+        "id": 4,
+        "transform": {
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "scale": {
+            "x": 0.4,
+            "y": 1,
+            "z": 4
+          }
+        },
+        "material": {
+          "solid": {}
+        },
+        "meshedObject": {
+          "reference": "cow2.obj"
+        }
+      }
+    ],
+    "lights": [
+      {
+        "id": 2,
+        "transform": {
+          "position": {
+            "x": 3,
+            "y": 0,
+            "z": 3
+          }
+        },
+        "color": {
+          "r": 0.5,
+          "g": 0,
+          "b": 1
+        },
+        "intensity": 100,
+        "point": {}
+      },
+      {
+        "id": 3,
+        "transform": {
+          "position": {
+            "x": 0,
+            "y": 3,
+            "z": 0
+          }
+        },
+        "color": {
+          "r": 0,
+          "g": 1,
+          "b": 0
+        },
+        "intensity": 30,
+        "point": {}
+      }
+    ],
+    "cameras": [
+      {
+        "id": 1,
+        "transform": {
+          "position": {
+            "x": 1.25,
+            "y": 0.1,
+            "z": 0
+          },
+          "rotation": {
+            "x": 10,
+            "y": 90,
+            "z": 0
+          }
+        },
+        "perspective": {
+          "fov": 60
+        }
+      }
+    ]
+  }

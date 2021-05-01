@@ -1,31 +1,46 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using System.Text.Json;
-using Google.Protobuf;
 using SceneFormat;
 
 namespace Example
 {
-    class Example
+    static class Example
     {
-        private static readonly JsonFormatter _jsonFormatter = new JsonFormatter(JsonFormatter.Settings.Default);
         private static readonly ISceneIO _sceneIO = new SceneIO();
         
-        static void Main(string[] args)
+        static void Main()
         {
             var scene = new Scene
             {
-                Version = 42,
-                Cameras =
+                Version = 1,
+                SceneObjects =
                 {
-                    new Scene.Types.Camera()
+                    new SceneObject
                     {
                         Id = 0,
-                        Position = new Scene.Types.Vector3 {
-                            X = 1.01,
-                            Y = 2.76,
-                            Z = 3,
+                        Transform = new Transform
+                        {
+                            Position = new Vector3 { X = 1.0, Y = 1.0, Z = 1.0 }
+                        },
+                        Material = new Material
+                        {
+                            Solid = new SolidMaterial()
+                        },
+                        MeshedObject = new MeshedObject
+                        {
+                            Reference = "cow.obj"
+                        }
+                    }
+                },
+                Cameras =
+                {
+                    new Camera
+                    {
+                        Id = 0,
+                        Transform = new Transform {
+                            Position = new Vector3 { X = 1.01, Y = 2.76, Z = 3, }
+                        },
+                        Perspective = new PerspectiveCamera {
+                            Fov = 60,
                         },
                     }
                 }
@@ -35,10 +50,10 @@ namespace Example
             _sceneIO.SaveAsJson(scene, "example_json.cowscene");
 
             var readResultBinary = _sceneIO.Read("example_binary.cowscene");
-            Console.WriteLine($"Camera X is {readResultBinary.Cameras[0].Position.X} when reading binary");
+            Console.WriteLine($"Camera X is {readResultBinary.Cameras[0].Transform.Position.X} when reading binary");
 
             var readResultJson = _sceneIO.Read("example_json.cowscene");
-            Console.WriteLine($"Camera X is {readResultJson.Cameras[0].Position.X} when reading json");
+            Console.WriteLine($"Camera X is {readResultJson.Cameras[0].Transform.Position.X} when reading json");
         }
     }
 }

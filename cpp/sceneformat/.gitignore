@@ -1,0 +1,6 @@
+.idea
+cmake-build-debug
+
+# protobuf generated
+*.pb.cc
+*.pb.h

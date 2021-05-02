@@ -1,0 +1,6 @@
+#ifndef SCENEFORMAT_SCENEIO_H
+#define SCENEFORMAT_SCENEIO_H
+
+void hello();
+
+#endif //SCENEFORMAT_SCENEIO_H

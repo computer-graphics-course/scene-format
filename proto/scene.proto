@@ -5,7 +5,7 @@ option java_package = "com.github.computergraphicscourse.sceneformat";
 option java_outer_classname = "SceneFormat";
 
 message Scene {
-  int32 version = 1;
+  int32 version = 1; // "1" is the only allowed value at the moment.
   RenderOptions render_options = 2;
   repeated SceneObject scene_objects = 3;
   repeated Light lights = 4;
@@ -90,7 +90,7 @@ message SceneObject {
   int32 id = 1;
   Transform transform = 2;
 
-  oneof mat {
+  oneof object_material {
     // @oneof 2 material
     // Reference to material in array of materials
     string material_id = 3;

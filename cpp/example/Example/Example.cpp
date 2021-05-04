@@ -1,6 +1,5 @@
 #include <iostream>
 #include "sceneio.h"
-#include <google/protobuf/util/json_util.h>
 
 using namespace scene_format;
 

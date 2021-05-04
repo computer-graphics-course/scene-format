@@ -295,8 +295,30 @@ maven {
       </pre>
       <b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/java/example/src/main/java/Main.java">this snippet</a> to read or write scene format files.<br />
 
-      <h3>C++/Rust Libraries</h3>
-      Coming soon. C++ Library will probably be distributed as a source code archive. Meanwhile you can build library yourself using protoc, as <a href="https://developers.google.com/protocol-buffers/docs/cpptutorial">described here</a>.<br />
+      <h3>C++ Library (instructions for Visual Studio on Windows)</h3>
+      <i>Please let us know if you have ideas for an easier way to distribute library.</i><br />
+      <b>Step 1.</b>Install vcpkg:
+      <pre>
+      <code>
+git clone https://github.com/microsoft/vcpkg
+cd vckpg && ./bootstrap-vcpkg.bat
+$env:Path += ";$(pwd)"
+      </code>
+      </pre>
+
+      <b>Step 2.</b>Install protobuf libraries with vcpkg (do this in your project folder, note that this can take some time (around 10 minutes):
+      <pre>
+      <code>
+vcpkg install protobuf protobuf:x64-windows
+vcpkg integrate install
+      </code>
+      </pre>
+
+      <b>Step 3.</b>Download latest library build from <a href="https://turbocow.nikitavbv.com/sceneformat/releases/cpp_latest.zip">here</a>. Place those somewhere in your project and include sceneio.h<br />
+      <b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/cpp/example/Example/Example.cpp">this snippet</a> to read or write scene format files.<br />
+
+      <h3>Other languages</h3>
+      Please let us know if we missed some language you use. You can also build library yourself using protoc, as <a href="https://developers.google.com/protocol-buffers">described in protobuf docs</a>.<br />
 
       <h3>Problems? Contributions?</h3>
       If you have any suggestions or would like to submit a patch, feel free to create a pull request against the <a href="https://github.com/computer-graphics-course/scene-format">scene format repo</a> or

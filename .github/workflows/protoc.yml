@@ -41,7 +41,7 @@ jobs:
           name: generated-code-java
           path: java/sceneformat/src/main/java/com/github/computergraphicscourse/sceneformat/SceneFormat.java
       - name: Build C++ library
-        run: curl -X POST https://api.nikitavbv.com/v1/scene-format/cpp?branch=${GITHUB_REF##*/}&version=0.1.$GITHUB_RUN_NUMBER
+        run: curl -X POST -d "" "https://api.nikitavbv.com/v1/scene-format/cpp?branch=${GITHUB_REF##*/}&version=0.1.$GITHUB_RUN_NUMBER"
   build_csharp_library:
     needs: protoc
     runs-on: ubuntu-latest

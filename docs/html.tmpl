@@ -317,6 +317,15 @@ vcpkg integrate install
       <b>Step 3.</b>Download latest library build from <a href="https://turbocow.nikitavbv.com/sceneformat/releases/cpp_latest.zip">here</a>. Place those somewhere in your project and include sceneio.h<br />
       <b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/cpp/example/Example/Example.cpp">this snippet</a> to read or write scene format files.<br />
 
+      <h3>Rust Library</h3>
+      Add to your Cargo.toml:
+      <pre>
+      <code>
+sceneformat = { git = "https://github.com/computer-graphics-course/scene-format" }
+      </code>
+      </pre>
+      Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/rust/src/lib.rs">this snippet's test</a> to read or write scene format files.<br />
+
       <h3>Other languages</h3>
       Please let us know if we missed some language you use. You can also build library yourself using protoc, as <a href="https://developers.google.com/protocol-buffers">described in protobuf docs</a>.<br />
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using SceneFormat;
 
 namespace Example
@@ -16,14 +17,22 @@ namespace Example
                 {
                     new SceneObject
                     {
-                        Id = 0,
+                        Id = 1,
                         Transform = new Transform
                         {
                             Position = new Vector3 { X = 1.0, Y = 1.0, Z = 1.0 }
                         },
                         Material = new Material
                         {
-                            LambertReflection = new LambertReflectionMaterial {},
+                            LambertReflection = new LambertReflectionMaterial
+                            {
+                                Color = new Color
+                                {
+                                    R = 0.4,
+                                    G = 0.6,
+                                    B = 0.6,
+                                },
+                            },
                         },
                         MeshedObject = new MeshedObject
                         {
@@ -35,7 +44,7 @@ namespace Example
                 {
                     new Camera
                     {
-                        Id = 0,
+                        Id = 2,
                         Transform = new Transform {
                             Position = new Vector3 { X = 1.01, Y = 2.76, Z = 3, }
                         },

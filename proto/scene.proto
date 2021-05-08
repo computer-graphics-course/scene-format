@@ -22,7 +22,7 @@ message Vector3 {
 
 /*
 Representation of RGB colors.
-Components in range [0, 1]
+Components should be greater or equal 0. No upper bound
 */
 message Color {
   double r = 1;
@@ -30,15 +30,42 @@ message Color {
   double b = 3;
 }
 
-// Position, rotation and scale of an object
+/*
+Position, rotation and scale of an object
+To calculate transformation matrix
+create translation matrix using position
+create rotation matrix using rotation
+create scale matrix using scale
+and multiple 3 matrices to get final matrix
+Process using parent is specified below
+
+Right vector can be extract
+from 1 column of the transformation matrix if your renderer use column-major conversion 
+from 1 row of the transformation matrix if your renderer use row-major conversion 
+
+Up vector can be extract
+from 2 column of the transformation matrix if your renderer use column-major conversion 
+from 2 row of the transformation matrix if your renderer use row-major conversion
+
+Forward vector can be extract
+from 3 column of the transformation matrix if your renderer use column-major conversion 
+from 3 row of the transformation matrix if your renderer use row-major conversion 
+*/
 message Transform {
+  /*
+  If not specified default value will be (0, 0, 0)
+  */
   Vector3 position = 2;
   /*
   Rotation in euler angles.
   Can be negative or positive.
-  Angles are measured counterclockwise
+  Angles are measured counterclockwise.
+  If not specified default value will be (0, 0, 0)
   */
   Vector3 rotation = 3;
+  /*
+  If not specified default value will be (1, 1, 1)
+  */
   Vector3 scale = 4;
   /*
   @optional
@@ -58,18 +85,51 @@ Can be overridden in renderer
 message RenderOptions {
   // Camera from which scene should be rendered
   int32 camera_id = 1;
+  // Width of final image
   int32 width = 2;
+  // Height of final image
   int32 height = 3;
 }
 
-// Representation of cube 
-message Cube {}
+/*
+Representation of cube
+To determine the position of a sphere look at Transform.position
+Transform.scale should be ignored
+If your renderer supports only axis aligned box Transform.rotation should be ignored
+For those who dare to support oriented bounding box here link how obb is implemented in opengl:
+http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/
+*/
+message Cube {
+  // Size of cube in each dimension
+  Vector3 size = 1;
+}
 
-// Representation of sphere 
-message Sphere {}
+/*
+Representation of sphere
+Transform.scale should be ignored
+To determine the position of a sphere look at Transform.position
+*/
+message Sphere {
+  // Radius of sphere
+  float radius = 1;
+}
 
-// Representation of plane 
+/*
+Representation of plane
+To determine the position of a plane look at Transform.position
+To determine the normal of a plane look at up vector of transformation
+*/
 message Plane {}
+
+/*
+Representation of disk
+To determine the position of a disk look at Transform.position
+To determine the normal of a disk look at up vector of transformation
+*/
+message Disk {
+  // Radius of disk
+  float radius = 1;
+}
 
 // Mesh specified in obj file 
 message MeshedObject {
@@ -92,28 +152,29 @@ message SceneObject {
 
   oneof object_material {
     // @oneof 2 material
-    // Reference to material in array of materials
+    // Reference to a material in the array of materials
     string material_id = 3;
-    // @oneof_item
-    Material material = 4;
+    Material material = 4; // @oneof_item
   }
 
   oneof mesh {
-    // @oneof 4 mesh
-    Sphere sphere = 5;
-    // @oneof_item
-    Cube cube = 6;
-    // @oneof_item
-    Plane plane = 7;
-    // @oneof_item
-    MeshedObject meshed_object = 8;
+    Sphere sphere = 5; // @oneof 4 mesh
+    Cube cube = 6; // @oneof_item
+    Plane plane = 7; // @oneof_item
+    MeshedObject meshed_object = 8; // @oneof_item
   }
 }
 
-// Representation of directional light
+/*
+Representation of directional light
+To determine the direction of a light look at forward vector of transformation
+*/
 message LightDirectional {}
 
-// Representation of point light
+/*
+Representation of point light
+To determine the position of a light look at Transform.position
+*/
 message LightPoint {}
 
 // This is a sphere of light which surrounds the whole scene.
@@ -123,7 +184,10 @@ message LightSurrounding {}
 @optional
 Representation of sphere light
 */
-message LightSphere {}
+message LightSphere {
+  // Radius of source light
+  float radius = 1;
+}
 
 // Representation of light
 message Light {
@@ -134,8 +198,8 @@ message Light {
   */
   int32 id = 1;
   Transform transform = 3;
+  // Color of source light
   Color color = 4;
-  double intensity = 5;
   oneof light {
     LightPoint point = 6; // @oneof 4 light
     LightDirectional directional = 7; // @oneof_item
@@ -145,7 +209,12 @@ message Light {
 }
 
 // Representation of perspective camera
-message PerspectiveCamera { double fov = 1; }
+message PerspectiveCamera {
+  /*
+  Horizontal field of view of camera
+  */
+  double fov = 1;
+}
 
 /*
 @optional
@@ -162,8 +231,7 @@ message Camera {
   int32 id = 1;
   Transform transform = 2;
   oneof camera {
-    // @oneof 2 camera
-    PerspectiveCamera perspective = 3;
+    PerspectiveCamera perspective = 3; // @oneof 2 camera
     // @oneof_item
     // @optional
     OrthographicCamera orthographic = 4;
@@ -174,10 +242,8 @@ message Camera {
 message Material {
   string id = 1;
   oneof material {
-    // @oneof 2 material
-    SolidMaterial solid = 2;
-    // @oneof_item
-    MirrorMaterial glass = 3;
+    SolidMaterial solid = 2; // @oneof 2 material
+    MirrorMaterial glass = 3; // @oneof_item
   }
 }
 

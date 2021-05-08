@@ -23,6 +23,9 @@ message Vector3 {
 /*
 Representation of RGB colors.
 Components should be greater or equal 0. No upper bound
+(0, 0, 0) - white
+(1, 1, 1) - black
+All values greater than 1 should be mapped to range [0, 1] by using gamma correction or just clamping values
 */
 message Color {
   double r = 1;
@@ -32,43 +35,46 @@ message Color {
 
 /*
 Position, rotation and scale of an object
-To calculate transformation matrix
-create translation matrix using position
-create rotation matrix using rotation
-create scale matrix using scale
-and multiple 3 matrices to get final matrix
+To calculate transformation matrix:
+<ul>
+  <li>create translation matrix using position</li>
+  <li>create rotation matrix using rotation</li>
+  <li>create scale matrix using scale</li>
+  <li>and multiple 3 matrices to get final matrix</li>
+</ul>
 Process using parent is specified below
 
-Right vector can be extract
-from 1 column of the transformation matrix if your renderer use column-major conversion 
-from 1 row of the transformation matrix if your renderer use row-major conversion 
+Right vector can be extracted
+from 1st column of the matrix if your renderer uses column-major conversion 
+from 1st row of the matrix if your renderer uses row-major conversion 
 
-Up vector can be extract
-from 2 column of the transformation matrix if your renderer use column-major conversion 
-from 2 row of the transformation matrix if your renderer use row-major conversion
+Up vector can be extracted
+from 2nd column of the matrix if your renderer uses column-major conversion 
+from 2nd row of the matrix if your renderer uses row-major conversion
 
-Forward vector can be extract
-from 3 column of the transformation matrix if your renderer use column-major conversion 
-from 3 row of the transformation matrix if your renderer use row-major conversion 
+Forward vector can be extracted
+from 3rd column of the matrix if your renderer uses column-major conversion 
+from 3rd row of the matrix if your renderer uses row-major conversion 
 */
 message Transform {
   /*
-  If not specified default value will be (0, 0, 0)
+  @default (0, 0, 0)
   */
   Vector3 position = 2;
   /*
+  @default (0, 0, 0)
   Rotation in euler angles.
   Can be negative or positive.
   Angles are measured counterclockwise.
-  If not specified default value will be (0, 0, 0)
   */
   Vector3 rotation = 3;
   /*
-  If not specified default value will be (1, 1, 1)
+  @default (1, 1, 1)
   */
   Vector3 scale = 4;
   /*
   @optional
+  @default 0
   Id of parent relative to which transformation should be applied.
   If parent_id is 0 transformation is specified in world space.
   To correctly apply transformation you should build a tree structure representing relationships between objects.
@@ -83,11 +89,20 @@ Default options for rendering scene.
 Can be overridden in renderer
 */
 message RenderOptions {
-  // Camera from which scene should be rendered
+  /*
+  @default 1
+  Camera from which scene should be rendered
+  */
   int32 camera_id = 1;
-  // Width of final image
+  /*
+  @default 640
+  Width of final image
+  */
   int32 width = 2;
-  // Height of final image
+  /*
+  @default 320
+  Height of final image
+  */
   int32 height = 3;
 }
 
@@ -96,11 +111,13 @@ Representation of cube
 To determine the position of a cube look at Transform.position
 Transform.scale should be ignored
 If your renderer supports only axis aligned box Transform.rotation should be ignored
-For those who dare to support oriented bounding box here link how obb is implemented in opengl:
-http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/
+For those who dare to support oriented bounding box here <a href="http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/">link</a> how obb is implemented in opengl
 */
 message Cube {
-  // Size of cube in each dimension
+  /*
+  @default (1, 1, 1)
+  Size of cube in each dimension
+  */
   Vector3 size = 1;
 }
 
@@ -110,25 +127,31 @@ Transform.scale should be ignored
 To determine the position of a sphere look at Transform.position
 */
 message Sphere {
-  // Radius of sphere
-  float radius = 1;
+  /*
+  @default 1
+  Radius of sphere
+  */
+  double radius = 1;
 }
 
 /*
 Representation of plane
 To determine the position of a plane look at Transform.position
-To determine the normal of a plane look at up vector of transformation
+To determine the normal of a plane look at Transform.up
 */
 message Plane {}
 
 /*
 Representation of disk
 To determine the position of a disk look at Transform.position
-To determine the normal of a disk look at up vector of transformation
+To determine the normal of a disk look at Transform.up
 */
 message Disk {
-  // Radius of disk
-  float radius = 1;
+  /*
+  @default 1
+  Radius of disk
+  */
+  double radius = 1;
 }
 
 // Mesh specified in obj file 
@@ -161,13 +184,14 @@ message SceneObject {
     Sphere sphere = 5; // @oneof 4 mesh
     Cube cube = 6; // @oneof_item
     Plane plane = 7; // @oneof_item
-    MeshedObject meshed_object = 8; // @oneof_item
+    Disk disk = 8; // @oneof_item
+    MeshedObject meshed_object = 9; // @oneof_item
   }
 }
 
 /*
 Representation of directional light
-To determine the direction of a light look at forward vector of transformation
+To determine the direction of a light look at Transform.forward
 */
 message LightDirectional {}
 
@@ -185,7 +209,10 @@ message LightSurrounding {}
 Representation of sphere light
 */
 message LightSphere {
-  // Radius of source light
+  /*
+  @default 1
+  Radius of source light
+  */
   float radius = 1;
 }
 
@@ -198,19 +225,23 @@ message Light {
   */
   int32 id = 1;
   Transform transform = 3;
-  // Color of source light
+  /*
+  @default (1, 1, 1)
+  Color of source light
+  */
   Color color = 4;
   oneof light {
-    LightPoint point = 6; // @oneof 4 light
-    LightDirectional directional = 7; // @oneof_item
-    LightSphere sphere = 8; // @oneof_item @optional
-    LightSurrounding surrounding = 9; // @oneof_item
+    LightPoint point = 5; // @oneof 4 light
+    LightDirectional directional = 6; // @oneof_item
+    LightSphere sphere = 7; // @oneof_item @optional
+    LightSurrounding surrounding = 8; // @oneof_item
   }
 }
 
 // Representation of perspective camera
 message PerspectiveCamera {
   /*
+  @default 60
   Horizontal field of view of camera
   */
   double fov = 1;
@@ -224,7 +255,9 @@ message OrthographicCamera {}
 
 /*
 Representation of camera
-Look direction of a camera is defined as -Transform.forward
+Camera can be transformed as any other point is space using transformation matrix
+and camera viewport is located along negative z-axis
+For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/computing-pixel-coordinates-of-3d-point/mathematics-computing-2d-coordinates-of-3d-points#:~:text=camera%20coordinate%20system%20and%20camera%20space">link</a>
 */
 message Camera {
   /*

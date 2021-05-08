@@ -93,7 +93,7 @@ message RenderOptions {
 
 /*
 Representation of cube
-To determine the position of a sphere look at Transform.position
+To determine the position of a cube look at Transform.position
 Transform.scale should be ignored
 If your renderer supports only axis aligned box Transform.rotation should be ignored
 For those who dare to support oriented bounding box here link how obb is implemented in opengl:

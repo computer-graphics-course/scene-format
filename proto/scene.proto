@@ -222,6 +222,10 @@ Representation of orthographic camera
 */
 message OrthographicCamera {}
 
+/*
+Representation of camera
+Look direction of a camera is defined as -Transform.forward
+*/
 message Camera {
   /*
   Object id in scene.

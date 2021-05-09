@@ -125,6 +125,7 @@ message Cube {
 Representation of sphere
 Transform.scale should be ignored
 To determine the position of a sphere look at Transform.position
+For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection">link</a>
 */
 message Sphere {
   /*
@@ -135,16 +136,18 @@ message Sphere {
 }
 
 /*
-Representation of plane
+Representation of plane - unbound surface defined by point and normal
 To determine the position of a plane look at Transform.position
 To determine the normal of a plane look at Transform.up
+For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a>
 */
 message Plane {}
 
 /*
-Representation of disk
+Representation of disk - surface defined by point and normal with limited radius
 To determine the position of a disk look at Transform.position
 To determine the normal of a disk look at Transform.up
+For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a>
 */
 message Disk {
   /*
@@ -213,7 +216,7 @@ message LightSphere {
   @default 1
   Radius of source light
   */
-  float radius = 1;
+  double radius = 1;
 }
 
 // Representation of light

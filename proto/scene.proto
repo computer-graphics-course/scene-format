@@ -55,6 +55,9 @@ from 2nd row of the matrix if your renderer uses row-major conversion
 Forward vector can be extracted
 from 3rd column of the matrix if your renderer uses column-major conversion 
 from 3rd row of the matrix if your renderer uses row-major conversion 
+
+<a href="https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/how-does-matrix-work-part-1">Detailed explanation</a> about matrices
+<a href="https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/row-major-vs-column-major-vector">Explanation</a> about different conversions
 */
 message Transform {
   /*
@@ -111,6 +114,7 @@ Representation of cube
 To determine the position of a cube look at Transform.position
 Transform.scale should be ignored
 If your renderer supports only axis aligned box Transform.rotation should be ignored
+For more detailed explanation about aabb follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">link</a>
 For those who dare to support oriented bounding box here <a href="http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/">link</a> how obb is implemented in opengl
 */
 message Cube {
@@ -125,7 +129,7 @@ message Cube {
 Representation of sphere
 Transform.scale should be ignored
 To determine the position of a sphere look at Transform.position
-For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection">link</a>
+For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection">link</a>
 */
 message Sphere {
   /*
@@ -139,7 +143,7 @@ message Sphere {
 Representation of plane - unbound surface defined by point and normal
 To determine the position of a plane look at Transform.position
 To determine the normal of a plane look at Transform.up
-For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a>
+For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a>
 */
 message Plane {}
 
@@ -147,7 +151,7 @@ message Plane {}
 Representation of disk - surface defined by point and normal with limited radius
 To determine the position of a disk look at Transform.position
 To determine the normal of a disk look at Transform.up
-For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a>
+For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a>
 */
 message Disk {
   /*
@@ -195,12 +199,15 @@ message SceneObject {
 /*
 Representation of directional light
 To determine the direction of a light look at Transform.forward
+For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-lights">link</a>
 */
 message LightDirectional {}
 
 /*
 Representation of point light
 To determine the position of a light look at Transform.position
+For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-spherical-light">link</a>
+In article above this light source is named spherical light but it is actually a point light
 */
 message LightPoint {}
 
@@ -260,7 +267,7 @@ message OrthographicCamera {}
 Representation of camera
 Camera can be transformed as any other point is space using transformation matrix
 and camera viewport is located along negative z-axis
-For more detailed explanation you can follow this <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/computing-pixel-coordinates-of-3d-point/mathematics-computing-2d-coordinates-of-3d-points#:~:text=camera%20coordinate%20system%20and%20camera%20space">link</a>
+For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/computing-pixel-coordinates-of-3d-point/mathematics-computing-2d-coordinates-of-3d-points#:~:text=camera%20coordinate%20system%20and%20camera%20space">link</a>
 */
 message Camera {
   /*

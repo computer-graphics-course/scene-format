@@ -40,7 +40,7 @@ To calculate transformation matrix:
   <li>create translation matrix using position</li>
   <li>create rotation matrix using rotation</li>
   <li>create scale matrix using scale</li>
-  <li>and multiple 3 matrices to get final matrix</li>
+  <li>multiple 3 matrices to get final matrix</li>
 </ul>
 Process using parent is specified below
 
@@ -211,8 +211,13 @@ In article above this light source is named spherical light but it is actually a
 */
 message LightPoint {}
 
-// This is a sphere of light which surrounds the whole scene.
-message LightSurrounding {}
+/*
+Representation of environment light
+<b>No transformation should be applied</b>
+Direction is determined by randomly
+For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Light_Sources/Infinite_Area_Lights">link</a>
+*/
+message LightEnvironment {}
 
 /*
 @optional
@@ -244,7 +249,7 @@ message Light {
     LightPoint point = 5; // @oneof 4 light
     LightDirectional directional = 6; // @oneof_item
     LightSphere sphere = 7; // @oneof_item @optional
-    LightSurrounding surrounding = 8; // @oneof_item
+    LightEnvironment environment = 8; // @oneof_item
   }
 }
 
@@ -252,7 +257,7 @@ message Light {
 message PerspectiveCamera {
   /*
   @default 60
-  Horizontal field of view of camera
+  Horizontal field of view
   */
   double fov = 1;
 }
@@ -285,17 +290,37 @@ message Camera {
   }
 }
 
-// Representation of material
+/*
+Representation of material
+For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF">link</a>
+or this <a href="https://pbr-book.org/3ed-2018/Reflection_Models">link</a>
+*/
 message Material {
   string id = 1;
   oneof material {
-    SolidMaterial solid = 2; // @oneof 2 material
-    MirrorMaterial glass = 3; // @oneof_item
+    LambertReflectionMaterial lambertReflection = 2; // @oneof 2 material
+    SpecularReflectionMaterial specularReflection = 3; // @oneof_item
   }
 }
 
-// Lambert material
-message SolidMaterial {}
+/*
+Representation of Lambert material
+This material reflects light in all directions with equal probability
+For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Lambertian_Reflection">link</a>
+*/
+message LambertReflectionMaterial {}
 
-// Material for perfect mirror
-message MirrorMaterial {}
+/*
+Representation of specular reflection material
+This material reflects light strictly in one direction which can be found by reflecting ray direction around normal
+For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Specular_Reflection_and_Transmission">link</a>
+*/
+message SpecularReflectionMaterial {
+  /*
+  @default 1.5
+  Index of refraction
+  The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum
+  <a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
+  */
+  double eta = 1;
+}

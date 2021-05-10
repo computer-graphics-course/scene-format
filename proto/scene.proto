@@ -318,6 +318,7 @@ For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Refl
 message SpecularReflectionMaterial {
   /*
   @default 1.5
+  @optional
   Index of refraction
   The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum
   <a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>

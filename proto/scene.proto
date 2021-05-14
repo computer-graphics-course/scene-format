@@ -214,7 +214,7 @@ message LightPoint {}
 /*
 Representation of environment light
 <b>No transformation should be applied</b>
-Direction is determined by randomly
+Direction is determined randomly
 For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Light_Sources/Infinite_Area_Lights">link</a>
 */
 message LightEnvironment {}
@@ -258,6 +258,7 @@ message PerspectiveCamera {
   /*
   @default 60
   Horizontal field of view
+  Should be in range [0, 179]
   */
   double fov = 1;
 }

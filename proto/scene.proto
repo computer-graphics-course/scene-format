@@ -110,7 +110,7 @@ message RenderOptions {
 }
 
 /*
-Representation of cube
+Representation of cube (rectangular parallelepiped, to be precise.)
 To determine the position of a cube look at Transform.position
 Transform.scale should be ignored
 If your renderer supports only axis aligned box Transform.rotation should be ignored
@@ -120,7 +120,7 @@ For those who dare to support oriented bounding box here <a href="http://www.ope
 message Cube {
   /*
   @default (1, 1, 1)
-  Size of cube in each dimension
+  Size of cube in each dimension (in other words, you can view vector components as the length of parallelepiped sides)
   */
   Vector3 size = 1;
 }

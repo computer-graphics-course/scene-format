@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+{{/* see http://masterminds.github.io/sprig for a list of available functions */}}
+
 <html>
   <head>
     <title>Scene Format - v1</title>
@@ -81,7 +83,7 @@
       .field-table .field_type { /* Type */
         width: 12em;
       }
-      .field-table .required_to_implement { /* Required to implement */
+      .field-table .required_to_implement, .default_value { /* Required to implement */
         width: 12em;
       }
       .field-table .field_description { /* Description */
@@ -353,7 +355,13 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
         {{if .HasFields}}
           <table class="field-table">
             <thead>
-              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
             </thead>
             <tbody>
               {{range .Fields}}
@@ -371,13 +379,20 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                     {{ end }}
                   {{ end }}
                   <td class="field_type"><a href="#{{.FullType}}">{{ .LongType }}</a>{{if eq .Label "repeated" }}, repeated</strong>{{end}}</td>
-                  <td class="required_to_implement">{{if not (contains "@optional" .Description) }}yes{{else}}<strong>no</strong>{{end}}</td>
+                  <td class="default_value">
+                    {{ if contains "@default " .Description }}
+                      {{ replace "@default " "" (regexFind "@default (.*)(\n|$)" .Description) }}
+                    {{ end }}
+                  </td>
+                  <td class="required_to_implement">
+                    {{if not (contains "@optional" .Description) }}yes{{else}}<strong>no</strong>{{end}}
+                  </td>
                   <td class="field_description">
                       <p>
                         {{ if contains "@oneof " .Description}}
-                            {{ replace "\n" "<br/>" (regexReplaceAll "^(?:\\S+(\\s|\\b)+\n?){3}" (replace "@optional" "" (replace "@optional " "" (replace "@optional\n" "" .Description))) "")}}
+                            {{ replace "\n" "<br/>" (regexReplaceAll "(^(?:\\S+(\\s|\\b)+\n?){3})|((@optional|(@default (.*)(\n|$)))( |\n)?)" .Description "") }}
                         {{ else }}                            
-                            {{trim (replace "\n" "<br/>" (replace "@oneof_item" "" (replace "@optional" "" (replace "@optional " "" (replace "@optional \n" "" .Description)))))}}
+                            {{trim (replace "\n" "<br/>" (regexReplaceAll "((@optional)|(@oneof_item)|(@default (.*)(\n|$)))( |\n)?" .Description ""))}}
                         {{ end }}
                       </p>
                 </td>

@@ -212,11 +212,23 @@
                 </li>
               
                 <li>
+                  <a href="#scene_format.Disk"><span class="badge">M</span>Disk</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LambertReflectionMaterial"><span class="badge">M</span>LambertReflectionMaterial</a>
+                </li>
+              
+                <li>
                   <a href="#scene_format.Light"><span class="badge">M</span>Light</a>
                 </li>
               
                 <li>
                   <a href="#scene_format.LightDirectional"><span class="badge">M</span>LightDirectional</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightEnvironment"><span class="badge">M</span>LightEnvironment</a>
                 </li>
               
                 <li>
@@ -228,19 +240,11 @@
                 </li>
               
                 <li>
-                  <a href="#scene_format.LightSurrounding"><span class="badge">M</span>LightSurrounding</a>
-                </li>
-              
-                <li>
                   <a href="#scene_format.Material"><span class="badge">M</span>Material</a>
                 </li>
               
                 <li>
                   <a href="#scene_format.MeshedObject"><span class="badge">M</span>MeshedObject</a>
-                </li>
-              
-                <li>
-                  <a href="#scene_format.MirrorMaterial"><span class="badge">M</span>MirrorMaterial</a>
                 </li>
               
                 <li>
@@ -268,7 +272,7 @@
                 </li>
               
                 <li>
-                  <a href="#scene_format.SolidMaterial"><span class="badge">M</span>SolidMaterial</a>
+                  <a href="#scene_format.SpecularReflectionMaterial"><span class="badge">M</span>SpecularReflectionMaterial</a>
                 </li>
               
                 <li>
@@ -317,7 +321,7 @@
       <b>Step 2.</b> Add a nuget source:
       <pre>
       <code>
-dotnet nuget add source "https://github.com/computer-graphics-course/index.json" --name "SceneFormat GitHub" --username "&lt;your github username&gt;" --password "&lt;token from step 1&gt;"
+dotnet nuget add source "https://nuget.pkg.github.com/computer-graphics-course/index.json" --name "SceneFormat GitHub" --username "&lt;your github username&gt;" --password "&lt;token from step 1&gt;"
       </code>
       </pre>
       <b>Step 3.</b> Install <i>SceneFormat</i> dependency. Check <a href="https://github.com/computer-graphics-course/scene-format/packages/752161">this page</a> for the latest version available.<br />
@@ -416,7 +420,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.Camera">Camera</h3>
           <a href="#title">Top</a>
         </div>
-        <p></p>
+        <p>Representation of camera<br/>Camera can be transformed as any other point is space using transformation matrix<br/>and camera viewport is located along negative z-axis<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/computing-pixel-coordinates-of-3d-point/mathematics-computing-2d-coordinates-of-3d-points#:~:text=camera%20coordinate%20system%20and%20camera%20space">link</a></p>
 
         
           <table class="field-table">
@@ -505,7 +509,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.Color">Color</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Representation of RGB colors.<br/>Components in range [0, 1]</p>
+        <p>Representation of RGB colors.<br/>Components should be greater or equal 0. No upper bound<br/>(0, 0, 0) - white<br/>(1, 1, 1) - black<br/>All values greater than 1 should be mapped to range [0, 1] by using gamma correction or just clamping values</p>
 
         
           <table class="field-table">
@@ -576,9 +580,110 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.Cube">Cube</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Representation of cube</p>
+        <p>Representation of cube<br/>To determine the position of a cube look at Transform.position<br/>Transform.scale should be ignored<br/>If your renderer supports only axis aligned box Transform.rotation should be ignored<br/>For more detailed explanation about aabb follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">link</a><br/>For those who dare to support oriented bounding box here <a href="http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/">link</a> how obb is implemented in opengl</p>
 
         
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">size</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            @default (1, 1, 1)<br/>Size of cube in each dimension
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Disk">Disk</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of disk - surface defined by point and normal with limited radius<br/>To determine the position of a disk look at Transform.position<br/>To determine the normal of a disk look at Transform.up<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">radius</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            @default 1<br/>Radius of disk
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.LambertReflectionMaterial">LambertReflectionMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of Lambert material<br/>This material reflects light in all directions with equal probability<br/>For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Lambertian_Reflection">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
 
         
       
@@ -640,24 +745,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            
-                        
-                      </p>
-                </td>
-                </tr>
-              
-                <tr>
-                  
-                    
-                        <td class="field_name" colspan="2">intensity</td>
-                    
-                  
-                  <td class="field_type"><a href="#double">double</a></td>
-                  <td class="required_to_implement">yes</td>
-                  <td class="field_description">
-                      <p>
-                                                    
-                            
+                            @default (1, 1, 1)<br/>Color of source light
                         
                       </p>
                 </td>
@@ -718,10 +806,10 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                 <tr>
                   
                     
-                        <td class="field_name" colspan="1">surrounding</td>
+                        <td class="field_name" colspan="1">environment</td>
                     
                   
-                  <td class="field_type"><a href="#scene_format.LightSurrounding">LightSurrounding</a></td>
+                  <td class="field_type"><a href="#scene_format.LightEnvironment">LightEnvironment</a></td>
                   <td class="required_to_implement">yes</td>
                   <td class="field_description">
                       <p>
@@ -743,7 +831,17 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.LightDirectional">LightDirectional</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Representation of directional light</p>
+        <p>Representation of directional light<br/>To determine the direction of a light look at Transform.forward<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-lights">link</a></p>
+
+        
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.LightEnvironment">LightEnvironment</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of environment light<br/><b>No transformation should be applied</b><br/>Direction is determined randomly<br/>For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Light_Sources/Infinite_Area_Lights">link</a></p>
 
         
 
@@ -753,7 +851,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.LightPoint">LightPoint</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Representation of point light</p>
+        <p>Representation of point light<br/>To determine the position of a light look at Transform.position<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-spherical-light">link</a><br/>In article above this light source is named spherical light but it is actually a point light</p>
 
         
 
@@ -766,16 +864,33 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
         <p><br/>Representation of sphere light</p>
 
         
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">radius</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            @default 1<br/>Radius of source light
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
 
-        
-      
-        <div class="struct-heading">
-          <h3 id="scene_format.LightSurrounding">LightSurrounding</h3>
-          <a href="#title">Top</a>
-        </div>
-        <p>This is a sphere of light which surrounds the whole scene.</p>
-
-        
+          
 
         
       
@@ -783,7 +898,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.Material">Material</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Representation of material</p>
+        <p>Representation of material<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF">link</a><br/>or this <a href="https://pbr-book.org/3ed-2018/Reflection_Models">link</a></p>
 
         
           <table class="field-table">
@@ -813,10 +928,10 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   
                     <div class="field_name">
                         <td colspan="1" rowspan="2">material (one&nbsp;of)</td>
-                        <td colspan="1">solid</td>
+                        <td colspan="1">lambert_reflection</td>
                     </div>
                   
-                  <td class="field_type"><a href="#scene_format.SolidMaterial">SolidMaterial</a></td>
+                  <td class="field_type"><a href="#scene_format.LambertReflectionMaterial">LambertReflectionMaterial</a></td>
                   <td class="required_to_implement">yes</td>
                   <td class="field_description">
                       <p>
@@ -830,10 +945,10 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                 <tr>
                   
                     
-                        <td class="field_name" colspan="1">glass</td>
+                        <td class="field_name" colspan="1">specular_reflection</td>
                     
                   
-                  <td class="field_type"><a href="#scene_format.MirrorMaterial">MirrorMaterial</a></td>
+                  <td class="field_type"><a href="#scene_format.SpecularReflectionMaterial">SpecularReflectionMaterial</a></td>
                   <td class="required_to_implement">yes</td>
                   <td class="field_description">
                       <p>
@@ -889,16 +1004,6 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
         
       
         <div class="struct-heading">
-          <h3 id="scene_format.MirrorMaterial">MirrorMaterial</h3>
-          <a href="#title">Top</a>
-        </div>
-        <p>Material for perfect mirror</p>
-
-        
-
-        
-      
-        <div class="struct-heading">
           <h3 id="scene_format.OrthographicCamera">OrthographicCamera<strong> - not required to implement</strong></h3>
           <a href="#title">Top</a>
         </div>
@@ -932,7 +1037,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            
+                            @default 60<br/>Horizontal field of view<br/>Should be in range (0, 180)
                         
                       </p>
                 </td>
@@ -949,7 +1054,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.Plane">Plane</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Representation of plane</p>
+        <p>Representation of plane - unbound surface defined by point and normal<br/>To determine the position of a plane look at Transform.position<br/>To determine the normal of a plane look at Transform.up<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a></p>
 
         
 
@@ -979,7 +1084,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            Camera from which scene should be rendered
+                            @default 1<br/>Camera from which scene should be rendered
                         
                       </p>
                 </td>
@@ -996,7 +1101,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            
+                            @default 640<br/>Width of final image
                         
                       </p>
                 </td>
@@ -1013,7 +1118,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            
+                            @default 320<br/>Height of final image
                         
                       </p>
                 </td>
@@ -1207,7 +1312,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                         
-                            Reference to material in array of materials
+                            Reference to a material in the array of materials
                         
                       </p>
                 </td>
@@ -1233,7 +1338,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                 <tr>
                   
                     <div class="field_name">
-                        <td colspan="1" rowspan="4">mesh (one&nbsp;of)</td>
+                        <td colspan="1" rowspan="5">mesh (one&nbsp;of)</td>
                         <td colspan="1">sphere</td>
                     </div>
                   
@@ -1285,6 +1390,23 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                 <tr>
                   
                     
+                        <td class="field_name" colspan="1">disk</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Disk">Disk</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
                         <td class="field_name" colspan="1">meshed_object</td>
                     
                   
@@ -1307,12 +1429,39 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
         
       
         <div class="struct-heading">
-          <h3 id="scene_format.SolidMaterial">SolidMaterial</h3>
+          <h3 id="scene_format.SpecularReflectionMaterial">SpecularReflectionMaterial</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Lambert material</p>
+        <p>Representation of specular reflection material<br/>This material reflects light strictly in one direction which can be found by reflecting ray direction around normal<br/>For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Specular_Reflection_and_Transmission">link</a></p>
 
         
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">eta</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement"><strong>no</strong></td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            @default 1.5<br/><br/>Index of refraction<br/>The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum<br/><a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
 
         
       
@@ -1320,9 +1469,36 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.Sphere">Sphere</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Representation of sphere</p>
+        <p>Representation of sphere<br/>Transform.scale should be ignored<br/>To determine the position of a sphere look at Transform.position<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection">link</a></p>
 
         
+          <table class="field-table">
+            <thead>
+              <tr><td colspan="2">Field</td><td>Type</td><td>Required to implement?</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">radius</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="required_to_implement">yes</td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            @default 1<br/>Radius of sphere
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
 
         
       
@@ -1330,7 +1506,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
           <h3 id="scene_format.Transform">Transform</h3>
           <a href="#title">Top</a>
         </div>
-        <p>Position, rotation and scale of an object</p>
+        <p>Position, rotation and scale of an object<br/>To calculate transformation matrix:<br/><ul><br/><li>create translation matrix using position</li><br/><li>create rotation matrix using rotation</li><br/><li>create scale matrix using scale</li><br/><li>multiple 3 matrices to get final matrix</li><br/></ul><br/>Process using parent is specified below<br/><br/>Right vector can be extracted<br/>from 1st column of the matrix if your renderer uses column-major conversion <br/>from 1st row of the matrix if your renderer uses row-major conversion <br/><br/>Up vector can be extracted<br/>from 2nd column of the matrix if your renderer uses column-major conversion <br/>from 2nd row of the matrix if your renderer uses row-major conversion<br/><br/>Forward vector can be extracted<br/>from 3rd column of the matrix if your renderer uses column-major conversion <br/>from 3rd row of the matrix if your renderer uses row-major conversion <br/><br/><a href="https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/how-does-matrix-work-part-1">Detailed explanation</a> about matrices<br/><a href="https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/row-major-vs-column-major-vector">Explanation</a> about different conversions</p>
 
         
           <table class="field-table">
@@ -1350,7 +1526,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            
+                            @default (0, 0, 0)
                         
                       </p>
                 </td>
@@ -1367,7 +1543,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            Rotation in euler angles.<br/>Can be negative or positive.<br/>Angles are measured counterclockwise
+                            @default (0, 0, 0)<br/>Rotation in euler angles.<br/>Can be negative or positive.<br/>Angles are measured counterclockwise.
                         
                       </p>
                 </td>
@@ -1384,7 +1560,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            
+                            @default (1, 1, 1)
                         
                       </p>
                 </td>
@@ -1401,7 +1577,7 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
                   <td class="field_description">
                       <p>
                                                     
-                            <br/>Id of parent relative to which transformation should be applied.<br/>If parent_id is 0 transformation is specified in world space.<br/>To correctly apply transformation you should build a tree structure representing relationships between objects.<br/>Then from top to bottom create transformation matrix.<br/>If object has parent: multiply parent's matrix by object's matrix to get final matrix
+                            <br/>@default 0<br/>Id of parent relative to which transformation should be applied.<br/>If parent_id is 0 transformation is specified in world space.<br/>To correctly apply transformation you should build a tree structure representing relationships between objects.<br/>Then from top to bottom create transformation matrix.<br/>If object has parent: multiply parent's matrix by object's matrix to get final matrix
                         
                       </p>
                 </td>
@@ -1632,93 +1808,945 @@ sceneformat = { git = "https://github.com/computer-graphics-course/scene-format"
     </div>
     <pre>
         <code class="json" style="font-size: 1rem;">{
-  "version": 1,
-  "renderOptions": {
-    "cameraId": 1,
-    "width": 1920,
-    "height": 1080
-  },
-  "sceneObjects": [
-    {
-      "id": 4,
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "scale": {
-          "x": 0.4,
-          "y": 1,
-          "z": 4
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 6
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "sphere": {
+                "radius": 1.5
+              }
+            }
+          ]
         }
-      },
-      "material": {
-        "solid": {}
-      },
-      "meshedObject": {
-        "reference": "cow2.obj"
-      }
-    }
-  ],
-  "lights": [
-    {
-      "id": 2,
-      "transform": {
-        "position": {
-          "x": 3,
-          "y": 0,
-          "z": 3
-        }
-      },
-      "color": {
-        "r": 0.5,
-        "g": 0,
-        "b": 1
-      },
-      "intensity": 100,
-      "point": {}
-    },
-    {
-      "id": 3,
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 3,
-          "z": 0
-        }
-      },
-      "color": {
-        "r": 0,
-        "g": 1,
-        "b": 0
-      },
-      "intensity": 30,
-      "point": {}
-    }
-  ],
-  "cameras": [
-    {
-      "id": 1,
-      "transform": {
-        "position": {
-          "x": 1.25,
-          "y": 0.1,
-          "z": 0
-        },
-        "rotation": {
-          "x": 10,
-          "y": 90,
-          "z": 0
-        }
-      },
-      "perspective": {
-        "fov": 60
-      }
-    }
-  ]
-}
         </code>
+        <img src="../images/sphere.png" alt="sphere"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 6
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "cube": {
+                "size": {
+                  "x": 2,
+                  "y": 1,
+                  "z": 1
+                }
+              }
+            }
+          ]
+        }
+        </code>
+        <img src="../images/cube.png" alt="cube"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 6
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": -1,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "plane": {}
+            }
+          ]
+        }
+        </code>
+        <img src="../images/plane.png" alt="plane"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 6
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": -1,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "disk": {
+                "radius": 5
+              }
+            }
+          ]
+        }
+        </code>
+        <img src="../images/disk.png" alt="disk"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0.3,
+                  "z": 1.2
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "meshed_object": {
+                "reference": "cow2.obj"
+              }
+            }
+          ]
+        }
+        </code>
+        <img src="../images/mesh.png" alt="mesh"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 3,
+                  "y": 3,
+                  "z": 6
+                },
+                "rotation": {
+                  "x": -25,
+                  "y": 25,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "cube": {
+                "size": {
+                  "x": 2,
+                  "y": 1,
+                  "z": 1
+                }
+              }
+            }
+          ]
+        }
+        </code>
+        <img src="../images/camera_rotation.png" alt="camera_rotation"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 1.25,
+                  "y": 0.1,
+                  "z": 0
+                },
+                "rotation": {
+                  "x": 10,
+                  "y": 90,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "scale": {
+                  "x": 0.4,
+                  "y": 1,
+                  "z": 4
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "meshed_object": {
+                "reference": "cow2.obj"
+              }
+            }
+          ]
+        }
+        </code>
+        <img src="../images/transformations.png" alt="transformations"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 2,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 1.25,
+                  "y": 0.1,
+                  "z": 0
+                },
+                "rotation": {
+                  "x": 10,
+                  "y": 90,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            },
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0.3,
+                  "z": 1.2
+                }
+              },
+              "perspective": {
+                "fov": 100
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 3,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "scale": {
+                  "x": 0.4,
+                  "y": 1,
+                  "z": 4
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "meshed_object": {
+                "reference": "cow2.obj"
+              }
+            }
+          ]
+        }
+        </code>
+        <img src="../images/multiple_cameras.png" alt="multiple_cameras"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 3
+                },
+                "rotation": {
+                  "x": -10,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 1
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "meshed_object": {
+                "reference": "C:/Projects/KPI/cow-engine/assets/cow2.obj"
+              }
+            },
+            {
+              "id": 4,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": -1
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "meshed_object": {
+                "reference": "C:/Projects/KPI/cow-engine/assets/dragon.obj"
+              }
+            },
+            {
+              "id": 3,
+              "transform": {
+                "position": {
+                  "x": 1.1,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "sphere": {
+                "radius": 0.3
+              }
+            },
+            {
+              "id": 3,
+              "transform": {
+                "position": {
+                  "x": -1.1,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "cube": {
+                "size": {
+                  "x": 0.3,
+                  "y": 0.3,
+                  "z": 0.3
+                }
+              }
+            }
+          ]
+        }
+        </code>
+        <img src="../images/multiple_objects.png" alt="multiple_objects"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 5
+                },
+                "rotation": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "sphere": {
+                "radius": 1
+              }
+            },
+            {
+              "id": 3,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 0,
+                    "b": 0
+                  }
+                }
+              },
+              "disk": {
+                "radius": 10
+              }
+            }
+          ],
+          "lights": [
+            {
+              "id": 4,
+              "color": {
+                "r": 7,
+                "g": 7,
+                "b": 7
+              },
+              "environment": {}
+            }
+          ]
+        }
+        </code>
+        <img src="../images/lambert.png" alt="lambert"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 5
+                },
+                "rotation": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 1
+                  }
+                }
+              },
+              "sphere": {
+                "radius": 1
+              }
+            },
+            {
+              "id": 3,
+              "transform": {
+                "position": {
+                  "x": 2,
+                  "y": 1,
+                  "z": 1
+                }
+              },
+              "material": {
+                "specular_reflection": {
+                  "eta": 2
+                }
+              },
+              "sphere": {
+                "radius": 1
+              }
+            },
+            {
+              "id": 4,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 0,
+                    "b": 0
+                  }
+                }
+              },
+              "disk": {
+                "radius": 10
+              }
+            }
+          ],
+          "lights": [
+            {
+              "id": 5,
+              "color": {
+                "r": 7,
+                "g": 7,
+                "b": 7
+              },
+              "environment": {}
+            }
+          ]
+        }
+        </code>
+        <img src="../images/reflection.png" alt="reflection"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 5
+                },
+                "rotation": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "sphere": {
+                "radius": 1
+              }
+            },
+            {
+              "id": 3,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 0,
+                    "b": 0
+                  }
+                }
+              },
+              "disk": {
+                "radius": 10
+              }
+            }
+          ],
+          "lights": [
+            {
+              "id": 4,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 2,
+                  "z": 2
+                }
+              },
+              "color": {
+                "r": 100,
+                "g": 100,
+                "b": 100
+              },
+              "point": {}
+            }
+          ]
+        }
+        </code>
+        <img src="../images/point.png" alt="point"/>
+        <code class="json" style="font-size: 1rem;">{
+          "version": 1,
+          "renderOptions": {
+            "cameraId": 1,
+            "width": 640,
+            "height": 360
+          },
+          "cameras": [
+            {
+              "id": 1,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 5
+                },
+                "rotation": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "perspective": {
+                "fov": 60
+              }
+            }
+          ],
+          "sceneObjects": [
+            {
+              "id": 2,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 1,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  }
+                }
+              },
+              "sphere": {
+                "radius": 1
+              }
+            },
+            {
+              "id": 3,
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              "material": {
+                "lambert_reflection": {
+                  "color": {
+                    "r": 1,
+                    "g": 0,
+                    "b": 0
+                  }
+                }
+              },
+              "disk": {
+                "radius": 10
+              }
+            }
+          ],
+          "lights": [
+            {
+              "id": 4,
+              "transform": {
+                "rotation": {
+                  "x": -30,
+                  "y": -100,
+                  "z": 0
+                }
+              },
+              "color": {
+                "r": 3,
+                "g": 3,
+                "b": 3
+              },
+              "directional": {}
+            }
+          ]
+        }
+        </code>
+        <img src="../images/directional.png" alt="directional"/>
     </pre>
   </body>
   <script>hljs.highlightAll();</script>

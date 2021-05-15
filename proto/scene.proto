@@ -309,7 +309,9 @@ Representation of Lambert material
 This material reflects light in all directions with equal probability
 For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Lambertian_Reflection">link</a>
 */
-message LambertReflectionMaterial {}
+message LambertReflectionMaterial {
+  Color color = 1;
+}
 
 /*
 Representation of specular reflection material

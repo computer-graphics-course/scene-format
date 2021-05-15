@@ -61,11 +61,7 @@ message RenderOptions {
   int32 width = 2;
   int32 height = 3;
 }
-
-// A Cube contains two fields:
-// topLeftForward: Vector3, represents the top left forward point of the cube in space. 
-// bottomRightBackward: Vector3, represents the bottom right backward point of the cube in space. 
-// Using only this 2 point you can define any cube in space. You need to wrap this type into SceneObject if you need to apply transform, rotate or scale. 
+ 
 message Cube {
 // topLeftForward point
  Vector3 tlf = 1;
@@ -88,15 +84,15 @@ message MeshedObject {
   string reference = 2;
 }
 
-// Representation of object to render
-// A sceneObject is one of the main things of this format. It describes all the required fields to use if you want to render soemthing.
+// Representation of object to render.
+// A sceneObject is one of the main things of this format. It describes all the required fields to use if you want to render something.
+// Using this fields you can render a transformed object of any type with applied material.
+//
 // SceneObject contains:
-// - id: defines the id for whole scene.
+// - id: defines the id which is unique across the scene.
 // - transform: this part has all data for transformation of the object.
 // - material: this part contains information about the material, which should be applied to object.
-// - mesh: this is the object itself. It may be Plane, Sphere or link to am .obj file, which you are already able to parse.
-//
-// Using this fields you can render a transformed object of any type with applied material.
+// - mesh: this is the object itself.
 message SceneObject {
   /*
   Object id in scene.

@@ -1,0 +1,21 @@
+name: build docs
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: |
+         docker run --rm -v $(pwd)/docs:/out -v $(pwd)/proto:/protos pseudomuto/protoc-gen-doc --doc_opt=/out/html.tmpl,index.html
+      - name: Release generated pages as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-pages
+          path: docs
+      - name: Deploy to GitHub pages
+        if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

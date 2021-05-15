@@ -170,7 +170,15 @@ message MeshedObject {
   string reference = 2;
 }
 
-// Representation of object to render
+// Representation of object to render.
+// A sceneObject is one of the main things of this format. It describes all the required fields to use if you want to render something.
+// Using this fields you can render a transformed object of any type with applied material.
+//
+// SceneObject contains:
+// - id: defines the id which is unique across the scene.
+// - transform: this part has all data for transformation of the object.
+// - material: this part contains information about the material, which should be applied to object.
+// - mesh: this is the object itself.
 message SceneObject {
   /*
   Object id in scene.

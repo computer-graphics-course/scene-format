@@ -1,0 +1,15 @@
+name: build docs
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: |
+         docker run --rm -v $(pwd)/docs:/out -v $(pwd)/proto:/protos pseudomuto/protoc-gen-doc --doc_opt=/out/html.tmpl,index.html
+      - name: Release generated page as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-page
+          path: docs/index.html

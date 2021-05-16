@@ -1,0 +1,4 @@
+title: SceneFormat
+baseurl: "/scene-format"
+url: ""
+exclude: ["html.tmpl"]

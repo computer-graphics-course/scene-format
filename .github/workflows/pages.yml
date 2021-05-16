@@ -10,11 +10,11 @@ jobs:
         run: |
          docker run --rm -v $(pwd)/docs:/out -v $(pwd)/proto:/protos pseudomuto/protoc-gen-doc --doc_opt=/out/html.tmpl,index.html
       - name: Deploy to GitHub pages
-        # if: github.ref == 'refs/heads/master'
         uses: helaili/jekyll-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           jekyll_src: 'docs'
+          build_only: github.ref != 'refs/heads/master'
       - name: Release generated pages as artifact
         uses: actions/upload-artifact@v2
         with:

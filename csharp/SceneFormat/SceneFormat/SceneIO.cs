@@ -23,7 +23,6 @@ namespace SceneFormat
         public Scene Read(Stream input)
         {
             var content = ReadToEnd(input);
-
             try
             {
                 return Scene.Parser.ParseJson(Encoding.UTF8.GetString(content));
@@ -36,7 +35,7 @@ namespace SceneFormat
 
         public Scene Read(string inputPath)
         {
-            return Read(File.Open(inputPath, FileMode.Open));
+            return PostProcessSceneAfterReadFromFile(Read(File.Open(inputPath, FileMode.Open)), inputPath);
         }
 
         public void Save(Scene scene, Stream output)
@@ -93,6 +92,23 @@ namespace SceneFormat
             var jsonElement = JsonSerializer.Deserialize<JsonElement>(json);
 
             return JsonSerializer.Serialize(jsonElement, options);
+        }
+
+        private Scene PostProcessSceneAfterReadFromFile(Scene scene, string filePath)
+        {
+            foreach (var sceneObject in scene.SceneObjects)
+            {
+                if (sceneObject.MeshedObject != null)
+                {
+                    var meshedObject = sceneObject.MeshedObject;
+                    if (meshedObject.Reference != null && !Path.IsPathRooted(meshedObject.Reference))
+                    {
+                        meshedObject.Reference = Path.Combine(Path.GetDirectoryName(filePath), meshedObject.Reference);
+                    }
+                }
+            }
+
+            return scene;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Example
                         },
                         Material = new Material
                         {
-                            Solid = new SolidMaterial()
+                            LambertReflection = new LambertReflectionMaterial {},
                         },
                         MeshedObject = new MeshedObject
                         {

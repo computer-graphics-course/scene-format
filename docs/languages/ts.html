@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<a href="{{ site.baseurl }}/">back to home</a>
+
+<h1>JavaScript/TypeScript Library</h1>
+<b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a
+    href="https://github.com/settings/tokens">here</a>.<br />
+<b>Step 2.</b> Login to npm registry (use your github username as username and token from step 1 as password):
+<pre>
+<code>npm login --scope=@computer-graphics-course --registry=https://npm.pkg.github.com</code>
+</pre>
+<b>Step 3.</b> Install scene-format dependency:
+<pre>
+<code>npm install --save @computer-graphics-course/scene-format</code>
+</pre>
+Remember that you can always check for latest version on <a
+    href="https://github.com/computer-graphics-course/scene-format/packages/754546">the package page</a>.<br />
+<b>Step 4.</b> Use code from <a
+    href="https://github.com/computer-graphics-course/scene-format/blob/master/ts/example/main.ts">this snippet</a> to
+read or write scene format files.<br />

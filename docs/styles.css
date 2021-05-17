@@ -1,0 +1,233 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 60em;
+  margin: 1em auto;
+  color: #222;
+  font-family: "Open Sans", sans-serif;
+  padding-bottom: 4em;
+}
+
+h1 {
+  font-weight: normal;
+  border-bottom: 1px solid #aaa;
+  padding-bottom: 0.5ex;
+}
+
+h2 {
+  border-bottom: 1px solid #aaa;
+  padding-bottom: 0.5ex;
+  margin: 1.5em 0;
+}
+
+h3 {
+  font-weight: normal;
+  border-bottom: 1px solid #aaa;
+  padding-bottom: 0.5ex;
+}
+
+a {
+  text-decoration: none;
+  color: #567e25;
+}
+
+table {
+  width: 100%;
+  font-size: 80%;
+  border-collapse: collapse;
+  line-height: 1.5;
+}
+
+thead {
+  font-weight: 700;
+  background-color: #dcdcdc;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fbfbfb;
+}
+
+td {
+  border: 1px solid #ccc;
+  padding: 0.5ex 2ex;
+}
+
+td p {
+  text-indent: 1em;
+  margin: 0;
+}
+
+td p:nth-child(1) {
+  text-indent: 0; /* No indent on first p in td */
+}
+
+/* Table of fields */
+.field-table .field_name { /* Field */
+  width: 5em;
+}
+.field-table .field_type { /* Type */
+  width: 12em;
+}
+.field-table .required_to_implement, .default_value { /* Required to implement */
+  width: 12em;
+}
+.field-table .field_description { /* Description */
+  width: auto;
+}
+
+/* Table of extensions */
+.extension-table td:nth-child(1) { /* Extension */
+  width: 10em;
+}
+.extension-table td:nth-child(2) { /* Type */
+  width: 10em;
+}
+.extension-table td:nth-child(3) { /* Base */
+  width: 10em;
+}
+.extension-table td:nth-child(4) { /* Number */
+  width: 5em;
+}
+.extension-table td:nth-child(5) { /* Description */
+  width: auto;
+}
+
+/* Table of enum values. */
+.enum-table td:nth-child(1) { /* Name */
+  width: 10em;
+}
+.enum-table td:nth-child(2) { /* Number */
+  width: 10em;
+}
+.enum-table td:nth-child(3) { /* Description */
+  width: auto;
+}
+
+/* Table of scalar value types. */
+.scalar-value-types-table tr {
+  height: 3em;
+}
+
+/* Table of contents. */
+#toc-container ul {
+  list-style-type: none;
+  padding-left: 1em;
+  line-height: 180%;
+  margin: 0;
+}
+#toc > li > a {
+  font-weight: bold;
+}
+
+/* File heading div */
+.file-heading {
+  width: 100%;
+  display: table;
+  border-bottom: 1px solid #aaa;
+  margin: 4em 0 1.5em 0;
+}
+.struct-heading {
+  width: 100%;
+  display: table;
+  margin-top: 0.75rem;
+  border-bottom: 1px solid #aaa;
+}
+.file-heading h2, .struct-heading h3 {
+  border: none;
+  display: table-cell;
+}
+.file-heading a {
+  text-align: right;
+  display: table-cell;
+}
+.struct-heading a {
+  text-align: right;
+  display: table-cell;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+.struct-heading:hover a {
+  opacity: 1;
+}
+
+/* The 'M', 'E' and 'X' badges in the ToC */
+.badge {
+  width: 1.6em;
+  height: 1.6em;
+  display: inline-block;
+
+  line-height: 1.6em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 60%;
+
+  color: #89ba48;
+  background-color: #dff0c8;
+
+  margin: 0.5ex 1em 0.5ex -1em;
+  border: 1px solid #fbfbfb;
+  border-radius: 1ex;
+}
+
+.language-cards {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.language-card {
+  box-sizing: border-box;
+  display: block;
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+  margin-bottom: 30px;
+  padding-right: 15px;
+  padding-left: 15px;
+  text-align: center;
+  color: #494d55;
+  text-decoration: none;
+}
+
+.language-card-inner {
+  border: 1px solid #f0f0f0;
+  padding: 45px 30px;
+  background: #fff;
+  position: relative;
+  border-radius: 4px;
+}
+
+.language-card-inner:hover {
+  background: #f5f5f5;
+}
+
+.language-card-icon {
+  margin-bottom: 15px;
+}
+
+.language-card-icon svg {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.language-card-inner h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 15px;
+  line-height: 1.2;
+}
+
+.background-card-inner:hover h4 {
+  color: #567e25;
+}
+
+.language-card-inner p {
+  margin-bottom: 15px;
+  margin: 0 auto;
+  color: #616670;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}

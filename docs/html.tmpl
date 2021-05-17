@@ -386,6 +386,17 @@ layout: default
       <h2 id="json-example">JSON example</h2>
       <a href="#title">Top</a>
     </div>
+    <div>
+      Scene examples to check if your program works with format correctly.<br />
+      Only focus on the general look of a scene, outputs may not be identical. Colors may wary from renderer to renderer and light sources might be too bright.<br />
+      Scenes without light sources are rendered only with normals to show how objects should look. Scenes with light sources and materials are rendered using Whitted raytracing.<br />
+      Parameters for Whitted raycaster:
+      <ul>
+        <li>256 rays per pixel</li>
+        <li>1 ray per light source</li>
+        <li>depth 3</li>
+      </ul>
+    </div>
     <pre>
         <code class="json" style="font-size: 1rem;">{
   "version": 1,
@@ -874,7 +885,7 @@ layout: default
       }
     },
     {
-      "id": 4,
+      "id": 3,
       "transform": {
         "position": {
           "x": 0,
@@ -896,7 +907,7 @@ layout: default
       }
     },
     {
-      "id": 3,
+      "id": 4,
       "transform": {
         "position": {
           "x": 1.1,
@@ -918,7 +929,7 @@ layout: default
       }
     },
     {
-      "id": 3,
+      "id": 5,
       "transform": {
         "position": {
           "x": -1.1,

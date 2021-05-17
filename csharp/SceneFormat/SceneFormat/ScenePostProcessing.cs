@@ -504,7 +504,7 @@ namespace SceneFormat
 
         private static void ValidateColor(Color color)
         {
-            if (color.R <= 0 || color.G <= 0 || color.B <= 0)
+            if (color.R < 0 || color.G < 0 || color.B < 0)
             {
                 throw new SceneIOException("Color channels should be non-negative");
             }

@@ -3,6 +3,9 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using Google.Protobuf;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SceneFormat
 {
@@ -23,14 +26,34 @@ namespace SceneFormat
         public Scene Read(Stream input)
         {
             var content = ReadToEnd(input);
+            Scene scene;
+            
             try
             {
-                return Scene.Parser.ParseJson(Encoding.UTF8.GetString(content));
+                scene = Scene.Parser.ParseFrom(content);
             }
-            catch (InvalidJsonException e)
+            catch (InvalidProtocolBufferException e)
             {
-                return Scene.Parser.ParseFrom(content);
+                var contentAsString = Encoding.UTF8.GetString(content).Replace("\uFEFF", "");
+                try
+                {
+                    scene = Scene.Parser.ParseJson(contentAsString);
+                }
+                catch (InvalidJsonException ex)
+                {
+                    try
+                    {
+                        JToken.Parse(contentAsString);
+                        throw new SceneIOException("Protobuf failed to parse what seems to be a valid json. Please report this problem to SceneFormat team.");
+                    }
+                    catch (JsonReaderException jex)
+                    {
+                        throw new SceneIOException("Failed to parse json: " + jex.Message);
+                    }
+                }
             }
+
+            return ScenePostProcessing.PostProcessAndValidate(scene);
         }
 
         public Scene Read(string inputPath)
@@ -40,7 +63,7 @@ namespace SceneFormat
 
         public void Save(Scene scene, Stream output)
         {
-            scene.WriteTo(output);
+            ScenePostProcessing.PostProcessAndValidate(scene).WriteTo(output);
         }
 
         public void Save(Scene scene, string outputPath)
@@ -53,7 +76,7 @@ namespace SceneFormat
 
         public void SaveAsJson(Scene scene, Stream output)
         {
-            var jsonData = _jsonFormatter.Format(scene);
+            var jsonData = _jsonFormatter.Format(ScenePostProcessing.PostProcessAndValidate(scene));
          
             if (this._prettifyJson)
             {
@@ -96,14 +119,18 @@ namespace SceneFormat
 
         private Scene PostProcessSceneAfterReadFromFile(Scene scene, string filePath)
         {
-            foreach (var sceneObject in scene.SceneObjects)
+            if (scene != null && scene.SceneObjects != null)
             {
-                if (sceneObject.MeshedObject != null)
+                foreach (var sceneObject in scene.SceneObjects)
                 {
-                    var meshedObject = sceneObject.MeshedObject;
-                    if (meshedObject.Reference != null && !Path.IsPathRooted(meshedObject.Reference))
+                    if (sceneObject.MeshedObject != null)
                     {
-                        meshedObject.Reference = Path.Combine(Path.GetDirectoryName(filePath), meshedObject.Reference);
+                        var meshedObject = sceneObject.MeshedObject;
+                        if (meshedObject.Reference != null && !Path.IsPathRooted(meshedObject.Reference))
+                        {
+                            meshedObject.Reference =
+                                Path.Combine(Path.GetDirectoryName(filePath), meshedObject.Reference);
+                        }
                     }
                 }
             }

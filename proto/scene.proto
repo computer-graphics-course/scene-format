@@ -107,6 +107,14 @@ message RenderOptions {
   Height of final image
   */
   int32 height = 3;
+
+  /*
+  @optional
+  Can be used as a map containing custom properties specific to renderer implementation.
+  If you are using this field, consider adding it to the format spec as a regular field if you think that
+  other implementations may benefit from your custom fields.
+  */
+  repeated CustomProperty custom_properties = 4;
 }
 
 /*
@@ -335,4 +343,16 @@ message SpecularReflectionMaterial {
   <a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
   */
   double eta = 1;
+}
+
+/*
+Custom properties can be used to extend format in ways specific to implementation.
+Please consider opening a PR/issue in format repo if you think your property would better be a regular field.
+*/
+message CustomProperty {
+  string key = 1;
+  oneof value {
+    string text_value = 2; // @oneof 2 value
+    int32 int32_value = 3; // @oneof_item
+  }
 }

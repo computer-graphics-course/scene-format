@@ -4,13 +4,13 @@ use std::fs::File;
 use std::io::Write;
 
 use custom_error::custom_error;
-use prost::Message;
+use prost::{Message, DecodeError};
 
 include!(concat!(env!("OUT_DIR"), "/scene_format.rs"));
 
 custom_error!{pub SceneIOError
     FailedToEncode = "Failed to encode",
-    FailedToDecode = "Failed to decode",
+    FailedToDecode{source: DecodeError} = "Fa color: ()iled to decode",
     IOError {source: std::io::Error} = "IO Error: {source}",
 }
 
@@ -43,7 +43,7 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
         return Ok(scene);
     }
 
-    Scene::decode(&*data.to_vec()).map_err(|_| SceneIOError::FailedToDecode)
+    Scene::decode(&*data.to_vec()).map_err(|source| SceneIOError::FailedToDecode { source })
 }
 
 pub fn read(read_from: &str) -> Result<Scene, SceneIOError> {
@@ -64,6 +64,7 @@ mod tests {
                 camera_id: 0,
                 width: 1000,
                 height: 1000,
+                custom_properties: Vec::new(),
             }),
             scene_objects: vec![
                 SceneObject {
@@ -80,7 +81,13 @@ mod tests {
                     }),
                     object_material: Some(scene_object::ObjectMaterial::Material(Material {
                         id: "".to_string(),
-                        material: Some(material::Material::Solid(SolidMaterial {})),
+                        material: Some(material::Material::LambertReflection(LambertReflectionMaterial {
+                            color: Some(Color {
+                                r: 1.0,
+                                g: 1.0,
+                                b: 1.0,
+                            })
+                        })),
                     })),
                     mesh: Some(scene_object::Mesh::MeshedObject(MeshedObject {
                         reference: "cow.obj".to_string(),

@@ -1,16 +1,17 @@
+#[macro_use] extern crate log;
 extern crate custom_error;
 
 use std::fs::File;
 use std::io::Write;
 
 use custom_error::custom_error;
-use prost::{Message, DecodeError};
+use prost::Message;
 
 include!(concat!(env!("OUT_DIR"), "/scene_format.rs"));
 
 custom_error!{pub SceneIOError
     FailedToEncode = "Failed to encode",
-    FailedToDecode{source: DecodeError} = "Fa color: ()iled to decode",
+    FailedToDecode{description: String} = "Failed to decode",
     IOError {source: std::io::Error} = "IO Error: {source}",
 }
 
@@ -39,11 +40,13 @@ pub fn save_json(scene: &Scene, save_to: &str) -> Result<(), SceneIOError> {
 }
 
 pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
-    if let Ok(scene) = serde_json::from_slice(data) {
-        return Ok(scene);
+    return match serde_json::from_slice(data) {
+        Ok(v) => Ok(v),
+        Err(err) => {
+            debug!("Failed to decode as json, trying binary: {:?}", err);
+            Scene::decode(&*data.to_vec()).map_err(|_| SceneIOError::FailedToDecode { description: err.to_string() })
+        }
     }
-
-    Scene::decode(&*data.to_vec()).map_err(|source| SceneIOError::FailedToDecode { source })
 }
 
 pub fn read(read_from: &str) -> Result<Scene, SceneIOError> {
@@ -55,6 +58,12 @@ pub fn read(read_from: &str) -> Result<Scene, SceneIOError> {
 mod tests {
 
     use super::*;
+    use env_logger::Env;
+
+    #[ctor::ctor]
+    fn init() {
+        env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
+    }
 
     #[test]
     fn example() {
@@ -124,5 +133,10 @@ mod tests {
 
         let read_result_json = read("example_json.cowscene").unwrap();
         println!("Camera X is {} when reading json", read_result_json.cameras[0].transform.as_ref().unwrap().position.as_ref().unwrap().x);
+    }
+
+    #[test]
+    fn example_from_docs1() {
+        read("./examples/1.cowscene").unwrap();
     }
 }

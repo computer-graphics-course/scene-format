@@ -176,6 +176,11 @@ message MeshedObject {
   Absolute or relative path 
   */
   string reference = 2;
+  /*
+  @optional
+  Embedded obj file. Can be used to create scene files without external dependencies.
+  */
+  MeshGeometry obj = 3;
 }
 
 // Representation of object to render.
@@ -355,4 +360,47 @@ message CustomProperty {
     string text_value = 2; // @oneof 2 value
     int32 int32_value = 3; // @oneof_item
   }
+}
+
+/*
+@optional
+Embedded obj file. Can be used to create scene files without external dependencies.
+See <a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file">OBJ format description on Wikipedia</a>.
+*/
+message MeshGeometry {
+  repeated Vertex vertices = 1; // List of geometric vertices
+  repeated VertexNormal vertex_normals = 2; // List of vertex normals; normals might not be unit vectors.
+  repeated TextureCoordinates texture_coordinates = 3; // List of texture coordinates.
+  repeated Face faces = 4; // Polygonal face element
+}
+
+// Right-hand coordinate system is used to specify coordinate locations.
+message Vertex {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+  double w = 4; // @default 1.0
+}
+
+message VertexNormal {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message TextureCoordinates {
+  double u = 1; // vary between 0 and 1.
+  double v = 2; // @default 0 vary between 0 and 1.
+  double w = 3; // @default 0 vary between 0 and 1.
+}
+
+// Faces are defined using lists of vertex and normal indices.
+message Face {
+  repeated FaceElement elements = 1;
+}
+
+message FaceElement {
+  int32 vertex_index = 1;
+  int32 normal_index = 2;
+  int32 texture_index = 3;
 }

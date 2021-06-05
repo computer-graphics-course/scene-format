@@ -93,7 +93,16 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
         scene.insert("sceneObjects".to_string(), Value::Array(post_process_scene_objects(&scene_objects)?));
     }
 
-    if !scene.contains_key("lights") {
+    if let Some(lights) = scene.get("lights") {
+        let lights = match &lights {
+            Value::Array(arr) => arr,
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected lights to be an array".to_string(),
+            })
+        };
+
+        scene.insert("lights".to_string(), Value::Array(post_process_lights(&lights)?));
+    } else {
         scene.insert("lights".to_string(), Value::Array(Vec::new()));
     }
 
@@ -177,7 +186,37 @@ fn post_process_scene_object(scene_object: &Map<String, Value>) -> Result<Map<St
         })
     }
 
-    Ok(scene_object.clone())
+    Ok(scene_object)
+}
+
+fn post_process_lights(lights: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
+    let mut new_lights = Vec::new();
+
+    for light in lights {
+        new_lights.push(Value::Object(match light {
+            Value::Object(light) => post_process_light(light)?,
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected light to be an object".to_string(),
+            })
+        }))
+    }
+
+    Ok(new_lights)
+}
+
+fn post_process_light(light: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+    let mut light = light.clone();
+
+    if let Some(transform) = light.get("transform") {
+        light["transform"] = Value::Object(match &transform {
+            Value::Object(transform) => post_process_transform(transform)?,
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected transform to be an object".to_string(),
+            })
+        })
+    }
+
+    Ok(light)
 }
 
 fn post_process_transform(transform: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
@@ -280,5 +319,65 @@ mod tests {
     #[test]
     fn example_from_docs1() {
         read("./examples/1.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs2() {
+        read("./examples/2.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs3() {
+        read("./examples/3.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs4() {
+        read("./examples/4.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs5() {
+        read("./examples/5.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs6() {
+        read("./examples/6.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs7() {
+        read("./examples/7.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs8() {
+        read("./examples/8.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs9() {
+        read("./examples/9.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs10() {
+        read("./examples/10.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs11() {
+        read("./examples/11.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs12() {
+        read("./examples/12.cowscene").unwrap();
+    }
+
+    #[test]
+    fn example_from_docs13() {
+        read("./examples/13.cowscene").unwrap();
     }
 }

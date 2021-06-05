@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 2,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "specular_reflection": {
+          "eta": 2
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 4,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 0,
+            "b": 0
+          }
+        }
+      },
+      "disk": {
+        "radius": 10
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 5,
+      "color": {
+        "r": 3,
+        "g": 3,
+        "b": 3
+      },
+      "environment": {}
+    }
+  ]
+}

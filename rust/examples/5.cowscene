@@ -11,8 +11,8 @@
       "transform": {
         "position": {
           "x": 0,
-          "y": 0,
-          "z": 6
+          "y": 0.3,
+          "z": 1.2
         }
       },
       "perspective": {
@@ -39,8 +39,8 @@
           }
         }
       },
-      "sphere": {
-        "radius": 1.5
+      "meshed_object": {
+        "reference": "cow2.obj"
       }
     }
   ]

@@ -1,2 +1,5 @@
-.idea
-target
+.idea/
+target/
+
+example_json.cowscene
+example_binary.cowscene

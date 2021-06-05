@@ -10,9 +10,14 @@
       "id": 1,
       "transform": {
         "position": {
-          "x": 0,
-          "y": 0,
-          "z": 6
+          "x": 1.25,
+          "y": 0.1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 10,
+          "y": 90,
+          "z": 0
         }
       },
       "perspective": {
@@ -28,6 +33,11 @@
           "x": 0,
           "y": 0,
           "z": 0
+        },
+        "scale": {
+          "x": 0.4,
+          "y": 1,
+          "z": 4
         }
       },
       "material": {
@@ -39,8 +49,8 @@
           }
         }
       },
-      "sphere": {
-        "radius": 1.5
+      "meshed_object": {
+        "reference": "cow2.obj"
       }
     }
   ]

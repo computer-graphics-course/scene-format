@@ -1,7 +1,7 @@
 #[macro_use] extern crate log;
 extern crate custom_error;
 
-use std::fs::File;
+use std::{env, fs::File, path::Path};
 use std::io::Write;
 
 use custom_error::custom_error;
@@ -45,6 +45,10 @@ pub fn save_json(scene: &Scene, save_to: &str) -> Result<(), SceneIOError> {
 }
 
 pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
+    decode_with_context(data, None)
+}
+
+pub fn decode_with_context(data: &[u8], context: Option<&Path>) -> Result<Scene, SceneIOError> {
     let value: Value = match serde_json::from_slice(data) {
         Ok(v) => v,
         Err(err) => {
@@ -90,7 +94,7 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
             })
         };
 
-        scene.insert("sceneObjects".to_string(), Value::Array(post_process_scene_objects(&scene_objects)?));
+        scene.insert("sceneObjects".to_string(), Value::Array(post_process_scene_objects(&scene_objects, context)?));
     }
 
     if let Some(lights) = scene.get("lights") {
@@ -159,12 +163,12 @@ fn post_process_camera(camera: &Map<String, Value>) -> Result<Map<String, Value>
 }
 
 
-fn post_process_scene_objects(scene_objects: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
+fn post_process_scene_objects(scene_objects: &Vec<Value>, context: Option<&Path>) -> Result<Vec<Value>, SceneIOError> {
     let mut objects = Vec::new();
 
     for object in scene_objects {
         objects.push(Value::Object(match object {
-            Value::Object(scene_object) => post_process_scene_object(scene_object)?,
+            Value::Object(scene_object) => post_process_scene_object(scene_object, context)?,
             _ => return Err(SceneIOError::FailedToDecode {
                 description: "Expected scene object to be an object".to_string(),
             })
@@ -174,7 +178,7 @@ fn post_process_scene_objects(scene_objects: &Vec<Value>) -> Result<Vec<Value>, 
     Ok(objects)
 }
 
-fn post_process_scene_object(scene_object: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+fn post_process_scene_object(scene_object: &Map<String, Value>, context: Option<&Path>) -> Result<Map<String, Value>, SceneIOError> {
     let mut scene_object = scene_object.clone();
 
     if let Some(transform) = scene_object.get("transform") {
@@ -184,6 +188,39 @@ fn post_process_scene_object(scene_object: &Map<String, Value>) -> Result<Map<St
                 description: "Expected transform to be an object".to_string(),
             })   
         })
+    }
+
+    if let Some(meshed_object) = scene_object.get("meshed_object") {
+        let mut meshed_object = match meshed_object {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected meshed object to be an object".to_string(),
+            })
+        };
+
+        if let Some(reference_path) = meshed_object.get("reference") {
+            let reference_path = match reference_path {
+                Value::String(s) => s.to_string(),
+                _ => return Err(SceneIOError::FailedToDecode {
+                    description: "Expected mesh referece to be a string".to_string(),
+                })
+            };
+
+            if let Some(context_path) = context {
+                let joined_path = context_path.join(Path::new(&reference_path))
+                    .to_str().ok_or(SceneIOError::FailedToDecode {
+                        description: "Failed to get joined path (context + reference".to_string(),
+                    })?.to_owned();
+
+                meshed_object["reference"] = Value::String(joined_path);
+            }
+        }
+
+        scene_object.insert("mesh".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("meshedObject".to_string(), Value::Object(meshed_object));
+            map
+        }));
     }
 
     Ok(scene_object)
@@ -230,8 +267,11 @@ fn post_process_transform(transform: &Map<String, Value>) -> Result<Map<String, 
 }
 
 pub fn read(read_from: &str) -> Result<Scene, SceneIOError> {
-    let data = std::fs::read(read_from)?;
-    decode(&data)
+    let file_path = Path::new(read_from);
+    let parent_directory_path = file_path.parent();
+
+    let data = std::fs::read(file_path)?;
+    decode_with_context(&data, parent_directory_path)
 }
 
 #[cfg(test)]
@@ -338,7 +378,17 @@ mod tests {
 
     #[test]
     fn example_from_docs5() {
-        read("./examples/5.cowscene").unwrap();
+        let result = read("./examples/5.cowscene").unwrap();
+
+        if let Some(meshed_object) = result.scene_objects.get(0).unwrap().mesh.as_ref() {
+            if let scene_object::Mesh::MeshedObject(meshed_object) = meshed_object {
+                assert_eq!("./examples/assets/cow.obj", meshed_object.reference);
+            } else {
+                panic!("Expected scene object to be meshed object");
+            }
+        } else {
+            panic!("Expected meshed object to be present");
+        }
     }
 
     #[test]

@@ -40,7 +40,7 @@
         }
       },
       "meshed_object": {
-        "reference": "cow2.obj"
+        "reference": "assets/cow.obj"
       }
     }
   ]

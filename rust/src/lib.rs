@@ -1,20 +1,19 @@
 #[macro_use] extern crate log;
 extern crate custom_error;
 
-use std::fs::File;
+pub mod errors;
+pub mod obj;
+
+use std::{env, fs::File, path::Path};
 use std::io::Write;
 
-use custom_error::custom_error;
 use prost::Message;
-use serde_json::{Map, Number, Value};
+use serde_json::{Map, Value};
+
+use errors::SceneIOError;
+use obj::read_obj_file;
 
 include!(concat!(env!("OUT_DIR"), "/scene_format.rs"));
-
-custom_error!{pub SceneIOError
-    FailedToEncode{description: String} = "Failed to encode",
-    FailedToDecode{description: String} = "Failed to decode",
-    IOError {source: std::io::Error} = "IO Error: {source}",
-}
 
 pub fn encode(scene: &Scene) -> Result<Vec<u8>, SceneIOError> {
     let mut buf = Vec::with_capacity(scene.encoded_len());
@@ -45,11 +44,17 @@ pub fn save_json(scene: &Scene, save_to: &str) -> Result<(), SceneIOError> {
 }
 
 pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
+    decode_with_context(data, None)
+}
+
+pub fn decode_with_context(data: &[u8], context: Option<&Path>) -> Result<Scene, SceneIOError> {
     let value: Value = match serde_json::from_slice(data) {
         Ok(v) => v,
         Err(err) => {
             debug!("Failed to decode as json, trying binary: {:?}", err);
-            return Scene::decode(&*data.to_vec()).map_err(|_| SceneIOError::FailedToDecode { description: err.to_string() })
+            return Scene::decode(&*data.to_vec())
+                .map_err(|_| SceneIOError::FailedToDecode { description: err.to_string() })
+                .and_then(|scene| post_process_scene(&scene, context))
         }
     };
 
@@ -68,7 +73,7 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
             })
         };
 
-        scene.insert("renderOptions".to_string(), Value::Object(post_process_render_options(render_options)?));
+        scene.insert("renderOptions".to_string(), Value::Object(pre_process_render_options(render_options)?));
     }
 
     if let Some(cameras) = scene.get("cameras") {
@@ -79,7 +84,7 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
             })
         };
 
-        scene.insert("cameras".to_string(), Value::Array(post_process_cameras(&cameras)?));
+        scene.insert("cameras".to_string(), Value::Array(pre_process_cameras(&cameras)?));
     }
 
     if let Some(scene_objects) = scene.get("sceneObjects") {
@@ -90,7 +95,7 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
             })
         };
 
-        scene.insert("sceneObjects".to_string(), Value::Array(post_process_scene_objects(&scene_objects)?));
+        scene.insert("sceneObjects".to_string(), Value::Array(pre_process_scene_objects(&scene_objects)?));
     }
 
     if let Some(lights) = scene.get("lights") {
@@ -101,7 +106,7 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
             })
         };
 
-        scene.insert("lights".to_string(), Value::Array(post_process_lights(&lights)?));
+        scene.insert("lights".to_string(), Value::Array(pre_process_lights(&lights)?));
     } else {
         scene.insert("lights".to_string(), Value::Array(Vec::new()));
     }
@@ -110,15 +115,17 @@ pub fn decode(data: &[u8]) -> Result<Scene, SceneIOError> {
         scene.insert("materials".to_string(), Value::Array(Vec::new()));
     }
 
-    Ok(serde_json::from_str(&match serde_json::to_string(&scene) {
+    let scene: Scene = serde_json::from_str(&match serde_json::to_string(&scene) {
         Ok(v) => v,
         Err(err) => return Err(SceneIOError::FailedToEncode {
             description: err.to_string(),
         }),
-    }).expect("expected json to be valid"))
+    }).expect("expected json to be valid");
+
+    post_process_scene(&scene, context)
 }
 
-fn post_process_render_options(render_options: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+fn pre_process_render_options(render_options: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
     let mut render_options = render_options.clone();
 
     if !render_options.contains_key("customProperties") {
@@ -128,12 +135,12 @@ fn post_process_render_options(render_options: &Map<String, Value>) -> Result<Ma
     Ok(render_options)
 }
 
-fn post_process_cameras(cameras: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
+fn pre_process_cameras(cameras: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
     let mut new_cameras = Vec::new();
 
     for camera in cameras {
         new_cameras.push(Value::Object(match &camera {
-            Value::Object(camera) => post_process_camera(camera)?,
+            Value::Object(camera) => pre_process_camera(camera)?,
             _ => return Err(SceneIOError::FailedToDecode {
                 description: "Expected camera to be an object".to_string(),
             })
@@ -143,12 +150,12 @@ fn post_process_cameras(cameras: &Vec<Value>) -> Result<Vec<Value>, SceneIOError
     Ok(new_cameras)
 }
 
-fn post_process_camera(camera: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+fn pre_process_camera(camera: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
     let mut camera = camera.clone();
 
     if let Some(transform) = camera.get("transform") {
         camera["transform"] = Value::Object(match &transform {
-            Value::Object(transform) => post_process_transform(transform)?,
+            Value::Object(transform) => pre_process_transform(transform)?,
             _ => return Err(SceneIOError::FailedToDecode {
                 description: "Expected transform to be an object".to_string(),
             })
@@ -159,12 +166,12 @@ fn post_process_camera(camera: &Map<String, Value>) -> Result<Map<String, Value>
 }
 
 
-fn post_process_scene_objects(scene_objects: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
+fn pre_process_scene_objects(scene_objects: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
     let mut objects = Vec::new();
 
     for object in scene_objects {
         objects.push(Value::Object(match object {
-            Value::Object(scene_object) => post_process_scene_object(scene_object)?,
+            Value::Object(scene_object) => pre_process_scene_object(scene_object)?,
             _ => return Err(SceneIOError::FailedToDecode {
                 description: "Expected scene object to be an object".to_string(),
             })
@@ -174,27 +181,102 @@ fn post_process_scene_objects(scene_objects: &Vec<Value>) -> Result<Vec<Value>, 
     Ok(objects)
 }
 
-fn post_process_scene_object(scene_object: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+fn pre_process_scene_object(scene_object: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
     let mut scene_object = scene_object.clone();
 
     if let Some(transform) = scene_object.get("transform") {
         scene_object["transform"] = Value::Object(match &transform {
-            Value::Object(transform) => post_process_transform(transform)?,
+            Value::Object(transform) => pre_process_transform(transform)?,
             _ => return Err(SceneIOError::FailedToDecode {
                 description: "Expected transform to be an object".to_string(),
             })   
         })
     }
 
+    if let Some(sphere) = scene_object.get("sphere") {
+        let sphere = match sphere {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected sphere to be an object".to_string(),
+            })
+        };
+
+        scene_object.insert("mesh".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("sphere".to_string(), Value::Object(sphere));
+            map
+        }));
+    }
+
+    if let Some(cube) = scene_object.get("cube") {
+        let cube = match cube {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected cube to be an object".to_string(),
+            })
+        };
+
+        scene_object.insert("mesh".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("cube".to_string(), Value::Object(cube));
+            map
+        }));
+    }
+
+    if let Some(plane) = scene_object.get("plane") {
+        let plane = match plane {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected plane to be an object".to_string(),
+            })
+        };
+
+        scene_object.insert("mesh".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("plane".to_string(), Value::Object(plane));
+            map
+        }));
+    }
+
+    if let Some(disk) = scene_object.get("disk") {
+        let disk = match disk {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected disk to be an object".to_string(),
+            })
+        };
+
+        scene_object.insert("mesh".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("disk".to_string(), Value::Object(disk));
+            map
+        }));
+    }
+
+    if let Some(meshed_object) = scene_object.get("meshed_object") {
+        let meshed_object = match meshed_object {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected meshed object to be an object".to_string(),
+            })
+        };
+
+        scene_object.insert("mesh".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("meshedObject".to_string(), Value::Object(meshed_object));
+            map
+        }));
+    }
+
     Ok(scene_object)
 }
 
-fn post_process_lights(lights: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
+fn pre_process_lights(lights: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
     let mut new_lights = Vec::new();
 
     for light in lights {
         new_lights.push(Value::Object(match light {
-            Value::Object(light) => post_process_light(light)?,
+            Value::Object(light) => pre_process_light(light)?,
             _ => return Err(SceneIOError::FailedToDecode {
                 description: "Expected light to be an object".to_string(),
             })
@@ -204,12 +286,12 @@ fn post_process_lights(lights: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> 
     Ok(new_lights)
 }
 
-fn post_process_light(light: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+fn pre_process_light(light: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
     let mut light = light.clone();
 
     if let Some(transform) = light.get("transform") {
         light["transform"] = Value::Object(match &transform {
-            Value::Object(transform) => post_process_transform(transform)?,
+            Value::Object(transform) => pre_process_transform(transform)?,
             _ => return Err(SceneIOError::FailedToDecode {
                 description: "Expected transform to be an object".to_string(),
             })
@@ -219,7 +301,7 @@ fn post_process_light(light: &Map<String, Value>) -> Result<Map<String, Value>, 
     Ok(light)
 }
 
-fn post_process_transform(transform: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+fn pre_process_transform(transform: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
     let mut transform = transform.clone();
 
     if !transform.contains_key("parentId") {
@@ -229,9 +311,50 @@ fn post_process_transform(transform: &Map<String, Value>) -> Result<Map<String, 
     Ok(transform)
 }
 
+fn post_process_scene(scene: &Scene, context: Option<&Path>) -> Result<Scene, SceneIOError> {
+    let mut scene = scene.clone();
+
+    for i in 0..scene.scene_objects.len() {
+        scene.scene_objects[i] = post_process_scene_object(&scene.scene_objects[i], context)?;
+    }
+
+    Ok(scene)
+}
+
+fn post_process_scene_object(scene_object: &SceneObject, context: Option<&Path>) -> Result<SceneObject, SceneIOError> {
+    let mut scene_object = scene_object.clone();
+    let mesh = match &scene_object.mesh {
+        Some(v) => v.clone(),
+        None => return Err(SceneIOError::FailedToDecode {
+            description: "Expected scene object to contain mesh".to_string(),
+        })
+    };
+
+    if let scene_object::Mesh::MeshedObject(meshed_object) = &mesh {
+        let mut meshed_object = meshed_object.clone();
+
+        if let Some(context) = context {
+            if meshed_object.reference != "" {
+                meshed_object.reference = context.join(meshed_object.reference).to_str().ok_or(SceneIOError::FailedToDecode {
+                    description: "Failed to join reference path with context".to_string(),
+                })?.to_string();
+
+                meshed_object.obj = Some(read_obj_file(&meshed_object.reference)?);
+            }
+        }
+
+        scene_object.mesh = Some(scene_object::Mesh::MeshedObject(meshed_object));
+    }
+
+    Ok(scene_object)
+}
+
 pub fn read(read_from: &str) -> Result<Scene, SceneIOError> {
-    let data = std::fs::read(read_from)?;
-    decode(&data)
+    let file_path = Path::new(read_from);
+    let parent_directory_path = file_path.parent();
+
+    let data = std::fs::read(file_path)?;
+    decode_with_context(&data, parent_directory_path)
 }
 
 #[cfg(test)]
@@ -239,6 +362,8 @@ mod tests {
 
     use super::*;
     use env_logger::Env;
+
+    const DELTA: f64 = 0.00001;
 
     #[ctor::ctor]
     fn init() {
@@ -279,7 +404,7 @@ mod tests {
                         })),
                     })),
                     mesh: Some(scene_object::Mesh::MeshedObject(MeshedObject {
-                        reference: "cow.obj".to_string(),
+                        reference: "examples/assets/cow.obj".to_string(),
                         obj: None,
                     })),
                 },
@@ -338,7 +463,36 @@ mod tests {
 
     #[test]
     fn example_from_docs5() {
-        read("./examples/5.cowscene").unwrap();
+        let result = read("./examples/5.cowscene").unwrap();
+
+        if let Some(meshed_object) = result.scene_objects.get(0).unwrap().mesh.as_ref() {
+            if let scene_object::Mesh::MeshedObject(meshed_object) = meshed_object {
+                assert_eq!("./examples/assets/cow.obj", meshed_object.reference);
+
+                let obj = meshed_object.obj.as_ref().unwrap();
+
+                assert_eq!(2574, obj.vertices.len());
+
+                assert!((0.14922 - obj.vertices[0].x).abs() < DELTA);
+                assert!((0.0940258 - obj.vertices[0].y).abs() < DELTA);
+                assert!((-0.0463043 - obj.vertices[0].z).abs() < DELTA);
+                assert!((1.0 - obj.vertices[0].w).abs() < DELTA);
+
+                assert_eq!(2574, obj.vertex_normals.len());
+                assert!((0.372948 - obj.vertex_normals[0].x).abs() < DELTA);
+                assert!((0.780945 - obj.vertex_normals[0].y).abs() < DELTA);
+                assert!((-0.501034 - obj.vertex_normals[0].z).abs() < DELTA);
+
+                assert_eq!(5144, obj.faces.len());
+                assert_eq!(3, obj.faces[0].elements.len());
+                assert_eq!(5, obj.faces[0].elements[0].vertex_index);
+                assert_eq!(1, obj.faces[0].elements[0].normal_index);
+            } else {
+                panic!("Expected scene object to be meshed object");
+            }
+        } else {
+            panic!("Expected meshed object to be present");
+        }
     }
 
     #[test]

@@ -193,6 +193,25 @@ fn pre_process_scene_object(scene_object: &Map<String, Value>) -> Result<Map<Str
         })
     }
 
+    // object_material
+    if let Some(material) = scene_object.get("material") {
+        let material = match material {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected material to be an object".to_string(),
+            })
+        };
+
+        let material = pre_process_material(&material)?;
+
+        scene_object.insert("objectMaterial".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("material".to_string(), Value::Object(material));
+            map
+        }));
+    }
+
+    // mesh
     if let Some(sphere) = scene_object.get("sphere") {
         let sphere = match sphere {
             Value::Object(v) => v.clone(),
@@ -269,6 +288,46 @@ fn pre_process_scene_object(scene_object: &Map<String, Value>) -> Result<Map<Str
     }
 
     Ok(scene_object)
+}
+
+fn pre_process_material(material: &Map<String, Value>) -> Result<Map<String, Value>, SceneIOError> {
+    let mut material = material.clone();
+
+    if !material.contains_key("id") {
+        material.insert("id".to_string(), Value::String("".to_string()));
+    }
+
+    if let Some(lambert_reflection) = material.get("lambert_reflection") {
+        let lambert_reflection = match lambert_reflection {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected lambert reflection to be an object".to_string(),
+            })
+        };
+
+        material.insert("material".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("lambertReflection".to_string(), Value::Object(lambert_reflection));
+            map
+        }));
+    }
+
+    if let Some(specular_reflection) = material.get("specular_reflection") {
+        let specular_reflection = match specular_reflection {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected specular reflection to be an object".to_string(),
+            })
+        };
+
+        material.insert("material".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("specularReflection".to_string(), Value::Object(specular_reflection));
+            map
+        }));
+    }
+
+    Ok(material)
 }
 
 fn pre_process_lights(lights: &Vec<Value>) -> Result<Vec<Value>, SceneIOError> {
@@ -488,7 +547,34 @@ mod tests {
 
     #[test]
     fn example_from_docs1() {
-        read("./examples/1.cowscene").unwrap();
+        let result = read("./examples/1.cowscene").unwrap();
+
+        if let Some(material) = result.scene_objects.get(0).unwrap().object_material.as_ref() {
+            match material {
+                scene_object::ObjectMaterial::Material(material) => {
+                    if let Some(material) = &material.material {
+                        match &material {
+                            material::Material::LambertReflection(lambert) => {
+                                if let Some(color) = &lambert.color {
+                                    assert!((color.r - 1.0).abs() < DELTA);
+                                    assert!((color.g - 1.0).abs() < DELTA);
+                                    assert!((color.b - 1.0).abs() < DELTA);
+                                } else {
+                                    panic!("Expected color to be set on lambert material");
+                                }
+                            },
+                            other => panic!("Unexpected material type: {:?}", other),
+                        }
+                    } else {
+                        panic!("Expected inline material to be set");
+                    }
+                },
+                other => panic!("Expected inline material, got instead: {:?}", other),
+            };
+
+        } else {
+            panic!("Expected some material to be set for the scene object with id = 0");
+        }
     }
 
     #[test]

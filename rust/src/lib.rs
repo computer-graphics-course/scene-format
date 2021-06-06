@@ -298,6 +298,51 @@ fn pre_process_light(light: &Map<String, Value>) -> Result<Map<String, Value>, S
         })
     }
 
+    if let Some(point) = light.get("point") {
+        let point_light = match point {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected point light to be an object".to_string(),
+            })
+        };
+
+        light.insert("light".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("point".to_string(), Value::Object(point_light));
+            map
+        }));
+    }
+
+    if let Some(directional) = light.get("directional") {
+        let directional_light = match directional {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected directional light to be an object".to_string(),
+            })
+        };
+
+        light.insert("light".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("directional".to_string(), Value::Object(directional_light));
+            map
+        }));
+    }
+
+    if let Some(environment) = light.get("environment") {
+        let environment_light = match environment {
+            Value::Object(v) => v.clone(),
+            _ => return Err(SceneIOError::FailedToDecode {
+                description: "Expected environment light to be an object".to_string(),
+            })
+        };
+
+        light.insert("environment".to_string(), Value::Object({
+            let mut map = Map::new();
+            map.insert("environment".to_string(), Value::Object(environment_light));
+            map
+        }));
+    }
+
     Ok(light)
 }
 
@@ -532,6 +577,17 @@ mod tests {
 
     #[test]
     fn example_from_docs13() {
-        read("./examples/13.cowscene").unwrap();
+        let scene = read("./examples/13.cowscene").unwrap();
+
+        if let Some(light) = scene.lights.get(0).unwrap().light.as_ref() {
+            match light {
+                light::Light::Directional(_) => {
+                    // ok
+                },
+                other => panic!("Expected light to be directional, instead got: {:?}", other),
+            };
+        } else {
+            panic!("Expected light to be present");
+        }
     }
 }

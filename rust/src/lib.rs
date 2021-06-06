@@ -1,20 +1,19 @@
 #[macro_use] extern crate log;
 extern crate custom_error;
 
+pub mod errors;
+pub mod obj;
+
 use std::{env, fs::File, path::Path};
 use std::io::Write;
 
-use custom_error::custom_error;
 use prost::Message;
-use serde_json::{Map, Number, Value};
+use serde_json::{Map, Value};
+
+use errors::SceneIOError;
+use obj::read_obj_file;
 
 include!(concat!(env!("OUT_DIR"), "/scene_format.rs"));
-
-custom_error!{pub SceneIOError
-    FailedToEncode{description: String} = "Failed to encode",
-    FailedToDecode{description: String} = "Failed to decode",
-    IOError {source: std::io::Error} = "IO Error: {source}",
-}
 
 pub fn encode(scene: &Scene) -> Result<Vec<u8>, SceneIOError> {
     let mut buf = Vec::with_capacity(scene.encoded_len());
@@ -324,7 +323,7 @@ fn post_process_scene(scene: &Scene, context: Option<&Path>) -> Result<Scene, Sc
 
 fn post_process_scene_object(scene_object: &SceneObject, context: Option<&Path>) -> Result<SceneObject, SceneIOError> {
     let mut scene_object = scene_object.clone();
-    let mut mesh = match &scene_object.mesh {
+    let mesh = match &scene_object.mesh {
         Some(v) => v.clone(),
         None => return Err(SceneIOError::FailedToDecode {
             description: "Expected scene object to contain mesh".to_string(),
@@ -335,9 +334,13 @@ fn post_process_scene_object(scene_object: &SceneObject, context: Option<&Path>)
         let mut meshed_object = meshed_object.clone();
 
         if let Some(context) = context {
-            meshed_object.reference = context.join(meshed_object.reference).to_str().ok_or(SceneIOError::FailedToDecode {
-                description: "Failed to join reference path with context".to_string(),
-            })?.to_string();
+            if meshed_object.reference != "" {
+                meshed_object.reference = context.join(meshed_object.reference).to_str().ok_or(SceneIOError::FailedToDecode {
+                    description: "Failed to join reference path with context".to_string(),
+                })?.to_string();
+
+                meshed_object.obj = Some(read_obj_file(&meshed_object.reference)?);
+            }
         }
 
         scene_object.mesh = Some(scene_object::Mesh::MeshedObject(meshed_object));
@@ -359,6 +362,8 @@ mod tests {
 
     use super::*;
     use env_logger::Env;
+
+    const DELTA: f64 = 0.00001;
 
     #[ctor::ctor]
     fn init() {
@@ -399,7 +404,7 @@ mod tests {
                         })),
                     })),
                     mesh: Some(scene_object::Mesh::MeshedObject(MeshedObject {
-                        reference: "cow.obj".to_string(),
+                        reference: "examples/assets/cow.obj".to_string(),
                         obj: None,
                     })),
                 },
@@ -463,6 +468,25 @@ mod tests {
         if let Some(meshed_object) = result.scene_objects.get(0).unwrap().mesh.as_ref() {
             if let scene_object::Mesh::MeshedObject(meshed_object) = meshed_object {
                 assert_eq!("./examples/assets/cow.obj", meshed_object.reference);
+
+                let obj = meshed_object.obj.as_ref().unwrap();
+
+                assert_eq!(2574, obj.vertices.len());
+
+                assert!((0.14922 - obj.vertices[0].x).abs() < DELTA);
+                assert!((0.0940258 - obj.vertices[0].y).abs() < DELTA);
+                assert!((-0.0463043 - obj.vertices[0].z).abs() < DELTA);
+                assert!((1.0 - obj.vertices[0].w).abs() < DELTA);
+
+                assert_eq!(2574, obj.vertex_normals.len());
+                assert!((0.372948 - obj.vertex_normals[0].x).abs() < DELTA);
+                assert!((0.780945 - obj.vertex_normals[0].y).abs() < DELTA);
+                assert!((-0.501034 - obj.vertex_normals[0].z).abs() < DELTA);
+
+                assert_eq!(5144, obj.faces.len());
+                assert_eq!(3, obj.faces[0].elements.len());
+                assert_eq!(5, obj.faces[0].elements[0].vertex_index);
+                assert_eq!(1, obj.faces[0].elements[0].normal_index);
             } else {
                 panic!("Expected scene object to be meshed object");
             }

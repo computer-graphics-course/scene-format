@@ -272,6 +272,10 @@ namespace SceneFormat
         
         private static void PostProcessMaterial(LambertReflectionMaterial material)
         {
+            if (material.R == 0)
+            {
+                material.R = 1;
+            }
             material.R = Math.Clamp(material.R, 0, 1);
         }
         

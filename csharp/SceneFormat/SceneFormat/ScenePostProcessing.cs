@@ -64,6 +64,10 @@ namespace SceneFormat
                 sceneObject.Transform = new Transform { };
             }
             PostProcessTransform(sceneObject.Transform);
+            if (sceneObject.Material != null)
+            {
+                PostProcessMaterial(sceneObject.Material);
+            }
             
             if (sceneObject.Cube != null)
             {

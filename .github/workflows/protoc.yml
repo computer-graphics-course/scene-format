@@ -66,7 +66,6 @@ jobs:
       - name: Delete existing package
         run : cd csharp/SceneFormat && gpr delete SceneFormat.0.1.$GITHUB_RUN_NUMBER.nupkg || true
       - name: Push
-        if: github.ref == 'refs/heads/master'
         run: cd csharp/SceneFormat && gpr push SceneFormat.0.1.$GITHUB_RUN_NUMBER.nupkg --repository computer-graphics-course/scene-format
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

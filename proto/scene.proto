@@ -301,6 +301,31 @@ Representation of orthographic camera
 message OrthographicCamera {}
 
 /*
+@optional
+Representation of realistic camera
+*/
+message RealisticCamera {
+  /*
+  @default 60
+  Horizontal field of view
+  Should be in range (0, 180)
+  */
+  double fov = 1;
+  
+  /*
+  @default 1
+  Focal length
+  */
+  double focus = 2;
+
+  /*
+  @default 0.01
+  Radius of lens
+  */
+  double radius = 3;
+}
+
+/*
 Representation of camera
 Camera can be transformed as any other point is space using transformation matrix
 and camera viewport is located along negative z-axis
@@ -315,10 +340,13 @@ message Camera {
   int32 id = 1;
   Transform transform = 2;
   oneof camera {
-    PerspectiveCamera perspective = 3; // @oneof 2 camera
+    PerspectiveCamera perspective = 3; // @oneof 3 camera
     // @oneof_item
     // @optional
     OrthographicCamera orthographic = 4;
+    // @oneof_item
+    // @optional
+    RealisticCamera realistic = 5;
   }
 }
 

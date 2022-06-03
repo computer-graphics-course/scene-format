@@ -107,6 +107,16 @@ message RenderOptions {
   Height of final image
   */
   int32 height = 3;
+  /*
+  @default 3
+  Depth of path tracing
+  */
+  int32 rayDepth = 4;
+  /*
+  @default 3
+  Number of rays per pixel dimension
+  */
+  int32 raysPerPixelDimension = 5;
 
   /*
   @optional
@@ -114,7 +124,7 @@ message RenderOptions {
   If you are using this field, consider adding it to the format spec as a regular field if you think that
   other implementations may benefit from your custom fields.
   */
-  repeated CustomProperty custom_properties = 4;
+  repeated CustomProperty custom_properties = 6;
 }
 
 /*

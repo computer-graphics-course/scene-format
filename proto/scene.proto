@@ -360,6 +360,13 @@ message Material {
   oneof material {
     LambertReflectionMaterial lambert_reflection = 2; // @oneof 2 material
     SpecularReflectionMaterial specular_reflection = 3; // @oneof_item
+    SpecularTransmitionMaterial specular_transmission = 4; // @oneof_item
+    FresnelMaterial fresnel = 5; // @oneof_item
+    OrenNayarMaterial oren_nayar = 6; // @oneof_item
+    MicrofacetReflectionMaterial microfacet_reflection = 7; // @oneof_item
+    MetalMaterial metal = 8; // @oneof_item
+    PlasticMaterial plastic = 9; // @oneof_item
+    BlendMaterial blend = 10; // @oneof_item
   }
 }
 
@@ -386,6 +393,140 @@ message SpecularReflectionMaterial {
   <a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
   */
   double eta = 1;
+  /*
+  @default 1
+  Amount of reflection
+  */
+  double r = 2;
+}
+
+/*
+Representation of specular transmition material
+*/
+message SpecularTransmitionMaterial {
+  /*
+  @default 1.5
+  @optional
+  Index of refraction
+  The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum
+  <a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
+  */
+  double eta = 1;
+  /*
+  @default 1
+  Amount of transmission
+  */
+  double t = 2;
+}
+
+/*
+Representation of fresnel material
+*/
+message FresnelMaterial {
+  /*
+  @default 1.5
+  @optional
+  */
+  double eta = 1;
+  /*
+  @default 1
+  Amount of reflection
+  */
+  double r = 2;
+  /*
+  @default 1
+  Amount of transmission
+  */
+  double t = 3;
+}
+
+/*
+Representation of diffuse material with Oren-Nayar model
+*/
+message OrenNayarMaterial {
+  Color color = 1;
+  /*
+  @default 1
+  Amount of reflection
+  */
+  double r = 3;
+  /*
+  @default 0
+  */
+  double roughness = 2;
+}
+
+/*
+Representation of reflection material using microfacet model
+*/
+message MicrofacetReflectionMaterial {
+  Color color = 1;
+  /*
+  @default 1
+  Amount of reflection
+  */
+  double r = 2;
+  /*
+  @default 1.5
+  */
+  double eta = 3;
+  /*
+  @default 0
+  */
+  double roughness = 4;
+}
+
+/*
+Representation of metal material
+*/
+message MetalMaterial {
+  Color color = 1;
+  /*
+  @default 1
+  Amount of reflection
+  */
+  double r = 2;
+  /*
+  @default 1.5
+  */
+  double eta = 3;
+  /*
+  @default 1.5
+  Extinction coefficient
+  */
+  double k = 4;
+  /*
+  @default 0.5
+  */
+  double roughness = 5;
+}
+
+/*
+Representation of plastic material
+*/
+message PlasticMaterial {
+  Color color = 1;
+  /*
+  @default 1
+  Amount of reflection
+  */
+  double r = 2;
+  /*
+  @default 0.5
+  */
+  double roughness = 3;
+}
+
+/*
+Representation of blend material
+*/
+message BlendMaterial {
+  Color diffuse = 1;
+  Color specular = 2;
+  /*
+  @default 0.5
+  */
+  double roughness = 3;
 }
 
 /*

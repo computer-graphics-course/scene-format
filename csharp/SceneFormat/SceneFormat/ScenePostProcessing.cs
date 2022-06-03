@@ -162,11 +162,15 @@ namespace SceneFormat
             
             if (camera.Perspective != null)
             {
-                PostProcessPerspectiveCamera(camera.Perspective);
+                PostProcessCamera(camera.Perspective);
+            }
+            if (camera.Realistic != null)
+            {
+                PostProcessCamera(camera.Realistic);
             }
         }
         
-        private static void PostProcessPerspectiveCamera(PerspectiveCamera camera)
+        private static void PostProcessCamera(PerspectiveCamera camera)
         {
             if (camera.Fov == 0)
             {
@@ -174,6 +178,22 @@ namespace SceneFormat
             }
         }
 
+        private static void PostProcessCamera(RealisticCamera camera)
+        {
+            if (camera.Fov == 0)
+            {
+                camera.Fov = 60;
+            }
+            if (camera.Focus == 0)
+            {
+                camera.Focus = 1;
+            }
+            if (camera.Radius == 0)
+            {
+                camera.Focus = 0.01;
+            }
+        }
+        
         private static void PostProcessRenderOptions(RenderOptions renderOptions)
         {
             if (renderOptions.CameraId == 0)
@@ -190,6 +210,16 @@ namespace SceneFormat
             {
                 renderOptions.Height = 320;
             }
+            
+            if (renderOptions.RayDepth == 0)
+            {
+                renderOptions.RayDepth = 3;
+            }
+            
+            if (renderOptions.RaysPerPixelDimension == 0)
+            {
+                renderOptions.RaysPerPixelDimension = 1;
+            }
         }
 
         private static void PostProcessMaterials(List<Material> materials)
@@ -202,18 +232,116 @@ namespace SceneFormat
         
         private static void PostProcessMaterial(Material material)
         {
+            if (material.LambertReflection != null)
+            {
+                PostProcessMaterial(material.LambertReflection);
+            }
             if (material.SpecularReflection != null)
             {
-                PostProcessSpecularReflectionMaterial(material.SpecularReflection);
+                PostProcessMaterial(material.SpecularReflection);
+            }
+            if (material.SpecularTransmission != null)
+            {
+                PostProcessMaterial(material.SpecularTransmission);
+            }
+            if (material.Fresnel != null)
+            {
+                PostProcessMaterial(material.Fresnel);
+            }
+            if (material.OrenNayar != null)
+            {
+                PostProcessMaterial(material.OrenNayar);
+            }
+            if (material.MicrofacetReflection != null)
+            {
+                PostProcessMaterial(material.MicrofacetReflection);
+            }
+            if (material.Metal != null)
+            {
+                PostProcessMaterial(material.Metal);
+            }
+            if (material.Plastic != null)
+            {
+                PostProcessMaterial(material.Plastic);
+            }
+            if (material.Blend != null)
+            {
+                PostProcessMaterial(material.Blend);
             }
         }
         
-        private static void PostProcessSpecularReflectionMaterial(SpecularReflectionMaterial specularReflectionMaterial)
+        private static void PostProcessMaterial(LambertReflectionMaterial material)
         {
-            if (specularReflectionMaterial.Eta == 0)
+            material.R = Math.Clamp(material.R, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(SpecularReflectionMaterial material)
+        {
+            if (material.Eta == 0)
             {
-                specularReflectionMaterial.Eta = 1.5;
+                material.Eta = 1.5;
             }
+            material.R = Math.Clamp(material.R, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(SpecularTransmitionMaterial material)
+        {
+            if (material.Eta == 0)
+            {
+                material.Eta = 1.5;
+            }
+            material.T = Math.Clamp(material.T, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(FresnelMaterial material)
+        {
+            if (material.Eta == 0)
+            {
+                material.Eta = 1.5;
+            }
+            material.R = Math.Clamp(material.R, 0, 1);
+            material.T = Math.Clamp(material.T, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(OrenNayarMaterial material)
+        {
+            material.R = Math.Clamp(material.R, 0, 1);
+            material.Roughness = Math.Clamp(material.Roughness, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(MicrofacetReflectionMaterial material)
+        {
+            if (material.Eta == 0)
+            {
+                material.Eta = 1.5;
+            }
+            material.R = Math.Clamp(material.R, 0, 1);
+            material.Roughness = Math.Clamp(material.Roughness, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(MetalMaterial material)
+        {
+            if (material.Eta == 0)
+            {
+                material.Eta = 1.5;
+            }
+            if (material.K == 0)
+            {
+                material.K = 1;
+            }
+            material.R = Math.Clamp(material.R, 0, 1);
+            material.Roughness = Math.Clamp(material.Roughness, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(PlasticMaterial material)
+        {
+            material.R = Math.Clamp(material.R, 0, 1);
+            material.Roughness = Math.Clamp(material.Roughness, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(BlendMaterial material)
+        {
+            material.Roughness = Math.Clamp(material.Roughness, 0, 1);
         }
 
         private static void PostProcessTransform(Transform transform)
@@ -488,18 +616,56 @@ namespace SceneFormat
             {
                 if (material.LambertReflection.Color == null)
                 {
-                    if (!string.IsNullOrEmpty(material.Id))
-                    {
-                        throw new SceneIOException("Color should be set for LambertReflection material, material id =" + material.Id);
-                    }
-                    else
-                    {
-                        throw new SceneIOException("Color should be set for LambertReflection material");
-                    }
+                    throw new SceneIOException($"Color should be set for LambertReflection material.{GetMaterialIdMessage(material)}");
                 }
-                
                 ValidateColor(material.LambertReflection.Color);
             }
+            if (material.OrenNayar != null)
+            {
+                if (material.OrenNayar.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for OrenNayar material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.OrenNayar.Color);
+            }
+            if (material.MicrofacetReflection != null)
+            {
+                if (material.MicrofacetReflection.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for MicrofacetReflection material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.MicrofacetReflection.Color);
+            }
+            if (material.Metal != null)
+            {
+                if (material.Metal.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for Metal material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.Metal.Color);
+            }
+            if (material.Plastic != null)
+            {
+                if (material.Plastic.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for Plastic material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.Plastic.Color);
+            }
+            if (material.Blend != null)
+            {
+                if (material.Blend.Diffuse == null || material.Blend.Specular == null)
+                {
+                    throw new SceneIOException($"Color should be set for Blend material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.Blend.Diffuse);
+                ValidateColor(material.Blend.Specular);
+            }
+        }
+
+        private static string GetMaterialIdMessage(Material material)
+        {
+            return string.IsNullOrEmpty(material.Id) ? "" : $"Material id ={material.Id}";
         }
 
         private static void ValidateColor(Color color)

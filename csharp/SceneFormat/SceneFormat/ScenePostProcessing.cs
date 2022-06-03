@@ -281,6 +281,10 @@ namespace SceneFormat
             {
                 material.Eta = 1.5;
             }
+            if (material.R == 0)
+            {
+                material.R = 1;
+            }
             material.R = Math.Clamp(material.R, 0, 1);
         }
         
@@ -289,6 +293,10 @@ namespace SceneFormat
             if (material.Eta == 0)
             {
                 material.Eta = 1.5;
+            }
+            if (material.T == 0)
+            {
+                material.T = 1;
             }
             material.T = Math.Clamp(material.T, 0, 1);
         }
@@ -299,12 +307,24 @@ namespace SceneFormat
             {
                 material.Eta = 1.5;
             }
+            if (material.R == 0)
+            {
+                material.R = 1;
+            }
+            if (material.T == 0)
+            {
+                material.T = 1;
+            }
             material.R = Math.Clamp(material.R, 0, 1);
             material.T = Math.Clamp(material.T, 0, 1);
         }
         
         private static void PostProcessMaterial(OrenNayarMaterial material)
         {
+            if (material.R == 0)
+            {
+                material.R = 1;
+            }
             material.R = Math.Clamp(material.R, 0, 1);
             material.Roughness = Math.Clamp(material.Roughness, 0, 1);
         }
@@ -314,6 +334,10 @@ namespace SceneFormat
             if (material.Eta == 0)
             {
                 material.Eta = 1.5;
+            }
+            if (material.R == 0)
+            {
+                material.R = 1;
             }
             material.R = Math.Clamp(material.R, 0, 1);
             material.Roughness = Math.Clamp(material.Roughness, 0, 1);
@@ -329,12 +353,20 @@ namespace SceneFormat
             {
                 material.K = 1;
             }
+            if (material.R == 0)
+            {
+                material.R = 1;
+            }
             material.R = Math.Clamp(material.R, 0, 1);
             material.Roughness = Math.Clamp(material.Roughness, 0, 1);
         }
         
         private static void PostProcessMaterial(PlasticMaterial material)
         {
+            if (material.R == 0)
+            {
+                material.R = 1;
+            }
             material.R = Math.Clamp(material.R, 0, 1);
             material.Roughness = Math.Clamp(material.Roughness, 0, 1);
         }

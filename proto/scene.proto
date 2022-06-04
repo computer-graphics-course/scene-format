@@ -390,6 +390,7 @@ This material reflects light strictly in one direction which can be found by ref
 For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Specular_Reflection_and_Transmission">link</a>
 */
 message SpecularReflectionMaterial {
+  Color color = 1;
   /*
   @default 1.5
   @optional
@@ -397,18 +398,19 @@ message SpecularReflectionMaterial {
   The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum
   <a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
   */
-  double eta = 1;
+  double eta = 2;
   /*
   @default 1
   Amount of reflection
   */
-  double r = 2;
+  double r = 3;
 }
 
 /*
 Representation of specular transmition material
 */
 message SpecularTransmitionMaterial {
+  Color color = 1;
   /*
   @default 1.5
   @optional
@@ -416,33 +418,34 @@ message SpecularTransmitionMaterial {
   The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum
   <a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
   */
-  double eta = 1;
+  double eta = 2;
   /*
   @default 1
   Amount of transmission
   */
-  double t = 2;
+  double t = 3;
 }
 
 /*
 Representation of fresnel material
 */
 message FresnelMaterial {
+  Color color = 1;
   /*
-  @default 1.5
-  @optional
-  */
-  double eta = 1;
+   @default 1.5
+   @optional
+   */
+  double eta = 2;
   /*
   @default 1
   Amount of reflection
   */
-  double r = 2;
+  double r = 3;
   /*
   @default 1
   Amount of transmission
   */
-  double t = 3;
+  double t = 4;
 }
 
 /*

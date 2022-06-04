@@ -660,6 +660,30 @@ namespace SceneFormat
                 }
                 ValidateColor(material.LambertReflection.Color);
             }
+            if (material.SpecularReflection != null)
+            {
+                if (material.SpecularReflection.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for LambertReflection material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.SpecularReflection.Color);
+            }
+            if (material.SpecularTransmission != null)
+            {
+                if (material.SpecularTransmission.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for LambertReflection material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.SpecularTransmission.Color);
+            }
+            if (material.Fresnel != null)
+            {
+                if (material.Fresnel.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for LambertReflection material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.Fresnel.Color);
+            }
             if (material.OrenNayar != null)
             {
                 if (material.OrenNayar.Color == null)

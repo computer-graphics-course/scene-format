@@ -1,0 +1,38 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Scene Format - v1</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic"/>
+    <link rel="stylesheet" type="text/css" href="/scene-format/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+  </head>
+
+  <body>
+    <a href="/scene-format/">back to home</a>
+
+<h1>Java Library</h1>
+<b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a href="https://github.com/settings/tokens">here</a>.<br />
+<b>Step 2.</b> Add following lines to your <i>~/.gradle/gradle.properties</i>:
+<pre>
+<code>gprComputerGraphicsUser=&lt;your github username&gt;
+gprComputerGraphicsPassword=&lt;token from step 1&gt;</code>
+</pre>
+<b>Step 3.</b> Add repository to your <i>build.gradle</i> (see complete example <a href="https://github.com/computer-graphics-course/scene-format/blob/master/java/example/build.gradle">here</a>):
+<pre>
+<code>maven {
+    url "https://maven.pkg.github.com/computer-graphics-course/scene-format"
+    credentials {
+        username "$gprComputerGraphicsUser"
+        password "$gprComputerGraphicsPassword"
+    }
+}</code>
+</pre>
+<b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/java/example/src/main/java/Main.java">this snippet</a> to read or write scene format files.<br />
+
+  </body>
+  <script>hljs.highlightAll();</script>
+</html>
+

@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Scene Format - v1</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic"/>
+    <link rel="stylesheet" type="text/css" href="/scene-format/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+  </head>
+
+  <body>
+    <a href="/scene-format/">back to home</a>
+
+<h1>C++ Library (instructions for Visual Studio on Windows)</h1>
+<i>Please let us know if you have ideas for an easier way to distribute library.</i><br />
+<b>Step 1.</b>Install vcpkg:
+<pre>
+      <code>git clone https://github.com/microsoft/vcpkg
+cd vckpg && ./bootstrap-vcpkg.bat
+$env:Path += ";$(pwd)"</code>
+      </pre>
+
+<b>Step 2.</b>Install protobuf libraries with vcpkg (do this in your project folder, note that this can take some time
+(around 10 minutes):
+<pre>
+      <code>vcpkg install protobuf protobuf:x64-windows
+vcpkg integrate install</code>
+      </pre>
+
+<b>Step 3.</b>Download latest library build from <a
+    href="https://turbocow.nikitavbv.com/sceneformat/releases/cpp_latest.zip">here</a>. Place those somewhere in your
+project and include sceneio.h<br />
+<b>Step 4.</b> Use code from <a
+    href="https://github.com/computer-graphics-course/scene-format/blob/master/cpp/example/Example/Example.cpp">this
+    snippet</a> to read or write scene format files.<br />
+  </body>
+  <script>hljs.highlightAll();</script>
+</html>
+

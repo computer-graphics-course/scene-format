@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Scene Format - v1</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic"/>
+    <link rel="stylesheet" type="text/css" href="/scene-format/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+  </head>
+
+  <body>
+    <a href="/scene-format/">back to home</a>
+
+<h1>C# Library</h1>
+<h2>Using Jetbrains Rider</h2>
+<b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a href="https://github.com/settings/tokens">here</a>.<br />
+<b>Step 2.</b> Go to Tools > NuGet > Show NuGet Sources.<br />
+<b>Step 3.</b> On Feeds tab, press on "plus" button on the "New feed" row.<br />
+<b>Step 4.</b> In "New feed" window enter the following:
+<pre>
+    <code>Name: computer graphics course
+URL: https://nuget.pkg.github.com/computer-graphics-course/index.json
+User: &lt;your github username&gt;
+Password: &lt;token from step 1&gt;</code>
+</pre>
+<b>Step 5.</b> Switch to <b>Packages</b> tab. Enter SceneFormat into the search field.<br />
+<b>Step 6.</b> In the pane to the right install the package by clicking on a button with a plus sign. You can install library updates any time here too.<br />
+<b>Step 7.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/csharp/SceneFormat/Example/Program.cs">this snippet</a> to read or write scene format files.<br />
+
+<h2>Using dotnet cli</h2>
+<b>Step 1.</b> Create a GitHub token with the <i>read:packages</i> scope <a href="https://github.com/settings/tokens">here</a>.<br />
+<b>Step 2.</b> Add a nuget source:
+<pre>
+    <code>dotnet nuget add source "https://nuget.pkg.github.com/computer-graphics-course/index.json" --name "SceneFormat GitHub" --username "&lt;your github username&gt;" --password "&lt;token from step 1&gt;"</code>
+</pre>
+
+<b>Step 3.</b> Install <i>SceneFormat</i> dependency. Check <a href="https://github.com/computer-graphics-course/scene-format/packages/752161">this page</a> for the latest version available.<br />
+<b>Step 4.</b> Use code from <a href="https://github.com/computer-graphics-course/scene-format/blob/master/csharp/SceneFormat/Example/Program.cs">this snippet</a> to read or write scene format files.<br />
+  </body>
+  <script>hljs.highlightAll();</script>
+</html>
+

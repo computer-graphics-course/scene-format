@@ -1,0 +1,4979 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Scene Format - v1</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic"/>
+    <link rel="stylesheet" type="text/css" href="/scene-format/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+  </head>
+
+  <body>
+        <h1 id="title">Scene Format - v1</h1>
+
+    <h2>Table of Contents</h2>
+
+    <div id="toc-container">
+      <ul id="toc">
+        <li><a href="#into">Intro</a></li>
+        <li><a href="#supported-languages">Supported Languages</a></li>
+        
+          
+          <li>
+            <a href="#scene.proto">scene.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#scene_format.BlendMaterial"><span class="badge">M</span>BlendMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Camera"><span class="badge">M</span>Camera</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Color"><span class="badge">M</span>Color</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Cube"><span class="badge">M</span>Cube</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.CustomProperty"><span class="badge">M</span>CustomProperty</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Disk"><span class="badge">M</span>Disk</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Face"><span class="badge">M</span>Face</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.FaceElement"><span class="badge">M</span>FaceElement</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.FresnelMaterial"><span class="badge">M</span>FresnelMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LambertReflectionMaterial"><span class="badge">M</span>LambertReflectionMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Light"><span class="badge">M</span>Light</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightDirectional"><span class="badge">M</span>LightDirectional</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightEnvironment"><span class="badge">M</span>LightEnvironment</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightPoint"><span class="badge">M</span>LightPoint</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.LightSphere"><span class="badge">M</span>LightSphere</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Material"><span class="badge">M</span>Material</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.MeshGeometry"><span class="badge">M</span>MeshGeometry</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.MeshedObject"><span class="badge">M</span>MeshedObject</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.MetalMaterial"><span class="badge">M</span>MetalMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.MicrofacetReflectionMaterial"><span class="badge">M</span>MicrofacetReflectionMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.MirrorMaterial"><span class="badge">M</span>MirrorMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.OrenNayarMaterial"><span class="badge">M</span>OrenNayarMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.OrthographicCamera"><span class="badge">M</span>OrthographicCamera</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.PerspectiveCamera"><span class="badge">M</span>PerspectiveCamera</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Plane"><span class="badge">M</span>Plane</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.PlasticMaterial"><span class="badge">M</span>PlasticMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.RealisticCamera"><span class="badge">M</span>RealisticCamera</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.RenderOptions"><span class="badge">M</span>RenderOptions</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Scene"><span class="badge">M</span>Scene</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.SceneObject"><span class="badge">M</span>SceneObject</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.SpecularReflectionMaterial"><span class="badge">M</span>SpecularReflectionMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.SpecularTransmitionMaterial"><span class="badge">M</span>SpecularTransmitionMaterial</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Sphere"><span class="badge">M</span>Sphere</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.TextureCoordinates"><span class="badge">M</span>TextureCoordinates</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Transform"><span class="badge">M</span>Transform</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Vector3"><span class="badge">M</span>Vector3</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.Vertex"><span class="badge">M</span>Vertex</a>
+                </li>
+              
+                <li>
+                  <a href="#scene_format.VertexNormal"><span class="badge">M</span>VertexNormal</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+        <li><a href="#scalar-value-types">Scalar Value Types</a></li>
+        <li><a href="#json-example">JSON Example</a></li>
+      </ul>
+    </div>
+
+    <div class="file-heading">
+      <h2 id="intro">Intro</h2>
+      <a href="#title">Top</a>
+    </div>
+    <div>
+      This scene format is intended to be used to define scenes for rendering as a part of a <a href="https://github.com/computer-graphics-course/assignments">computer graphics course</a>.<br />
+      We use <a href="https://developers.google.com/protocol-buffers">protobuf</a> to define files schema (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/proto/scene.proto">see it on GitHub</a>).  
+      Protobuf schema is a single source of truth and it is used to generate io libraries and this document.<br />
+      Data is stored as json in files with <i>.cowscene</i> extension (binary mode is also supported).
+
+      <h3 id="into-file-structure">Structure<h3>
+      The top-level structure of this file is <a href="#scene_format.Scene">Scene</a>. All scene objects are listed there.<br />
+      <b>Note that fields marked with <i>"Required to implement? No"</i> mean fields and features which are not required to be implemented as a part of the course. These fields are added for fun and experimentation purposes only.</b>
+
+      <h3>Usage & example</h3>
+      Please <a href="#json-example">see the example</a> of the demo scene defined in this format (<a href="https://github.com/computer-graphics-course/scene-format/blob/master/file_samples/binary.cowscene">example for binary is available in our github repo</a>). To read or write such files we provide libraries for a number of languages. These libraries support both json and binary as inputs.<br />
+      <b>It is strongly advised to use libraries we provide instead of implementing your own parser. That is because our libraries implement additional pre/postprocessing steps when reading/writing the file.</b>
+
+      <h3 id="supported-languages">Supported languages</h3>
+      <div class="language-cards">
+        <a class="language-card" href="./languages/csharp">
+          <div class="language-card-inner" style="border-top: 3px solid #4527a0;">
+            <div class="language-card-icon">
+              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50"><path d="M 25 2 C 24.285156 2 23.574219 2.179688 22.933594 2.539063 L 6.089844 12.003906 C 4.808594 12.726563 4 14.074219 4 15.535156 L 4 34.464844 C 4 35.929688 4.808594 37.277344 6.089844 38 L 22.933594 47.460938 C 24.214844 48.183594 25.785156 48.183594 27.066406 47.460938 L 43.910156 38 C 45.195313 37.277344 46 35.925781 46 34.464844 L 46 15.535156 C 46 14.074219 45.191406 12.726563 43.910156 12.003906 L 27.066406 2.539063 C 26.425781 2.179688 25.714844 2 25 2 Z M 25 4 C 25.375 4 25.753906 4.09375 26.089844 4.28125 L 42.933594 13.746094 C 43.601563 14.125 44 14.804688 44 15.535156 L 44 34.464844 C 44 35.195313 43.601563 35.875 42.929688 36.253906 L 26.089844 45.71875 C 25.417969 46.09375 24.582031 46.09375 23.910156 45.71875 L 7.070313 36.253906 C 6.398438 35.875 6 35.199219 6 34.464844 L 6 15.535156 C 6 14.804688 6.398438 14.125 7.070313 13.746094 L 23.910156 4.28125 C 24.246094 4.09375 24.625 4 25 4 Z M 25 12 C 17.839844 12 12 17.839844 12 25 C 12 32.160156 17.839844 38 25 38 C 29.089844 38 32.886719 36.09375 35.339844 32.863281 L 36.023438 31.960938 L 29.96875 28.453125 L 29.421875 29.046875 C 28.292969 30.28125 26.691406 31 25 31 C 21.683594 31 19 28.316406 19 25 C 19 21.683594 21.683594 19 25 19 C 26.691406 19 28.292969 19.71875 29.421875 20.953125 L 29.96875 21.546875 L 36.023438 18.039063 L 35.339844 17.136719 C 32.886719 13.90625 29.089844 12 25 12 Z M 25 14 C 28.074219 14 30.886719 15.316406 32.945313 17.511719 L 30.203125 19.097656 C 28.757813 17.832031 26.960938 17 25 17 C 20.597656 17 17 20.597656 17 25 C 17 29.402344 20.597656 33 25 33 C 26.960938 33 28.757813 32.167969 30.203125 30.902344 L 32.945313 32.488281 C 30.886719 34.683594 28.074219 36 25 36 C 18.925781 36 14 31.074219 14 25 C 14 18.925781 18.925781 14 25 14 Z M 35 20 L 35 22 L 33 22 L 33 24 L 35 24 L 35 26 L 33 26 L 33 28 L 35 28 L 35 30 L 37 30 L 37 28 L 39 28 L 39 30 L 41 30 L 41 28 L 43 28 L 43 26 L 41 26 L 41 24 L 43 24 L 43 22 L 41 22 L 41 20 L 39 20 L 39 22 L 37 22 L 37 20 Z M 37 24 L 39 24 L 39 26 L 37 26 Z"/></svg>
+            </div>
+            <h4 class="language-name">C#</h4>
+            <p>Install SceneFormat as NuGet library</p>
+          </div>
+        </a>
+        <a class="language-card" href="./languages/ts">
+          <div class="language-card-inner" style="border-top: 3px solid #007acc;">
+            <div class="language-card-icon">
+              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50"><path d="M 5 4 A 1.0001 1.0001 0 0 0 4 5 L 4 45 A 1.0001 1.0001 0 0 0 5 46 L 45 46 A 1.0001 1.0001 0 0 0 46 45 L 46 5 A 1.0001 1.0001 0 0 0 45 4 L 5 4 z M 6 6 L 44 6 L 44 44 L 6 44 L 6 6 z M 15 23 L 15 26.445312 L 20 26.445312 L 20 42 L 24 42 L 24 26.445312 L 29 26.445312 L 29 23 L 15 23 z M 36.691406 23.009766 C 33.576782 22.997369 30.017578 23.941219 30.017578 28.324219 C 30.017578 34.054219 37.738281 34.055625 37.738281 36.640625 C 37.738281 36.885625 37.842187 38.666016 35.117188 38.666016 C 32.392187 38.666016 30.121094 36.953125 30.121094 36.953125 L 30.121094 41.111328 C 30.121094 41.111328 42.001953 44.954062 42.001953 36.289062 C 42.000953 30.664063 34.208984 30.945391 34.208984 28.150391 C 34.208984 27.067391 34.978375 26.054687 37.109375 26.054688 C 39.240375 26.054688 41.126953 27.3125 41.126953 27.3125 L 41.267578 23.607422 C 41.267578 23.607422 39.113892 23.019408 36.691406 23.009766 z"/></svg>
+            </div>
+            <h4 class="language-name">TypeScript/JavaScript</h4>
+            <p>Install SceneFormat as NPM library</p>
+          </div>
+        </a>
+        <a class="language-card" href="./languages/java">
+          <div class="language-card-inner" style="border-top: 3px solid	#f89820;">
+            <div class="language-card-icon">
+              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><path d="M 26.558594 0.40039062 C 28.661594 5.4693906 19.012234 8.6032188 18.115234 12.824219 C 17.295234 16.708219 23.844609 21.21875 23.849609 21.21875 C 22.855609 19.61575 22.135719 18.287156 21.136719 15.785156 C 19.446719 11.559156 31.409594 7.7393906 26.558594 0.40039062 z M 32.957031 7.4257812 C 32.957031 7.4257812 24.507172 7.9840938 24.076172 13.621094 C 23.885172 16.127094 26.297188 17.463922 26.367188 19.294922 C 26.423188 20.784922 24.925781 22.025391 24.925781 22.025391 C 24.925781 22.025391 27.642234 21.49175 28.490234 19.21875 C 29.431234 16.69475 26.664219 14.966312 26.949219 12.945312 C 27.215219 11.015313 32.957031 7.4257813 32.957031 7.4257812 z M 18.044922 22.025391 C 18.044922 22.025391 8.6191406 21.861422 8.6191406 24.732422 C 8.6191406 27.725422 21.361797 27.939656 30.466797 26.097656 C 30.466797 26.097656 32.896922 24.364844 33.544922 23.714844 C 27.580922 24.980844 13.962891 25.151734 13.962891 24.052734 C 13.962891 23.039734 18.044922 22.025391 18.044922 22.025391 z M 37.576172 22.123047 C 36.48017 22.070729 35.258297 22.453328 34.154297 23.283203 C 36.324297 22.796203 38.152344 24.177531 38.152344 25.769531 C 38.152344 29.358531 33.179688 32.748047 33.179688 32.748047 C 33.179688 32.748047 40.878906 31.831453 40.878906 25.939453 C 40.879531 23.504453 39.402842 22.210244 37.576172 22.123047 z M 16.005859 27.578125 C 14.505859 27.578125 12.28125 28.784359 12.28125 29.943359 C 12.28125 32.268359 23.529516 34.063203 31.853516 30.658203 L 28.970703 29 C 23.324703 30.877 12.925859 30.099125 16.005859 27.578125 z M 17.388672 32.787109 C 15.339672 32.787109 14.013672 34.107359 14.013672 35.068359 C 14.013672 38.062359 26.234172 38.365172 31.076172 35.326172 L 28 33.283203 C 24.383 34.873203 15.295672 35.091109 17.388672 32.787109 z M 10.761719 35.154297 C 7.4284746 35.087031 5.2617187 36.652062 5.2617188 37.945312 C 5.2617187 44.836312 39.421875 44.503891 39.421875 37.462891 C 39.421875 36.290891 38.099953 35.738609 37.626953 35.474609 C 40.416953 42.202609 9.6816406 41.680984 9.6816406 37.708984 C 9.6816406 36.805984 11.944156 35.921844 14.035156 36.339844 L 12.257812 35.289062 C 11.736937 35.207313 11.237896 35.163906 10.761719 35.154297 z M 42.826172 39.931641 C 37.634172 45.059641 24.470422 46.927766 11.232422 43.759766 C 24.470422 49.398766 42.763172 46.222641 42.826172 39.931641 z"/></svg>
+            </div>
+            <h4 class="language-name">Java</h4>
+            <p>Install SceneFormat using Gradle/Maven</p>
+          </div>
+        </a>
+        <a class="language-card" href="./languages/cpp">
+          <div class="language-card-inner" style="border-top: 3px solid	#1e88e5;">
+            <div class="language-card-icon">
+              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50"><path d="M 25 2 C 24.285156 2 23.574219 2.179688 22.933594 2.539063 L 6.089844 12.003906 C 4.808594 12.726563 4 14.074219 4 15.535156 L 4 34.464844 C 4 35.929688 4.808594 37.277344 6.089844 38 L 22.933594 47.460938 C 24.214844 48.183594 25.785156 48.183594 27.066406 47.460938 L 43.910156 38 C 45.195313 37.277344 46 35.925781 46 34.464844 L 46 15.535156 C 46 14.074219 45.191406 12.726563 43.910156 12.003906 L 27.066406 2.539063 C 26.425781 2.179688 25.714844 2 25 2 Z M 25 4 C 25.375 4 25.753906 4.09375 26.089844 4.28125 L 42.933594 13.746094 C 43.601563 14.125 44 14.804688 44 15.535156 L 44 24 L 42 24 L 42 22 L 40 22 L 40 24 L 38 24 L 38 26 L 40 26 L 40 28 L 42 28 L 42 26 L 44 26 L 44 34.464844 C 44 35.195313 43.601563 35.875 42.929688 36.253906 L 26.089844 45.71875 C 25.417969 46.09375 24.582031 46.09375 23.910156 45.71875 L 7.070313 36.253906 C 6.398438 35.875 6 35.199219 6 34.464844 L 6 15.535156 C 6 14.804688 6.398438 14.125 7.070313 13.746094 L 23.910156 4.28125 C 24.246094 4.09375 24.625 4 25 4 Z M 25 12 C 17.839844 12 12 17.839844 12 25 C 12 32.160156 17.839844 38 25 38 C 29.089844 38 32.886719 36.09375 35.339844 32.863281 L 36.023438 31.960938 L 29.96875 28.453125 L 29.421875 29.046875 C 28.292969 30.28125 26.691406 31 25 31 C 21.683594 31 19 28.316406 19 25 C 19 21.683594 21.683594 19 25 19 C 26.691406 19 28.292969 19.71875 29.421875 20.953125 L 29.96875 21.546875 L 36.023438 18.039063 L 35.339844 17.136719 C 32.886719 13.90625 29.089844 12 25 12 Z M 25 14 C 28.074219 14 30.886719 15.316406 32.945313 17.511719 L 30.203125 19.097656 C 28.757813 17.832031 26.960938 17 25 17 C 20.597656 17 17 20.597656 17 25 C 17 29.402344 20.597656 33 25 33 C 26.960938 33 28.757813 32.167969 30.203125 30.902344 L 32.945313 32.488281 C 30.886719 34.683594 28.074219 36 25 36 C 18.925781 36 14 31.074219 14 25 C 14 18.925781 18.925781 14 25 14 Z M 33 22 L 33 24 L 31 24 L 31 26 L 33 26 L 33 28 L 35 28 L 35 26 L 37 26 L 37 24 L 35 24 L 35 22 Z"/></svg>
+            </div>
+            <h4 class="language-name">C++</h4>
+            <p>Read build instructions</p>
+          </div>
+        </a>
+        <a class="language-card" href="./languages/rust">
+          <div class="language-card-inner" style="border-top: 3px solid	#263238;">
+            <div class="language-card-icon">
+              <svg style="enable-background:new 0 0 144 144" version="1.1" viewBox="19 19 106 106" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><title>Rust programming language logo</title><metadata><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title/></cc:Work></rdf:RDF></metadata><path d="m124 70.7-4.39-2.72c-0.037-0.428-0.079-0.855-0.125-1.28l3.78-3.52c0.384-0.358 0.556-0.888 0.452-1.4-0.101-0.515-0.462-0.939-0.953-1.12l-4.83-1.8c-0.121-0.418-0.248-0.833-0.378-1.25l3.01-4.18c0.307-0.425 0.37-0.978 0.17-1.46-0.2-0.483-0.637-0.829-1.15-0.914l-5.09-0.828c-0.198-0.386-0.404-0.766-0.612-1.14l2.14-4.7c0.219-0.478 0.174-1.03-0.118-1.47-0.291-0.436-0.784-0.691-1.31-0.671l-5.17 0.18c-0.267-0.334-0.539-0.665-0.816-0.99l1.19-5.03c0.12-0.511-0.031-1.05-0.403-1.42-0.369-0.37-0.905-0.523-1.42-0.403l-5.03 1.19c-0.326-0.276-0.657-0.549-0.992-0.816l0.181-5.17c0.02-0.523-0.235-1.02-0.671-1.31-0.437-0.292-0.99-0.336-1.47-0.119l-4.69 2.14c-0.379-0.208-0.759-0.414-1.14-0.613l-0.83-5.09c-0.084-0.516-0.43-0.954-0.914-1.15-0.483-0.201-1.04-0.136-1.46 0.17l-4.18 3.01c-0.412-0.131-0.826-0.257-1.24-0.377l-1.8-4.83c-0.183-0.492-0.607-0.853-1.12-0.955-0.514-0.101-1.04 0.07-1.4 0.452l-3.52 3.78c-0.425-0.047-0.853-0.09-1.28-0.125l-2.72-4.4c-0.275-0.445-0.762-0.716-1.29-0.716s-1.01 0.271-1.28 0.716l-2.72 4.4c-0.428 0.035-0.856 0.078-1.28 0.125l-3.52-3.78c-0.357-0.382-0.887-0.553-1.4-0.452-0.515 0.103-0.939 0.463-1.12 0.955l-1.8 4.83c-0.418 0.12-0.832 0.247-1.24 0.377l-4.18-3.01c-0.425-0.307-0.979-0.372-1.46-0.17-0.483 0.2-0.83 0.638-0.914 1.15l-0.83 5.09c-0.384 0.199-0.764 0.404-1.14 0.613l-4.69-2.14c-0.477-0.218-1.03-0.173-1.47 0.119-0.436 0.29-0.691 0.787-0.671 1.31l0.18 5.17c-0.334 0.267-0.665 0.54-0.992 0.816l-5.03-1.19c-0.511-0.119-1.05 0.033-1.42 0.403-0.372 0.371-0.523 0.906-0.403 1.42l1.18 5.03c-0.275 0.326-0.547 0.656-0.814 0.99l-5.17-0.18c-0.521-0.015-1.02 0.235-1.31 0.671-0.292 0.434-0.336 0.99-0.119 1.47l2.14 4.7c-0.208 0.377-0.414 0.757-0.613 1.14l-5.09 0.828c-0.517 0.084-0.953 0.43-1.15 0.914-0.2 0.485-0.135 1.04 0.17 1.46l3.01 4.18c-0.131 0.413-0.258 0.828-0.378 1.25l-4.83 1.8c-0.49 0.183-0.851 0.607-0.953 1.12-0.102 0.514 0.069 1.04 0.452 1.4l3.78 3.52c-0.047 0.425-0.089 0.853-0.125 1.28l-4.39 2.72c-0.445 0.275-0.716 0.761-0.716 1.29s0.271 1.01 0.716 1.28l4.39 2.72c0.036 0.428 0.078 0.855 0.125 1.28l-3.78 3.52c-0.383 0.357-0.554 0.887-0.452 1.4 0.102 0.515 0.463 0.938 0.953 1.12l4.83 1.8c0.12 0.418 0.247 0.833 0.378 1.25l-3.01 4.18c-0.306 0.426-0.371 0.979-0.17 1.46 0.201 0.485 0.638 0.831 1.16 0.914l5.09 0.828c0.199 0.386 0.403 0.766 0.613 1.14l-2.14 4.69c-0.218 0.477-0.173 1.03 0.119 1.47 0.292 0.437 0.789 0.692 1.31 0.671l5.16-0.181c0.269 0.336 0.54 0.665 0.816 0.992l-1.18 5.03c-0.12 0.51 0.031 1.04 0.403 1.41 0.369 0.373 0.906 0.522 1.42 0.402l5.03-1.18c0.327 0.278 0.658 0.548 0.992 0.814l-0.18 5.17c-0.02 0.523 0.235 1.02 0.671 1.31 0.434 0.291 0.99 0.335 1.47 0.117l4.69-2.14c0.378 0.21 0.758 0.414 1.14 0.613l0.83 5.09c0.084 0.518 0.43 0.956 0.914 1.16 0.483 0.201 1.04 0.136 1.46-0.169l4.18-3.01c0.413 0.131 0.828 0.259 1.25 0.379l1.8 4.83c0.183 0.49 0.607 0.853 1.12 0.953 0.514 0.104 1.04-0.068 1.4-0.452l3.52-3.78c0.425 0.049 0.853 0.09 1.28 0.128l2.72 4.39c0.274 0.443 0.761 0.716 1.28 0.716s1.01-0.272 1.29-0.716l2.72-4.39c0.428-0.038 0.855-0.079 1.28-0.128l3.52 3.78c0.357 0.384 0.887 0.556 1.4 0.452 0.515-0.101 0.939-0.463 1.12-0.953l1.8-4.83c0.418-0.12 0.833-0.248 1.25-0.379l4.18 3.01c0.425 0.305 0.979 0.37 1.46 0.169 0.484-0.199 0.83-0.638 0.914-1.16l0.83-5.09c0.384-0.199 0.764-0.406 1.14-0.613l4.69 2.14c0.477 0.218 1.03 0.174 1.47-0.117 0.436-0.292 0.69-0.787 0.671-1.31l-0.18-5.17c0.334-0.267 0.665-0.536 0.991-0.814l5.03 1.18c0.511 0.12 1.05-0.029 1.42-0.402 0.372-0.371 0.523-0.904 0.403-1.41l-1.18-5.03c0.276-0.327 0.548-0.656 0.814-0.992l5.17 0.181c0.521 0.021 1.02-0.234 1.31-0.671 0.292-0.436 0.337-0.991 0.118-1.47l-2.14-4.69c0.209-0.379 0.414-0.759 0.612-1.14l5.09-0.828c0.518-0.083 0.954-0.429 1.15-0.914 0.2-0.483 0.137-1.04-0.17-1.46l-3.01-4.18c0.13-0.413 0.257-0.828 0.378-1.25l4.83-1.8c0.491-0.184 0.853-0.607 0.953-1.12 0.104-0.514-0.068-1.04-0.452-1.4l-3.78-3.52c0.046-0.425 0.088-0.853 0.125-1.28l4.39-2.72c0.445-0.274 0.716-0.761 0.716-1.28s-0.27-1.01-0.715-1.29zm-29.4 36.5c-1.68-0.362-2.74-2.02-2.38-3.7 0.359-1.68 2.01-2.75 3.69-2.39 1.68 0.359 2.75 2.02 2.39 3.7s-2.01 2.75-3.69 2.39zm-1.49-10.1c-1.53-0.328-3.04 0.646-3.36 2.18l-1.56 7.28c-4.81 2.18-10.2 3.4-15.8 3.4-5.76 0-11.2-1.27-16.1-3.55l-1.56-7.28c-0.328-1.53-1.83-2.51-3.36-2.18l-6.43 1.38c-1.19-1.23-2.3-2.54-3.32-3.92h31.3c0.354 0 0.59-0.064 0.59-0.386v-11.1c0-0.322-0.236-0.386-0.59-0.386h-9.15v-7.01h9.89c0.903 0 4.83 0.258 6.08 5.28 0.393 1.54 1.26 6.56 1.85 8.17 0.588 1.8 2.98 5.4 5.53 5.4h15.6c0.177 0 0.366-0.02 0.565-0.056-1.08 1.47-2.27 2.86-3.54 4.16l-6.58-1.41zm-43.3 9.95c-1.68 0.362-3.33-0.708-3.69-2.39-0.359-1.68 0.708-3.34 2.39-3.7 1.68-0.359 3.33 0.711 3.69 2.39 0.359 1.68-0.709 3.34-2.39 3.7zm-11.9-48.1c0.696 1.57-0.012 3.41-1.58 4.11-1.57 0.697-3.4-0.012-4.1-1.58s0.012-3.41 1.58-4.11c1.57-0.696 3.4 0.012 4.1 1.58zm-3.65 8.64 6.7-2.98c1.43-0.635 2.08-2.31 1.44-3.74l-1.38-3.12h5.42v24.4h-10.9c-0.949-3.34-1.46-6.86-1.46-10.5 0-1.39 0.075-2.76 0.219-4.11zm29.4-2.37v-7.2h12.9c0.667 0 4.71 0.771 4.71 3.79 0 2.51-3.1 3.41-5.65 3.41h-12zm46.9 6.48c0 0.956-0.035 1.9-0.105 2.84h-3.93c-0.393 0-0.551 0.258-0.551 0.643v1.8c0 4.24-2.39 5.17-4.49 5.4-2 0.225-4.21-0.836-4.48-2.06-1.18-6.63-3.14-8.04-6.24-10.5 3.85-2.44 7.85-6.05 7.85-10.9 0-5.21-3.57-8.49-6-10.1-3.42-2.25-7.2-2.7-8.22-2.7h-40.6c5.51-6.14 13-10.5 21.4-12.1l4.79 5.02c1.08 1.13 2.87 1.18 4.01 0.092l5.36-5.12c11.2 2.09 20.7 9.07 26.2 18.7l-3.67 8.28c-0.633 1.43 0.013 3.11 1.44 3.74l7.06 3.14c0.122 1.25 0.186 2.52 0.186 3.8zm-40.6-41.9c1.24-1.19 3.21-1.14 4.39 0.101 1.18 1.24 1.14 3.21-0.103 4.4-1.24 1.19-3.21 1.14-4.39-0.102-1.18-1.24-1.14-3.21 0.103-4.4zm36.4 29.3c0.695-1.57 2.53-2.28 4.1-1.58 1.57 0.696 2.28 2.54 1.58 4.11-0.695 1.57-2.53 2.28-4.1 1.58-1.57-0.696-2.28-2.54-1.58-4.11z"/></svg>
+            </div>
+            <h4 class="language-name">Rust</h4>
+            <p>Install as Cargo crate.</p>
+          </div>
+        </a>
+      </div>
+
+      <h3>Other languages</h3>
+      Please let us know if we missed some language you use. You can also build library yourself using protoc, as <a href="https://developers.google.com/protocol-buffers">described in protobuf docs</a>.<br />
+
+      <h3>Problems? Contributions?</h3>
+      If you have any suggestions or would like to submit a patch, feel free to create a pull request against the <a href="https://github.com/computer-graphics-course/scene-format">scene format repo</a> or
+      create an issue.<br />
+      Also, feel free to contact anyone from the scene format team if you have any questions or issues:
+      <a href="https://t.me/nikitavbv">@nikitavbv</a>, <a href="https://t.me/Brookokoko">@Brookokoko</a>, <a href="https://t.me/metamodern">@metamodern</a>, <a href="https://t.me/TheBestTvarynka">@TheBestTvarynka</a>, <a href="https://t.me/grizik">@grizik</a>.
+    </div>
+
+    
+      
+      <div class="file-heading">
+        <h2 id="scene.proto">scene.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.BlendMaterial">BlendMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of blend material</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">diffuse</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">specular</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">roughness</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0.5
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Camera">Camera</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of camera<br/>Camera can be transformed as any other point is space using transformation matrix<br/>and camera viewport is located along negative z-axis<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/computing-pixel-coordinates-of-3d-point/mathematics-computing-2d-coordinates-of-3d-points#:~:text=camera%20coordinate%20system%20and%20camera%20space">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Object id in scene.<br/>Should be equal or greater than 1.<br/>Should be unique across all Camera, Light and SceneObject
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">transform</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Transform">Transform</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="3">camera (one&nbsp;of)</td>
+                        <td colspan="1">perspective</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.PerspectiveCamera">PerspectiveCamera</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">orthographic</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.OrthographicCamera">OrthographicCamera</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">realistic</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.RealisticCamera">RealisticCamera</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Color">Color</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of RGB colors.<br/>Components should be greater or equal 0. No upper bound<br/>(0, 0, 0) - white<br/>(1, 1, 1) - black<br/>All values greater than 1 should be mapped to range [0, 1] by using gamma correction or just clamping values</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">g</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">b</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Cube">Cube</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of cube (rectangular parallelepiped, to be precise.)<br/>To determine the position of a cube look at Transform.position<br/>Transform.scale should be ignored<br/>If your renderer supports only axis aligned box Transform.rotation should be ignored<br/>For more detailed explanation about aabb follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection">link</a><br/>For those who dare to support oriented bounding box here <a href="http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/">link</a> how obb is implemented in opengl</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">size</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="default_value">
+                    
+                      (1, 1, 1)
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Size of cube in each dimension (in other words, you can view vector components as the length of parallelepiped sides)
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.CustomProperty">CustomProperty</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Custom properties can be used to extend format in ways specific to implementation.<br/>Please consider opening a PR/issue in format repo if you think your property would better be a regular field.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">key</td>
+                    
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="2">value (one&nbsp;of)</td>
+                        <td colspan="1">text_value</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">int32_value</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Disk">Disk</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of disk - surface defined by point and normal with limited radius<br/>To determine the position of a disk look at Transform.position<br/>To determine the normal of a disk look at Transform.up<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">radius</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Radius of disk
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Face">Face</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Faces are defined using lists of vertex and normal indices.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">elements</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.FaceElement">FaceElement</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.FaceElement">FaceElement</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">vertex_index</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">normal_index</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">texture_index</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.FresnelMaterial">FresnelMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of fresnel material</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">eta</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1.5
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">t</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of transmission
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.LambertReflectionMaterial">LambertReflectionMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of Lambert material<br/>This material reflects light in all directions with equal probability<br/>For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Lambertian_Reflection">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Light">Light</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of light</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Object id in scene.<br/>Should be equal or greater than 1.<br/>Should be unique across all Camera, Light and SceneObject
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">transform</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Transform">Transform</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                      (1, 1, 1)
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Color of source light
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="4">light (one&nbsp;of)</td>
+                        <td colspan="1">point</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.LightPoint">LightPoint</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">directional</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.LightDirectional">LightDirectional</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">sphere</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.LightSphere">LightSphere</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">environment</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.LightEnvironment">LightEnvironment</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.LightDirectional">LightDirectional</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of directional light<br/>To determine the direction of a light look at Transform.forward<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-lights">link</a></p>
+
+        
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.LightEnvironment">LightEnvironment</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of environment light<br/><b>No transformation should be applied</b><br/>Direction is determined randomly<br/>For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Light_Sources/Infinite_Area_Lights">link</a></p>
+
+        
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.LightPoint">LightPoint</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of point light<br/>To determine the position of a light look at Transform.position<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-spherical-light">link</a><br/>In article above this light source is named spherical light but it is actually a point light</p>
+
+        
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.LightSphere">LightSphere<strong> - not required to implement</strong></h3>
+          <a href="#title">Top</a>
+        </div>
+        <p><br/>Representation of sphere light</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">radius</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Radius of source light
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Material">Material</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of material<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF">link</a><br/>or this <a href="https://pbr-book.org/3ed-2018/Reflection_Models">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="2">material (one&nbsp;of)</td>
+                        <td colspan="1">lambert_reflection</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.LambertReflectionMaterial">LambertReflectionMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">specular_reflection</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.SpecularReflectionMaterial">SpecularReflectionMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">specular_transmission</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.SpecularTransmitionMaterial">SpecularTransmitionMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">fresnel</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.FresnelMaterial">FresnelMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">oren_nayar</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.OrenNayarMaterial">OrenNayarMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">microfacet_reflection</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.MicrofacetReflectionMaterial">MicrofacetReflectionMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">metal</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.MetalMaterial">MetalMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">plastic</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.PlasticMaterial">PlasticMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">blend</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.BlendMaterial">BlendMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">mirror</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.MirrorMaterial">MirrorMaterial</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.MeshGeometry">MeshGeometry<strong> - not required to implement</strong></h3>
+          <a href="#title">Top</a>
+        </div>
+        <p><br/>Embedded obj file. Can be used to create scene files without external dependencies.<br/>See <a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file">OBJ format description on Wikipedia</a>.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">vertices</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vertex">Vertex</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            List of geometric vertices
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">vertex_normals</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.VertexNormal">VertexNormal</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            List of vertex normals; normals might not be unit vectors.
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">texture_coordinates</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.TextureCoordinates">TextureCoordinates</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            List of texture coordinates.
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">faces</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Face">Face</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Polygonal face element
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.MeshedObject">MeshedObject</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Mesh specified in obj file</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">reference</td>
+                    
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Reference to obj file.<br/>Absolute or relative path
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">obj</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.MeshGeometry">MeshGeometry</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Embedded obj file. Can be used to create scene files without external dependencies.
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.MetalMaterial">MetalMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of metal material</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">eta</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1.5
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">k</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Extinction coefficient
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">roughness</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0.5
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.MicrofacetReflectionMaterial">MicrofacetReflectionMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of reflection material using microfacet model</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">eta</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1.5
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">roughness</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.MirrorMaterial">MirrorMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.OrenNayarMaterial">OrenNayarMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of diffuse material with Oren-Nayar model</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">roughness</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.OrthographicCamera">OrthographicCamera<strong> - not required to implement</strong></h3>
+          <a href="#title">Top</a>
+        </div>
+        <p><br/>Representation of orthographic camera</p>
+
+        
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.PerspectiveCamera">PerspectiveCamera</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of perspective camera</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">fov</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      60
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Horizontal field of view<br/>Should be in range (0, 180)
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Plane">Plane</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of plane - unbound surface defined by point and normal<br/>To determine the position of a plane look at Transform.position<br/>To determine the normal of a plane look at Transform.up<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection">link</a></p>
+
+        
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.PlasticMaterial">PlasticMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of plastic material</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">roughness</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0.5
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.RealisticCamera">RealisticCamera<strong> - not required to implement</strong></h3>
+          <a href="#title">Top</a>
+        </div>
+        <p><br/>Representation of realistic camera</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">fov</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      60
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Horizontal field of view<br/>Should be in range (0, 180)
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">focus</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Focal length
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">radius</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0.01
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Radius of lens
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.RenderOptions">RenderOptions</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Default options for rendering scene.<br/>Can be overridden in renderer</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">camera_id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Camera from which scene should be rendered
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">width</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                      640
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Width of final image
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">height</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                      320
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Height of final image
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">rayDepth</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                      3
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Depth of path tracing
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">raysPerPixelDimension</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Number of rays per pixel dimension
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">custom_properties</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.CustomProperty">CustomProperty</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Can be used as a map containing custom properties specific to renderer implementation.<br/>If you are using this field, consider adding it to the format spec as a regular field if you think that<br/>other implementations may benefit from your custom fields.
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Scene">Scene</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">version</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            "1" is the only allowed value at the moment.
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">render_options</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.RenderOptions">RenderOptions</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">scene_objects</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.SceneObject">SceneObject</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">lights</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Light">Light</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">cameras</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Camera">Camera</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">materials</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Material">Material</a>, repeated</strong></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.SceneObject">SceneObject</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of object to render.<br/>A sceneObject is one of the main things of this format. It describes all the required fields to use if you want to render something.<br/>Using this fields you can render a transformed object of any type with applied material.<br/><br/>SceneObject contains:<br/>- id: defines the id which is unique across the scene.<br/>- transform: this part has all data for transformation of the object.<br/>- material: this part contains information about the material, which should be applied to object.<br/>- mesh: this is the object itself.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Object id in scene.<br/>Should be equal or greater than 1.<br/>Should be unique across all Camera, Light and SceneObject
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">transform</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Transform">Transform</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="2">material (one&nbsp;of)</td>
+                        <td colspan="1">material_id</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#string">string</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                        
+                            Reference to a material in the array of materials
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">material</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Material">Material</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    <div class="field_name">
+                        <td colspan="1" rowspan="5">mesh (one&nbsp;of)</td>
+                        <td colspan="1">sphere</td>
+                    </div>
+                  
+                  <td class="field_type"><a href="#scene_format.Sphere">Sphere</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                        
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">cube</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Cube">Cube</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">plane</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Plane">Plane</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">disk</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Disk">Disk</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="1">meshed_object</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.MeshedObject">MeshedObject</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.SpecularReflectionMaterial">SpecularReflectionMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of specular reflection material<br/>This material reflects light strictly in one direction which can be found by reflecting ray direction around normal<br/>For more detailed explanation follow <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Specular_Reflection_and_Transmission">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">eta</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1.5
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Index of refraction<br/>The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum<br/><a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">r</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of reflection
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.SpecularTransmitionMaterial">SpecularTransmitionMaterial</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of specular transmition material</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">color</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Color">Color</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">eta</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1.5
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Index of refraction<br/>The index of refraction describes how much more slowly light travels in a particular medium than in a vacuum<br/><a href="https://en.wikipedia.org/wiki/List_of_refractive_indices">Index of refraction for different medium</a>
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">t</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Amount of transmission
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Sphere">Sphere</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of sphere<br/>Transform.scale should be ignored<br/>To determine the position of a sphere look at Transform.position<br/>For more detailed explanation follow <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection">link</a></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">radius</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Radius of sphere
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.TextureCoordinates">TextureCoordinates</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">u</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            vary between 0 and 1.
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">v</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0 vary between 0 and 1.
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">w</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      0 vary between 0 and 1.
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Transform">Transform</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Position, rotation and scale of an object<br/>To calculate transformation matrix:<br/><ul><br/><li>create translation matrix using position</li><br/><li>create rotation matrix using rotation</li><br/><li>create scale matrix using scale</li><br/><li>multiple 3 matrices to get final matrix</li><br/></ul><br/>Process using parent is specified below<br/><br/>Right vector can be extracted<br/>from 1st column of the matrix if your renderer uses column-major conversion <br/>from 1st row of the matrix if your renderer uses row-major conversion <br/><br/>Up vector can be extracted<br/>from 2nd column of the matrix if your renderer uses column-major conversion <br/>from 2nd row of the matrix if your renderer uses row-major conversion<br/><br/>Forward vector can be extracted<br/>from 3rd column of the matrix if your renderer uses column-major conversion <br/>from 3rd row of the matrix if your renderer uses row-major conversion <br/><br/><a href="https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/how-does-matrix-work-part-1">Detailed explanation</a> about matrices<br/><a href="https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/row-major-vs-column-major-vector">Explanation</a> about different conversions</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">position</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="default_value">
+                    
+                      (0, 0, 0)
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">rotation</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="default_value">
+                    
+                      (0, 0, 0)
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Rotation in euler angles.<br/>Can be negative or positive.<br/>Angles are measured counterclockwise.
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">scale</td>
+                    
+                  
+                  <td class="field_type"><a href="#scene_format.Vector3">Vector3</a></td>
+                  <td class="default_value">
+                    
+                      (1, 1, 1)
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">parent_id</td>
+                    
+                  
+                  <td class="field_type"><a href="#int32">int32</a></td>
+                  <td class="default_value">
+                    
+                      0
+
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    <strong>no</strong>
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            Id of parent relative to which transformation should be applied.<br/>If parent_id is 0 transformation is specified in world space.<br/>To correctly apply transformation you should build a tree structure representing relationships between objects.<br/>Then from top to bottom create transformation matrix.<br/>If object has parent: multiply parent's matrix by object's matrix to get final matrix
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Vector3">Vector3</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Representation of 3D vectors and points</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">x</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">y</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">z</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.Vertex">Vertex</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p>Right-hand coordinate system is used to specify coordinate locations.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">x</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">y</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">z</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">w</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                      1.0
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <div class="struct-heading">
+          <h3 id="scene_format.VertexNormal">VertexNormal</h3>
+          <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr>
+                <td colspan="2">Field</td>
+                <td>Type</td>
+                <td>Default value</td>
+                <td>Required to implement?</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">x</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">y</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+                <tr>
+                  
+                    
+                        <td class="field_name" colspan="2">z</td>
+                    
+                  
+                  <td class="field_type"><a href="#double">double</a></td>
+                  <td class="default_value">
+                    
+                  </td>
+                  <td class="required_to_implement">
+                    yes
+                  </td>
+                  <td class="field_description">
+                      <p>
+                                                    
+                            
+                        
+                      </p>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+
+    <div class="file-heading">
+      <h2 id="scalar-value-types">Intro</h2>
+      <a href="#title">Top</a>
+    </div>
+    <table class="scalar-value-types-table">
+      <thead>
+        <tr><td>Scalar Type</td><td>C#</td><td>JavaScript</td><td>Java</td><td>C++</td></tr>
+      </thead>
+      <tbody>
+        
+          <tr id="double">
+            <td>double</td>
+            <td>double</td>
+            <td>any</td>
+            <td>double</td>
+            <td>double</td>
+          </tr>
+        
+          <tr id="float">
+            <td>float</td>
+            <td>float</td>
+            <td>any</td>
+            <td>float</td>
+            <td>float</td>
+          </tr>
+        
+          <tr id="int32">
+            <td>int32</td>
+            <td>int</td>
+            <td>any</td>
+            <td>int</td>
+            <td>int32</td>
+          </tr>
+        
+          <tr id="int64">
+            <td>int64</td>
+            <td>long</td>
+            <td>any</td>
+            <td>long</td>
+            <td>int64</td>
+          </tr>
+        
+          <tr id="uint32">
+            <td>uint32</td>
+            <td>uint</td>
+            <td>any</td>
+            <td>int</td>
+            <td>uint32</td>
+          </tr>
+        
+          <tr id="uint64">
+            <td>uint64</td>
+            <td>ulong</td>
+            <td>any</td>
+            <td>long</td>
+            <td>uint64</td>
+          </tr>
+        
+          <tr id="sint32">
+            <td>sint32</td>
+            <td>int</td>
+            <td>any</td>
+            <td>int</td>
+            <td>int32</td>
+          </tr>
+        
+          <tr id="sint64">
+            <td>sint64</td>
+            <td>long</td>
+            <td>any</td>
+            <td>long</td>
+            <td>int64</td>
+          </tr>
+        
+          <tr id="fixed32">
+            <td>fixed32</td>
+            <td>uint</td>
+            <td>any</td>
+            <td>int</td>
+            <td>uint32</td>
+          </tr>
+        
+          <tr id="fixed64">
+            <td>fixed64</td>
+            <td>ulong</td>
+            <td>any</td>
+            <td>long</td>
+            <td>uint64</td>
+          </tr>
+        
+          <tr id="sfixed32">
+            <td>sfixed32</td>
+            <td>int</td>
+            <td>any</td>
+            <td>int</td>
+            <td>int32</td>
+          </tr>
+        
+          <tr id="sfixed64">
+            <td>sfixed64</td>
+            <td>long</td>
+            <td>any</td>
+            <td>long</td>
+            <td>int64</td>
+          </tr>
+        
+          <tr id="bool">
+            <td>bool</td>
+            <td>bool</td>
+            <td>any</td>
+            <td>boolean</td>
+            <td>bool</td>
+          </tr>
+        
+          <tr id="string">
+            <td>string</td>
+            <td>string</td>
+            <td>any</td>
+            <td>String</td>
+            <td>string</td>
+          </tr>
+        
+          <tr id="bytes">
+            <td>bytes</td>
+            <td>ByteString</td>
+            <td>any</td>
+            <td>ByteString</td>
+            <td>string</td>
+          </tr>
+        
+      </tbody>
+    </table>
+
+    <div class="file-heading">
+      <h2 id="json-example">JSON example</h2>
+      <a href="#title">Top</a>
+    </div>
+    <div>
+      Scene examples to check if your program works with format correctly.<br />
+      Only focus on the general look of a scene, outputs may not be identical. Colors may wary from renderer to renderer and light sources might be too bright.<br />
+      Scenes without light sources are rendered only with normals to show how objects should look. Scenes with light sources and materials are rendered using Whitted raytracing.<br />
+      Parameters for Whitted raycaster:
+      <ul>
+        <li>256 rays per pixel</li>
+        <li>2 ray per light source</li>
+        <li>depth 2</li>
+      </ul>
+    </div>
+    <pre>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 6
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1.5
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/sphere.png" alt="sphere"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 6
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "cube": {
+        "size": {
+          "x": 2,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/cube.png" alt="cube"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 6
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -1,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "plane": {}
+    }
+  ]
+}
+        </code>
+        <img src="./images/plane.png" alt="plane"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 6
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -1,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "disk": {
+        "radius": 5
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/disk.png" alt="disk"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0.3,
+          "z": 1.2
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "meshed_object": {
+        "reference": "cow2.obj"
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/mesh.png" alt="mesh"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 3,
+          "y": 3,
+          "z": 6
+        },
+        "rotation": {
+          "x": -25,
+          "y": 25,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "cube": {
+        "size": {
+          "x": 2,
+          "y": 1,
+          "z": 1
+        }
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/camera_rotation.png" alt="camera_rotation"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 1.25,
+          "y": 0.1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 10,
+          "y": 90,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.4,
+          "y": 1,
+          "z": 4
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "meshed_object": {
+        "reference": "cow2.obj"
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/transformations.png" alt="transformations"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 2,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 1.25,
+          "y": 0.1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 10,
+          "y": 90,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    },
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0.3,
+          "z": 1.2
+        }
+      },
+      "perspective": {
+        "fov": 100
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.4,
+          "y": 1,
+          "z": 4
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "meshed_object": {
+        "reference": "cow2.obj"
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/multiple_cameras.png" alt="multiple_cameras"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 3
+        },
+        "rotation": {
+          "x": -10,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "meshed_object": {
+        "reference": "cow2.obj"
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": -1
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "meshed_object": {
+        "reference": "dragon.obj"
+      }
+    },
+    {
+      "id": 4,
+      "transform": {
+        "position": {
+          "x": 1.1,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 0.3
+      }
+    },
+    {
+      "id": 5,
+      "transform": {
+        "position": {
+          "x": -1.1,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "cube": {
+        "size": {
+          "x": 0.3,
+          "y": 0.3,
+          "z": 0.3
+        }
+      }
+    }
+  ]
+}
+        </code>
+        <img src="./images/multiple_objects.png" alt="multiple_objects"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 0,
+            "b": 0
+          }
+        }
+      },
+      "disk": {
+        "radius": 10
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 4,
+      "color": {
+        "r": 3,
+        "g": 3,
+        "b": 3
+      },
+      "environment": {}
+    }
+  ]
+}
+        </code>
+        <img src="./images/lambert.png" alt="lambert"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 2,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "specular_reflection": {
+          "eta": 2
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 4,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 0,
+            "b": 0
+          }
+        }
+      },
+      "disk": {
+        "radius": 10
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 5,
+      "color": {
+        "r": 3,
+        "g": 3,
+        "b": 3
+      },
+      "environment": {}
+    }
+  ]
+}
+        </code>
+        <img src="./images/reflection.png" alt="reflection"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 0,
+            "b": 0
+          }
+        }
+      },
+      "disk": {
+        "radius": 10
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 4,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 2,
+          "z": 2
+        }
+      },
+      "color": {
+        "r": 100,
+        "g": 100,
+        "b": 100
+      },
+      "point": {}
+    }
+  ]
+}
+        </code>
+        <img src="./images/point.png" alt="point"/>
+        <code class="json" style="font-size: 1rem;">{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 640,
+    "height": 360
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 0,
+            "b": 0
+          }
+        }
+      },
+      "disk": {
+        "radius": 10
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 4,
+      "transform": {
+        "rotation": {
+          "x": -30,
+          "y": -100,
+          "z": 0
+        }
+      },
+      "color": {
+        "r": 3,
+        "g": 3,
+        "b": 3
+      },
+      "directional": {}
+    }
+  ]
+}
+        </code>
+        <img src="./images/directional.png" alt="directional"/>
+    </pre>
+  </body>
+  <script>hljs.highlightAll();</script>
+</html>
+

@@ -272,6 +272,10 @@ namespace SceneFormat
             {
                 PostProcessMaterial(material.Blend);
             }
+            if (material.Mirror != null)
+            {
+                PostProcessMaterial(material.Mirror);
+            }
         }
         
         private static void PostProcessMaterial(LambertReflectionMaterial material)
@@ -382,6 +386,11 @@ namespace SceneFormat
         private static void PostProcessMaterial(BlendMaterial material)
         {
             material.Roughness = Math.Clamp(material.Roughness, 0, 1);
+        }
+        
+        private static void PostProcessMaterial(MirrorMaterial material)
+        {
+            material.R = Math.Clamp(material.R, 0, 1);
         }
 
         private static void PostProcessTransform(Transform transform)
@@ -664,7 +673,7 @@ namespace SceneFormat
             {
                 if (material.SpecularReflection.Color == null)
                 {
-                    throw new SceneIOException($"Color should be set for LambertReflection material.{GetMaterialIdMessage(material)}");
+                    throw new SceneIOException($"Color should be set for SpecularReflection material.{GetMaterialIdMessage(material)}");
                 }
                 ValidateColor(material.SpecularReflection.Color);
             }
@@ -672,7 +681,7 @@ namespace SceneFormat
             {
                 if (material.SpecularTransmission.Color == null)
                 {
-                    throw new SceneIOException($"Color should be set for LambertReflection material.{GetMaterialIdMessage(material)}");
+                    throw new SceneIOException($"Color should be set for SpecularTransmission material.{GetMaterialIdMessage(material)}");
                 }
                 ValidateColor(material.SpecularTransmission.Color);
             }
@@ -680,7 +689,7 @@ namespace SceneFormat
             {
                 if (material.Fresnel.Color == null)
                 {
-                    throw new SceneIOException($"Color should be set for LambertReflection material.{GetMaterialIdMessage(material)}");
+                    throw new SceneIOException($"Color should be set for Fresnel material.{GetMaterialIdMessage(material)}");
                 }
                 ValidateColor(material.Fresnel.Color);
             }
@@ -724,6 +733,14 @@ namespace SceneFormat
                 }
                 ValidateColor(material.Blend.Diffuse);
                 ValidateColor(material.Blend.Specular);
+            }
+            if (material.Mirror != null)
+            {
+                if (material.Mirror.Color == null)
+                {
+                    throw new SceneIOException($"Color should be set for Mirror material.{GetMaterialIdMessage(material)}");
+                }
+                ValidateColor(material.Plastic.Color);
             }
         }
 

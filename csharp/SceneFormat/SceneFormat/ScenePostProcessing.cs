@@ -740,7 +740,7 @@ namespace SceneFormat
                 {
                     throw new SceneIOException($"Color should be set for Mirror material.{GetMaterialIdMessage(material)}");
                 }
-                ValidateColor(material.Plastic.Color);
+                ValidateColor(material.Mirror.Color);
             }
         }
 

@@ -367,7 +367,7 @@ message Material {
     MetalMaterial metal = 8; // @oneof_item
     PlasticMaterial plastic = 9; // @oneof_item
     BlendMaterial blend = 10; // @oneof_item
-    BlendMaterial mirror = 11; // @oneof_item
+    MirrorMaterial mirror = 11; // @oneof_item
   }
 }
 
